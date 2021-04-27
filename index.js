@@ -1,8 +1,8 @@
 const express = require('express');
-const monaRoutes = require('./routes/monaRoutes')
-const sessionRoutes = require('./routes/session_routes')
-const dashboard =require('./routes/dashboard')
-const auth = require('./auth')
+const monaRoutes = require('./src/routes/monaRoutes')
+const sessionRoutes = require('./src/routes/session_routes')
+const dashboard =require('./src/routes/dashboard')
+const auth = require('./src/auth')
 const cors = require ('cors')
 const bodyParser = require ('body-parser');
 const session = require('express-session');
@@ -10,9 +10,9 @@ const FileStore = require ('session-file-store')(session)
 const fileUpload = require('express-fileupload')
 
 
-const userRoutes = require('./routes/userRoutes')
-const saveRoutes = require('./routes/saveRoutes')
-const expendRoutes = require('./routes/expendRoutes')
+const userRoutes = require('./src/routes/userRoutes')
+const saveRoutes = require('./src/routes/saveRoutes')
+const expendRoutes = require('./src/routes/expendRoutes')
 
 const app = express();
 
