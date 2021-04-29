@@ -1,22 +1,35 @@
 const mysql = require('mysql');
-let conexion = mysql.createConnection(
-    {
-        host: 'us-cdbr-east-03.cleardb.com',
-        user: 'bc74c327788e47',
-        password: '8dcf085d',
-        database: 'heroku_b667af063c5f73a'
-    }
-);
-conexion.connect( 
-                    function(err)
-                        {
-                            
-                            if( err ) throw err; //si hay error , se va de la función.
-                            
-                            console.log("conectado con exito!");
 
-                        }
-                );
-
-                
-module.exports = conexion;
+var db_config = {
+    host: 'us-cdbr-east-03.cleardb.com',
+    user: 'bc74c327788e47',
+    password: '8dcf085d',
+    database: 'heroku_b667af063c5f73a'
+};
+  
+  var connection;
+  
+  function handleDisconnect() {
+    connection = mysql.createConnection(db_config); // Recreate the connection, since
+                                                    // the old one cannot be reused.
+  
+    connection.connect(function(err) {              // The server is either down
+      if(err) {                                     // or restarting (takes a while sometimes).
+        console.log('error when connecting to db:', err);
+        setTimeout(handleDisconnect, 2000); // We introduce a delay before attempting to reconnect,
+      }                                     // to avoid a hot loop, and to allow our node script to
+    });                                     // process asynchronous requests in the meantime.
+                                            // If you're also serving http, display a 503 error.
+    connection.on('error', function(err) {
+      console.log('db error', err);
+      if(err.code === 'PROTOCOL_CONNECTION_LOST') { // Connection to the MySQL server is usually
+        handleDisconnect();                         // lost due to either server restart, or a
+      } else {                                      // connection idle timeout (the wait_timeout
+        throw err;                                  // server variable configures this)
+      }
+    });
+  }
+  
+  handleDisconnect();
+  
+module.exports = connection;
