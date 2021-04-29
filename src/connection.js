@@ -6,10 +6,13 @@ var db_config = {
     password: '8dcf085d',
     database: 'heroku_b667af063c5f73a'
 };
+
+  console.log("se carga connection")
   
   var connection;
   
   function handleDisconnect() {
+    console.log("handleDisconect")
     connection = mysql.createConnection(db_config); // Recreate the connection, since
                                                     // the old one cannot be reused.
   

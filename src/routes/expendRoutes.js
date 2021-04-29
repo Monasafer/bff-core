@@ -1,16 +1,16 @@
 const express = require('express');
 const conexion = require('../connection')
 const router = express.Router();
+const pool = require('../database');
 
 router.get('/', (req, res)=>{                          //GASTOS 
-
-  
-        conexion.query('SELECT * FROM expend WHERE expen_state_code = 1', function(err,result,fields){
+        console.log("se llama expend")
+        pool.query('SELECT * FROM expend WHERE expen_state_code = 1', function(err,result,fields){
                 if (err) throw err;
                 
                 //console.log(result);
                 res.json(result);
-        })       
+        });
                         
         //res.send('listado de gastos de monadb')
 });
