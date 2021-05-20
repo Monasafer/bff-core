@@ -1,10 +1,10 @@
 const express = require('express');
 const conexion = require('../connection')
 const router = express.Router();
+const pool = require('../database');
 
 
-
-router.get('/', (req, res)=>{                                    //MONA
+router.get('/mona', (req, res)=>{                 //MONA
     
     conexion.query('SELECT * FROM mona WHERE mona_state_code = 1', function(err,result,fields){
         if (err) throw err;
@@ -16,18 +16,20 @@ router.get('/', (req, res)=>{                                    //MONA
 });
 
 
-router.get('/:id', (req, res) => {
-    
-  conexion.query('SELECT * FROM mona WHERE mona_id=' + req.params.id,
-                  function (err, result, fields){
-                      if ( err ) throw err;
+router.get('/mona/:user_id',(req,res)=>{ //GASTOS POR USUARIO
+        const {user_id} = req.params;
+        console.log(user_id);
+        consulta='SELECT * FROM mona WHERE (mona_user_id) = ?';
+        pool.query(consulta,user_id,(err,result)=>{
+                if(!err){
+                        res.json(result);
+                }else{
+                        console.log(err);
+                }
+        });
+});
 
-                      res.json(result[0]); //esta con el [0], asi te devuelve el OBJETO de la array y no la array completa
-                  }
-              )
-
-} );
-
+/*
 //////////////////////////////////POST - ANDA POR QUERY CON POSTMAN /////////////////////////////////////////////
 router.post('/', (req, res)=>{
   console.log(req.body)
@@ -148,6 +150,6 @@ router.put('/:id', (req, res)=>{
 
 
 })
-
+*/
 
 module.exports = router; 

@@ -1,32 +1,33 @@
 const express = require('express');
 const conexion = require('../connection.js')
 const router = express.Router();
+const pool = require('../database');
 
-router.get('/', (req,res)=>{                                           // AHORROS Y PLAN DE AHORRO \\
+router.get('/save', (req,res)=>{                                           // AHORROS Y PLAN DE AHORRO \\
    
     conexion.query('SELECT * FROM save WHERE save_state_code = 1', function (err,result,fields){
         if (err) throw err;
-
-        console.log(result);
+        //console.log(result);
         res.send(result)
     })
 
         
   })
 
-router.get('/:id', (req, res) => {
-
-conexion.query('SELECT * FROM save WHERE save_id=' + req.params.id,
-                function (err, result, fields){
-                    if ( err ) throw err;
-
-                    res.json(result[0]); //esta con el [0], asi te devuelve el OBJETO de la array y no la array completa
+  router.get('/save/:user_id',(req,res)=>{ //AHORROS POR USUARIO
+        const {user_id} = req.params;
+        console.log(user_id);
+        consulta='SELECT * FROM save WHERE (save_user_id) = ?';
+        pool.query(consulta,user_id,(err,result)=>{
+                if(!err){
+                        res.json(result);
+                }else{
+                        console.log(err);
                 }
-            )
+        });
+});
 
-} );
-
-
+/*
 //////////////////////////////////POST - ANDA POR QUERY CON POSTMAN /////////////////////////////////////////////
 router.post('/', (req, res)=>{
     console.log(req.body)
@@ -158,6 +159,6 @@ router.post('/', (req, res)=>{
 })
 
 
-
+*/
 
 module.exports = router;

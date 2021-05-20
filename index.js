@@ -4,20 +4,24 @@ const sessionRoutes = require('./src/routes/session_routes')
 const dashboard =require('./src/routes/dashboard')
 const auth = require('./src/auth')
 const cors = require ('cors')
-const bodyParser = require ('body-parser');
+//const bodyParser = require ('body-parser');
 const session = require('express-session');
 const FileStore = require ('session-file-store')(session)
 const fileUpload = require('express-fileupload')
+
+
+//Settings
+const app = express();
 
 
 const userRoutes = require('./src/routes/userRoutes')
 const saveRoutes = require('./src/routes/saveRoutes')
 const expendRoutes = require('./src/routes/expendRoutes')
 
-const app = express();
 
-app.use(bodyParser.urlencoded({ extended: false}))
-app.use(bodyParser.json())
+//Middleware
+app.use(express.urlencoded({ extended: false}))
+app.use(express.json())
 app.use(fileUpload());
 
 app.use(express.static('../public')) //esto es para las imagenes
@@ -35,10 +39,15 @@ app.use( session({
     name : 'mona'
 })
 )
-app.use('/auth', sessionRoutes)
-app.use('/expend', expendRoutes) //poner el auth, entremedio de el '/expend' y el expendRoutes. - ahora lo saco para probar con REACT
-app.use('/mona', monaRoutes) //acordarese de las autoizaciones en las rutas
+app.use(require('./src/routes/expendRoutes'));
+app.use(require('./src/routes/saveRoutes'));
+app.use(require('./src/routes/monaRoutes'));
+//app.use('/auth', sessionRoutes)
+//app.use('/expend', expendRoutes) //poner el auth, entremedio de el '/expend' y el expendRoutes. - ahora lo saco para probar con REACT
+//app.use('/mona', monaRoutes) //acordarese de las autoizaciones en las rutas
 //app.use('/user', userRoutes)
-app.use('/save', saveRoutes)
-app.use('/dashboard', dashboard)
+//app.use('/save', saveRoutes)
+//app.use('/dashboard', dashboard)
+
+//Starting
 app.listen(process.env.PORT || 3000, ()=>{console.log('Mona Loading...')} );

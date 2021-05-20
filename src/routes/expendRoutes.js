@@ -3,70 +3,45 @@ const conexion = require('../connection')
 const router = express.Router();
 const pool = require('../database');
 
-router.get('/', (req, res)=>{                          //GASTOS 
-        console.log("se llama expend")
-        pool.query('SELECT * FROM expend WHERE expen_state_code = 1', function(err,result,fields){
+/////////////////////////////////////////////////////////////
+router.get('/expend', (req, res)=>{        //TODOS LOS GASTOS 
+        console.log("expend active")
+        pool.query('SELECT * FROM expend', function(err,result,fields){
                 if (err) throw err;
-                
                 //console.log(result);
                 res.json(result);
         });
-                        
-        //res.send('listado de gastos de monadb')
 });
-
-router.get('/:id', (req, res) => {
-    
-        conexion.query('SELECT * FROM expend WHERE expen_id=' + req.params.id,
-                        function (err, result, fields){
-                            if ( err ) throw err;
-    
-                            res.json(result[0]); //esta con el [0], asi te devuelve el OBJETO de la array y no la array completa
-                        }
-                    )
-    
-} );
-
-
-
-
-router.post('/', (req, res)=>{
-console.log(req.body)
-        //¿EL NUMERO DE ID IRIA EN PARAMETROS? ejemplo {params.id}      
-let sql = `INSERT INTO expend (expen_descr, expen_value, expen_user_id, expen_creation_date, expen_finish_date, expen_state_code) 
-            VALUES (?, ?, ?, ?, ?, ?)`
-
-let params = [
-        req.body.descr, 
-        req.body.value, 
-        req.session.idUser = 1,  // solucionado (parametros aclarados en session_routes.js )
-        req.body.creationdate, 
-        req.body.finishdate, 
-        req.body.statecode =1 //TENGO QUE METER ESTA OPCION SI O SI 
-        ];
-       
-        conexion.query(sql, params, function(err,result,fields){
-              let respuesta;
-
-              if (err){
-                console.log(err)
-
-                respuesta ={
-                                status: 'error',
-                                message: 'Error al guardar  gasto'
-                           }
-              }
-              else{
-                      respuesta = {
-                                        status: 'ok',
-                                        message: 'El gasto se guardo satisfactoreamente'
-                                  }
-              }
-              res.json(respuesta);
-        })
-
+///////////////////////////////////////////////////////////////
+router.get('/expend/:user_id',(req,res)=>{ //GASTOS POR USUARIO
+        const {user_id} = req.params;
+        console.log(user_id);
+        consulta='SELECT * FROM expend WHERE (expen_user_id) = ?';
+        pool.query(consulta,user_id,(err,result)=>{
+                if(!err){
+                        res.json(result);
+                }else{
+                        console.log(err);
+                }
+        });
 });
+///////////////////////////////////////////////////////////
+router.post('/expend', (req, res) => { //Ingresar
+        const {expen_id, expen_descr, expen_value,expen_user_id,expen_creation_date,expen_finish_date,expen_state_code} = req.body;
+        console.log(expen_id, expen_descr, expen_value,expen_user_id,expen_creation_date,expen_finish_date,expen_state_code);
+        const query = `insert into expend(expen_id,expen_descr,expen_value,expen_user_id,expen_creation_date,expen_finish_date,expen_state_code)
+        values(?, ?, ?,?,?,?,?);`;
+        campos = [expen_id, expen_descr, expen_value,expen_user_id,expen_creation_date,expen_finish_date,expen_state_code]
+        pool.query(query, campos, (err, rows, fields) => {
+          if(!err) {
+            res.json({status: 'expen Saved'});
+          } else {
+            console.log(err);
+          }
+        });
+      });
 
+/*
 // router.put('/:id' , (req, res)=>{
         
 //         let sql = `UPDATE expend
@@ -152,5 +127,5 @@ router.put('/:id', (req, res)=>{
 
 
 })
-
+*/
 module.exports = router;
