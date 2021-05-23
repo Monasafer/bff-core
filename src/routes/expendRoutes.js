@@ -7,7 +7,6 @@ router.get('/expend', (req, res)=>{        //TODOS LOS GASTOS
         console.log("expend active")
         pool.query('SELECT * FROM expend WHERE (expen_state_code)=1', function(err,result,fields){
                 if (err) throw err;
-                //console.log(result);
                 res.json(result);
         });
 });
@@ -16,7 +15,6 @@ router.get('/expendelete', (req, res)=>{        //TODOS LOS GASTOS ELIMINADOS
         console.log("expend active")
         pool.query('SELECT * FROM expend WHERE (expen_state_code)=0', function(err,result,fields){
                 if (err) throw err;
-                //console.log(result);
                 res.json(result);
         });
 });
@@ -45,7 +43,7 @@ router.get('/expendelete/:user_id',(req,res)=>{ //GASTOS ELIMINADOS POR USUARIO
         });
 });
 ///////////////////////////////////////////////////////////
-router.post('/expend', (req, res) => { //Ingresar Gasto
+router.post('/expend', (req, res) => { //Ingresar Gasto pasandole expen_id=0
         const {expen_id, expen_descr, expen_value,expen_user_id,expen_creation_date,expen_finish_date,expen_state_code} = req.body;
         console.log(expen_id, expen_descr, expen_value,expen_user_id,expen_creation_date,expen_finish_date,expen_state_code);
         const query = `insert into expend(expen_id,expen_descr,expen_value,expen_user_id,expen_creation_date,expen_finish_date,expen_state_code)

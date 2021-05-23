@@ -18,7 +18,6 @@ const expendRoutes = require('./src/routes/expendRoutes')
 app.use(express.urlencoded({ extended: false}))
 app.use(express.json())
 app.use(fileUpload());
-
 app.use(express.static('../public')) //esto es para las imagenes
 
 app.use(cors({credentials: true, 
@@ -38,12 +37,9 @@ app.use( session({
 app.use(require('./src/routes/expendRoutes'));
 app.use(require('./src/routes/saveRoutes'));
 app.use(require('./src/routes/monaRoutes'));
+app.use(require('./src/routes/userRoutes'));
 //app.use('/auth', sessionRoutes)
-//app.use('/expend', expendRoutes) //poner el auth, entremedio de el '/expend' y el expendRoutes. - ahora lo saco para probar con REACT
-//app.use('/mona', monaRoutes) //acordarese de las autoizaciones en las rutas
-//app.use('/user', userRoutes)
-//app.use('/save', saveRoutes)
 //app.use('/dashboard', dashboard)
 
 //Starting
-app.listen(process.env.PORT || 3000, ()=>{console.log('Mona Loading...')} );
+app.listen(process.env.PORT || 3000, ()=>{console.log('Mona Starting...')} );
