@@ -2,31 +2,50 @@ const express = require('express');
 const conexion = require('../connection')
 const router = express.Router();
 const pool = require('../database');
-
 /////////////////////////////////////////////////////////////
 router.get('/expend', (req, res)=>{        //TODOS LOS GASTOS 
         console.log("expend active")
-        pool.query('SELECT * FROM expend', function(err,result,fields){
+        pool.query('SELECT * FROM expend WHERE (expen_state_code)=1', function(err,result,fields){
+                if (err) throw err;
+                //console.log(result);
+                res.json(result);
+        });
+});
+/////////////////////////////////////////////////////////////
+router.get('/expendelete', (req, res)=>{        //TODOS LOS GASTOS ELIMINADOS
+        console.log("expend active")
+        pool.query('SELECT * FROM expend WHERE (expen_state_code)=0', function(err,result,fields){
                 if (err) throw err;
                 //console.log(result);
                 res.json(result);
         });
 });
 ///////////////////////////////////////////////////////////////
-router.get('/expend/:user_id',(req,res)=>{ //GASTOS POR USUARIO
+router.get('/expend/:user_id',(req,res)=>{ //GASTOS POR USUARIO 
         const {user_id} = req.params;
         console.log(user_id);
-        consulta='SELECT * FROM expend WHERE (expen_user_id) = ?';
+        consulta='SELECT * FROM expend WHERE (expen_user_id) = ? AND (expen_state_code)=1';
         pool.query(consulta,user_id,(err,result)=>{
                 if(!err){
                         res.json(result);
                 }else{
-                        console.log(err);
-                }
+                        console.log(err); }
+        });
+});
+///////////////////////////////////////////////////////////////
+router.get('/expendelete/:user_id',(req,res)=>{ //GASTOS ELIMINADOS POR USUARIO 
+        const {user_id} = req.params;
+        console.log(user_id);
+        consulta='SELECT * FROM expend WHERE (expen_user_id) = ? AND (expen_state_code)=0';
+        pool.query(consulta,user_id,(err,result)=>{
+                if(!err){
+                        res.json(result);
+                }else{
+                        console.log(err);}
         });
 });
 ///////////////////////////////////////////////////////////
-router.post('/expend', (req, res) => { //Ingresar
+router.post('/expend', (req, res) => { //Ingresar Gasto
         const {expen_id, expen_descr, expen_value,expen_user_id,expen_creation_date,expen_finish_date,expen_state_code} = req.body;
         console.log(expen_id, expen_descr, expen_value,expen_user_id,expen_creation_date,expen_finish_date,expen_state_code);
         const query = `insert into expend(expen_id,expen_descr,expen_value,expen_user_id,expen_creation_date,expen_finish_date,expen_state_code)
@@ -34,98 +53,55 @@ router.post('/expend', (req, res) => { //Ingresar
         campos = [expen_id, expen_descr, expen_value,expen_user_id,expen_creation_date,expen_finish_date,expen_state_code]
         pool.query(query, campos, (err, rows, fields) => {
           if(!err) {
-            res.json({status: 'expen Saved'});
+            res.json({status: 'expend Saved'});
           } else {
             console.log(err);
           }
         });
       });
-
-/*
-// router.put('/:id' , (req, res)=>{
-        
-//         let sql = `UPDATE expend
-//                 SET expen_descr = ?, 
-//                 expen_value = ?, 
-//                 expen_user_id = ?, 
-//                 expen_creation_date = ?, 
-//                 expen_finish_date= ?, 
-//                 expen_state_code = ?
-//                 WHERE expen_id = ?`
-        
-//         let params = [
-//                 req.body.descr, 
-//                 req.body.value, 
-//                 req.session.idUser = 1, //HARDCODEADO - NO HACE EL EDIT SIN ESTO,
-//                 req.body.creationdate, 
-//                 req.body.finishdate, 
-//                 req.body.statecode = 1, //HARDCODEADO - NO HACE EL EDIT SIN ESTO,SI LE PONES EL STATECODE EN 0 NO MUESTRA POR PANTALLA
-//                 req.params.id
-//                 ];
-        
-//         conexion.query(sql, params, function(err,result,fields){
-
-//                 let respuesta;
-
-//                 if (err){
-//                         respuesta={
-//                                         status: 'error',
-//                                         message: 'Error al modificar la receta',
-//                                   }
-//                 }
-//                 else{
-//                         respuesta= {
-//                                         status: 'ok',
-//                                         message: 'la respuesta se agregó',
-//                                   }
-//                 }
-//                 res.json(respuesta);
-
-//         })
-
-
-// })
-
-
-//////////////////////////////// ES EL ELIMINAR (DELETE) PERO CON METODO PUT /////////////////////
-
-router.put('/:id', (req, res)=>{
-
-        console.log(req.body)
-        console.log(req.params)
-        console.log(req.session)
-        
-        let sql = `UPDATE expend
-                SET ?
-                WHERE expen_id = ?`
-        
-        let params = [
-                req.body, 
-                req.params.id
-                ];
-        
-        conexion.query(sql, params, function(err,result,fields){
-
-                let respuesta;
-
-                if (err){
-                        respuesta={
-                                status: 'error',
-                                message: 'Error al modificar la receta',
-                                err: err
-                        }       
-                }
-                else{
-                        respuesta= {
-                                        status: 'ok',
-                                        message: 'la respuesta se agregó',
-                                  }
-                }
-                res.json(respuesta);
-
-        })
-
-
-})
-*/
+///////////////////////////////////////////////////////////
+router.put('/expend/:expen_id', (req, res) => {  //cambiar gasto ingresando su ID
+        const {expen_id} = req.params;
+        console.log(expen_id);
+        const {expen_descr, expen_value,expen_user_id,expen_creation_date,expen_finish_date,expen_state_code} = req.body;
+        console.log(req.body);
+        let query =  `UPDATE expend
+                SET 
+                expen_descr = ?, 
+                expen_value = ?, 
+                expen_creation_date = ?, 
+                expen_finish_date= ?, 
+                expen_state_code = ?
+                WHERE expen_id = ?`;
+        campos = [expen_descr, expen_value,expen_creation_date,expen_finish_date,expen_state_code,expen_id];
+        console.log(campos);
+        pool.query(query,campos, (err, rows, fields) => {
+          if(!err) {
+            res.json({status: 'expend Updated'});
+          } else {
+            console.log(err);
+          }
+        });
+      });
+///////////////////////////////////////////////////////////
+router.put('/expendelete/:expen_id', (req, res) => {  //Eliminar gasto ingresando su ID
+        const {expen_id} = req.params;
+        console.log(expen_id);
+        const {expen_descr, expen_value,expen_user_id,expen_creation_date,expen_finish_date,expen_state_code} = req.body;
+        console.log(req.body);
+        let query =  `UPDATE expend
+                SET 
+                expen_state_code = 0
+                WHERE expen_id = ?`;
+        campos = [expen_id];
+        console.log(campos);
+        pool.query(query,campos, (err, rows, fields) => {
+          if(!err) {
+            res.json({status: 'expend Eliminado correctamente'});
+          } else {
+            console.log(err);
+          }
+        });
+      });
+//Exportacion de ruta
 module.exports = router;

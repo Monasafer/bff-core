@@ -2,18 +2,15 @@ const express = require('express');
 const conexion = require('../connection.js')
 const router = express.Router();
 const pool = require('../database');
-
+////////////////////////////////////////////////////////////////////
 router.get('/save', (req,res)=>{                                           // AHORROS Y PLAN DE AHORRO \\
-   
     conexion.query('SELECT * FROM save WHERE save_state_code = 1', function (err,result,fields){
         if (err) throw err;
         //console.log(result);
         res.send(result)
-    })
-
-        
+    })  
   })
-
+////////////////////////////////////////////////////////////////////
   router.get('/save/:user_id',(req,res)=>{ //AHORROS POR USUARIO
         const {user_id} = req.params;
         console.log(user_id);
@@ -26,47 +23,25 @@ router.get('/save', (req,res)=>{                                           // AH
                 }
         });
 });
+////////////////////////////////////////////////////////////////////
+router.post('/save', (req, res) => { //Ingresar Ahorro
+        const {save_id, save_descr, save_value,save_pretend,save_user_id,save_creation_date,save_pretend_date,save_state_code} = req.body;
+        console.log(save_id, save_descr, save_value,save_pretend,save_user_id,save_creation_date,save_pretend_date,save_state_code);
+        const query = `insert into save(save_id, save_descr, save_value,save_pretend,save_user_id,save_creation_date,save_pretend_date,save_state_code)
+        values(?, ?, ?,?,?,?,?,?);`;
+        campos = [save_id, save_descr, save_value,save_pretend,save_user_id,save_creation_date,save_pretend_date,save_state_code]
+        pool.query(query, campos, (err, rows, fields) => {
+          if(!err) {
+            res.json({status: 'save Saved'});
+          } else {
+            console.log(err);
+          }
+        });
+      });
+////////////////////////////////////////////////////////////////////
+
 
 /*
-//////////////////////////////////POST - ANDA POR QUERY CON POSTMAN /////////////////////////////////////////////
-router.post('/', (req, res)=>{
-    console.log(req.body)
-            //¿EL NUMERO DE ID IRIA EN PARAMETROS? ejemplo {params.id}      
-    let sql = `INSERT INTO save (save_descr, save_value, save_user_id, save_creation_date, save_state_code) 
-                VALUES (?, ?, ?, ?, ?)`
-    
-    let params = [
-            req.body.descr, 
-            req.body.value,
-            //req.body.pretend, 
-            req.body.idUser = 1,  // solucionado (parametros aclarados en session_routes.js )
-            req.body.creationdate, 
-            //req.body.pretenddate, 
-            req.body.statecode = 1 //TENGO QUE METER ESTA OPCION SI O SI 
-            ];
-           
-            conexion.query(sql, params, function(err,result,fields){
-                  let respuesta;
-    
-                  if (err){
-                    console.log(err)
-    
-                    respuesta ={
-                                    status: 'error',
-                                    message: 'Error al guardar  gasto'
-                               }
-                  }
-                  else{
-                          respuesta = {
-                                            status: 'ok',
-                                            message: 'El gasto se guardo satisfactoreamente'
-                                      }
-                  }
-                  res.json(respuesta);
-            })
-    
-});
-
 ////////////////////////////////////////////////////////PUT - CHEQUEAR SI ANDA POR POSTMAN////////////////////////////////////////////
 
 // router.put('/:id', (req, res)=>{ //save_descr, save_value, save_pretend, save_user_id, save_creation_date, save_pretend_date, save_state_code
@@ -157,8 +132,6 @@ router.post('/', (req, res)=>{
 
 
 })
-
-
 */
 
 module.exports = router;

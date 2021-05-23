@@ -2,8 +2,7 @@ const express = require('express');
 const conexion = require('../connection')
 const router = express.Router();
 const pool = require('../database');
-
-
+////////////////////////////////////////////////////////////////////
 router.get('/mona', (req, res)=>{                 //MONA
     
     conexion.query('SELECT * FROM mona WHERE mona_state_code = 1', function(err,result,fields){
@@ -14,8 +13,7 @@ router.get('/mona', (req, res)=>{                 //MONA
         res.send(result)
     })  
 });
-
-
+////////////////////////////////////////////////////////////////////
 router.get('/mona/:user_id',(req,res)=>{ //GASTOS POR USUARIO
         const {user_id} = req.params;
         console.log(user_id);
@@ -28,44 +26,25 @@ router.get('/mona/:user_id',(req,res)=>{ //GASTOS POR USUARIO
                 }
         });
 });
+////////////////////////////////////////////////////////////////////
+router.post('/mona', (req, res) => { //Ingresar Mona
+        const {mona_id, mona_descr, mona_value,mona_user_id,mona_creation_date,mona_state_code} = req.body;
+        console.log(mona_id, mona_descr, mona_value,mona_user_id,mona_creation_date,mona_state_code);
+        const query = `insert into mona(mona_id, mona_descr, mona_value,mona_user_id,mona_creation_date,mona_state_code)
+        values(?, ?, ?,?,?,?);`;
+        campos = [mona_id, mona_descr, mona_value,mona_user_id,mona_creation_date,mona_state_code]
+        pool.query(query, campos, (err, rows, fields) => {
+          if(!err) {
+            res.json({status: 'mona Saved'});
+          } else {
+            console.log(err);
+          }
+        });
+      });
+////////////////////////////////////////////////////////////////////
+
 
 /*
-//////////////////////////////////POST - ANDA POR QUERY CON POSTMAN /////////////////////////////////////////////
-router.post('/', (req, res)=>{
-  console.log(req.body)
-          //¿EL NUMERO DE ID IRIA EN PARAMETROS? ejemplo {params.id}      
-  let sql = `INSERT INTO mona (mona_descr, mona_value, mona_user_id, mona_creation_date, mona_state_code) 
-              VALUES (?, ?, ?, ?, ?)`
-  
-  let params = [
-          req.body.descr, 
-          req.body.value, 
-          req.body.idUser = 1,  // solucionado (parametros aclarados en session_routes.js )
-          req.body.creationdate = '2020-04-05T06:00:00.000Z',  
-          req.body.statecode = 1 //TENGO QUE METER ESTA OPCION SI O SI 
-          ];
-         
-          conexion.query(sql, params, function(err,result,fields){
-                let respuesta;
-  
-                if (err){
-                  console.log(err)
-  
-                  respuesta ={
-                                  status: 'error',
-                                  message: 'Error al guardar Mona/ingreso'
-                             }
-                }
-                else{
-                        respuesta = {
-                                          status: 'ok',
-                                          message: 'La Mona/ingreso se guardo satisfactoreamente'
-                                    }
-                }
-                res.json(respuesta);
-          })
-  
-  });
 ////////////////////////////////////////////////////////PUT - CHEQUEAR SI ANDA POR POSTMAN////////////////////////////////////////////
 
 // router.put('/:id', (req, res)=>{

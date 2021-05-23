@@ -4,20 +4,15 @@ const sessionRoutes = require('./src/routes/session_routes')
 const dashboard =require('./src/routes/dashboard')
 const auth = require('./src/auth')
 const cors = require ('cors')
-//const bodyParser = require ('body-parser');
 const session = require('express-session');
 const FileStore = require ('session-file-store')(session)
 const fileUpload = require('express-fileupload')
 
-
 //Settings
 const app = express();
-
-
 const userRoutes = require('./src/routes/userRoutes')
 const saveRoutes = require('./src/routes/saveRoutes')
 const expendRoutes = require('./src/routes/expendRoutes')
-
 
 //Middleware
 app.use(express.urlencoded({ extended: false}))
@@ -37,8 +32,9 @@ app.use( session({
     resave: false,
     saveUninitialized: true,
     name : 'mona'
-})
-)
+}))
+
+//Routes
 app.use(require('./src/routes/expendRoutes'));
 app.use(require('./src/routes/saveRoutes'));
 app.use(require('./src/routes/monaRoutes'));
