@@ -36,8 +36,10 @@ router.post('/Createuser', (req, res) => { //Crear usuario
         console.log(err); }
     });}
     else{
-        console.log("CORREO NO VALIDO,REVISAR");
+        console.log("CORREO NO VALIDO,VUELVA A INTENTAR");
     }
   });
+
+  
 //Exportacion de ruta
 module.exports = router;

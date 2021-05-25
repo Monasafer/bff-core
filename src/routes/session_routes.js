@@ -2,13 +2,12 @@ const express = require('express');
 const router = express.Router();
 const conexion = require('../connection')
 
-router.post('/', (req, res) =>{
+router.post('/register', (req, res) =>{
 
     let sql = `
-                 SELECT *
-                 FROM user
+                 SELECT * FROM user
                  WHERE user = ?
-                   AND pass = ?`;
+                 AND pass = ?`;
 
     let values = [
                     req.body.user,
@@ -24,8 +23,8 @@ router.post('/', (req, res) =>{
                     message : 'No es posible acceder en este momento. Intente nuevamente en unos minutos.'
                 }
             )
+
         }else{
-            
             if(result.length == 1){
                 req.session.user   = req.body.user;
                 req.session.user_id = result[0].user_id;
@@ -52,9 +51,6 @@ router.post('/', (req, res) =>{
 
         }
     })
-
-
-
 })
 
 router.delete('/', (req, res) => {

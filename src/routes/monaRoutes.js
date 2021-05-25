@@ -28,7 +28,7 @@ router.get('/mona/:user_id',(req,res)=>{ //MONA POR USUARIO
         });
 });
 ////////////////////////////////////////////////////////////////////
-router.get('/mona/:user_id',(req,res)=>{ //MONA ELIMINADOS POR USUARIO
+router.get('/monadelete/:user_id',(req,res)=>{ //MONA ELIMINADOS POR USUARIO
         const {user_id} = req.params;
         consulta='SELECT * FROM mona WHERE (mona_user_id) = ?   AND mona_state_code = 0';
         pool.query(consulta,user_id,(err,result)=>{
