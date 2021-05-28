@@ -19,37 +19,25 @@ router.get('/expendelete', (req, res)=>{        //TODOS LOS GASTOS ELIMINADOS
         });
 });
 ///////////////////////////////////////////////////////////////
-router.get('/expend/:user_id',(req,res)=>{ //GASTOS POR USUARIO 
+router.get('/expend/:user_id/:state_code',(req,res)=>{ //GASTOS POR USUARIO 
         const {user_id} = req.params;
-        console.log(user_id);
-        consulta='SELECT * FROM expend WHERE (expen_user_id) = ? AND (expen_state_code)=1';
-        pool.query(consulta,user_id,(err,result)=>{
+        const {state_code} = req.params;
+        rows = [user_id,state_code];
+        query ='SELECT * FROM expend WHERE (expen_user_id) = ? AND (expen_state_code)=?';
+        pool.query(query,rows,(err,result)=>{
                 if(!err){
                         res.json(result);
                 }else{
                         console.log(err); }
         });
 });
-///////////////////////////////////////////////////////////////
-router.get('/expendelete/:user_id',(req,res)=>{ //GASTOS ELIMINADOS POR USUARIO 
-        const {user_id} = req.params;
-        console.log(user_id);
-        consulta='SELECT * FROM expend WHERE (expen_user_id) = ? AND (expen_state_code)=0';
-        pool.query(consulta,user_id,(err,result)=>{
-                if(!err){
-                        res.json(result);
-                }else{
-                        console.log(err);}
-        });
-});
 ///////////////////////////////////////////////////////////
 router.post('/expend', (req, res) => { //Ingresar Gasto pasandole expen_id=0
         const {expen_id, expen_descr, expen_value,expen_user_id,expen_creation_date,expen_finish_date,expen_state_code} = req.body;
-        console.log(expen_id, expen_descr, expen_value,expen_user_id,expen_creation_date,expen_finish_date,expen_state_code);
         const query = `insert into expend(expen_id,expen_descr,expen_value,expen_user_id,expen_creation_date,expen_finish_date,expen_state_code)
         values(?, ?, ?,?,?,?,?);`;
-        campos = [expen_id, expen_descr, expen_value,expen_user_id,expen_creation_date,expen_finish_date,expen_state_code]
-        pool.query(query, campos, (err, rows, fields) => {
+        rows = [expen_id, expen_descr, expen_value,expen_user_id,expen_creation_date,expen_finish_date,expen_state_code]
+        pool.query(query, rows, (err, rows, fields) => {
           if(!err) {
             res.json({status: 'expend Saved'});
           } else {
@@ -59,10 +47,8 @@ router.post('/expend', (req, res) => { //Ingresar Gasto pasandole expen_id=0
       });
 ///////////////////////////////////////////////////////////
 router.put('/expend/:expen_id', (req, res) => {  //cambiar gasto ingresando su ID
-        const {expen_id} = req.params;
-        console.log(expen_id);
-        const {expen_descr, expen_value,expen_user_id,expen_creation_date,expen_finish_date,expen_state_code} = req.body;
-        console.log(req.body);
+        let {expen_id} = req.params;
+        let {expen_descr, expen_value,expen_user_id,expen_creation_date,expen_finish_date,expen_state_code} = req.body;
         let query =  `UPDATE expend
                 SET 
                 expen_descr = ?, 
@@ -71,9 +57,8 @@ router.put('/expend/:expen_id', (req, res) => {  //cambiar gasto ingresando su I
                 expen_finish_date= ?, 
                 expen_state_code = ?
                 WHERE expen_id = ?`;
-        campos = [expen_descr, expen_value,expen_creation_date,expen_finish_date,expen_state_code,expen_id];
-        console.log(campos);
-        pool.query(query,campos, (err, rows, fields) => {
+        rows = [expen_descr, expen_value,expen_creation_date,expen_finish_date,expen_state_code,expen_id];
+        pool.query(query,rows, (err, rows, fields) => {
           if(!err) {
             res.json({status: 'expend Updated'});
           } else {
@@ -83,17 +68,14 @@ router.put('/expend/:expen_id', (req, res) => {  //cambiar gasto ingresando su I
       });
 ///////////////////////////////////////////////////////////
 router.put('/expendelete/:expen_id', (req, res) => {  //Eliminar gasto ingresando su ID
-        const {expen_id} = req.params;
-        console.log(expen_id);
-        const {expen_descr, expen_value,expen_user_id,expen_creation_date,expen_finish_date,expen_state_code} = req.body;
-        console.log(req.body);
+        let {expen_id} = req.params;
+        let {expen_descr, expen_value,expen_user_id,expen_creation_date,expen_finish_date,expen_state_code} = req.body;
         let query =  `UPDATE expend
                 SET 
                 expen_state_code = 0
                 WHERE expen_id = ?`;
-        campos = [expen_id];
-        console.log(campos);
-        pool.query(query,campos, (err, rows, fields) => {
+        rows = [expen_id];
+        pool.query(query,rows, (err, rows, fields) => {
           if(!err) {
             res.json({status: 'expend Eliminado correctamente'});
           } else {
@@ -101,5 +83,21 @@ router.put('/expendelete/:expen_id', (req, res) => {  //Eliminar gasto ingresand
           }
         });
       });
+///////////////////////////////////////////////////////////
+router.get('/expend/:user_id/:startDate/:endDate',(req,res)=>{ //GASTOS POR USUARIO entre Fechas
+        const {user_id} = req.params;
+        const {startDate} = req.params;
+        const {endDate} = req.params;
+        rows = [user_id,startDate,endDate];
+        let query='select * from expend where (expen_user_id) = ? AND expen_creation_date >=?  AND expen_finish_date <=?  ';
+        pool.query(consulta,rows,(err,result)=>{
+                if(!err){
+                        res.json(result);
+                }else{
+                        console.log(err); }
+        });
+});
+
+
 //Exportacion de ruta
 module.exports = router;

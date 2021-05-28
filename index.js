@@ -1,6 +1,4 @@
 const express = require('express');
-const monaRoutes = require('./src/routes/monaRoutes')
-const sessionRoutes = require('./src/routes/session_routes')
 const dashboard =require('./src/routes/dashboard')
 const auth = require('./src/auth')
 const cors = require ('cors')
@@ -42,9 +40,11 @@ app.use(require('./src/routes/monaRoutes'));
 app.use(require('./src/routes/userRoutes'));
 app.use(require('./src/routes/dashboard'));
 
-
 //Starting
 app.listen(process.env.PORT || 3000, ()=>{console.log('Mona Starting...')} );
+
+
+
 
 /*
 app.use('/auth', sessionRoutes)

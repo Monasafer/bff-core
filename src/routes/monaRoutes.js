@@ -17,21 +17,12 @@ router.get('/monadelete', (req, res)=>{      //TODOS LOS MONA ELIMINADOS
         })  
     });
 ////////////////////////////////////////////////////////////////////
-router.get('/mona/:user_id',(req,res)=>{ //MONA POR USUARIO
+router.get('/mona/:user_id/:state_code',(req,res)=>{ //MONA POR USUARIO
         const {user_id} = req.params;
-        consulta='SELECT * FROM mona WHERE (mona_user_id) = ?';
-        pool.query(consulta,user_id,(err,result)=>{
-                if(!err){
-                        res.json(result);
-                }else{
-                        console.log(err);}
-        });
-});
-////////////////////////////////////////////////////////////////////
-router.get('/monadelete/:user_id',(req,res)=>{ //MONA ELIMINADOS POR USUARIO
-        const {user_id} = req.params;
-        consulta='SELECT * FROM mona WHERE (mona_user_id) = ?   AND mona_state_code = 0';
-        pool.query(consulta,user_id,(err,result)=>{
+        const {state_code} = req.params;
+        rows = [user_id,state_code];
+        let query='SELECT * FROM mona WHERE (mona_user_id) = ? AND (mona_state_code)=?';
+        pool.query(query,rows,(err,result)=>{
                 if(!err){
                         res.json(result);
                 }else{
@@ -43,8 +34,8 @@ router.post('/mona', (req, res) => { //Ingresar Mona
         const {mona_id, mona_descr, mona_value,mona_user_id,mona_creation_date,mona_state_code} = req.body;
         const query = `insert into mona(mona_id, mona_descr, mona_value,mona_user_id,mona_creation_date,mona_state_code)
         values(?, ?, ?,?,?,?);`;
-        campos = [mona_id, mona_descr, mona_value,mona_user_id,mona_creation_date,mona_state_code]
-        pool.query(query, campos, (err, rows, fields) => {
+        rows = [mona_id, mona_descr, mona_value,mona_user_id,mona_creation_date,mona_state_code]
+        pool.query(query, rows, (err, rows, fields) => {
           if(!err) {
             res.json({status: 'mona Saved'});
           } else {
@@ -54,9 +45,8 @@ router.post('/mona', (req, res) => { //Ingresar Mona
       });
 ////////////////////////////////////////////////////////////////////
 router.put('/mona/:mona_id', (req, res) => {  //cambiar mona ingresando su ID
-        const {mona_id} = req.params;
-        const {mona_descr, mona_value,mona_user_id,mona_creation_date,mona_state_code} = req.body;
-        console.log(req.body);
+        let {mona_id} = req.params;
+        let {mona_descr, mona_value,mona_user_id,mona_creation_date,mona_state_code} = req.body;
         let query =  `UPDATE mona
                 SET 
                 mona_descr = ?, 
@@ -64,9 +54,8 @@ router.put('/mona/:mona_id', (req, res) => {  //cambiar mona ingresando su ID
                 mona_creation_date = ?, 
                 mona_state_code = ?
                 WHERE mona_id = ?`;
-        campos = [mona_descr, mona_value,mona_creation_date,mona_state_code,mona_id];
-        console.log(campos);
-        pool.query(query,campos, (err, rows, fields) => {
+        rows = [mona_descr, mona_value,mona_creation_date,mona_state_code,mona_id];
+        pool.query(query,rows, (err, rows, fields) => {
           if(!err) {
             res.json({status: 'Mona Updated'});
           } else {
@@ -76,16 +65,14 @@ router.put('/mona/:mona_id', (req, res) => {  //cambiar mona ingresando su ID
       });
 ////////////////////////////////////////////////////////////////////
 router.put('/monadelete/:mona_id', (req, res) => {  //Eliminar gasto ingresando su ID
-        const {mona_id} = req.params;
-        const {mona_descr, mona_value,mona_user_id,mona_creation_date,mona_state_code} = req.body;
-        console.log(req.body);
+        let {mona_id} = req.params;
+        let {mona_descr, mona_value,mona_user_id,mona_creation_date,mona_state_code} = req.body;
         let query =  `UPDATE mona
                 SET 
                 mona_state_code = 0
                 WHERE mona_id = ?`;
-        campos = [mona_id];
-        console.log(campos);
-        pool.query(query,campos, (err, rows, fields) => {
+        rows = [mona_id];
+        pool.query(query,rows, (err, rows, fields) => {
           if(!err) {
             res.json({status: 'Mona Eliminado correctamente'});
           } else {

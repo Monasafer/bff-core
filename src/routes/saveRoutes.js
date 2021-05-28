@@ -1,5 +1,6 @@
 const express = require('express');
-const conexion = require('../connection.js')
+const conexion = require('../connection.js');
+const { query } = require('../database');
 const router = express.Router();
 const pool = require('../database');
 ////////////////////////////////////////////////////////////////////
@@ -17,10 +18,12 @@ router.get('/savedelete', (req,res)=>{                                          
         })  
       })
 ////////////////////////////////////////////////////////////////////
-  router.get('/save/:user_id',(req,res)=>{ //AHORROS POR USUARIO
-        const {user_id} = req.params;
-        consulta='SELECT * FROM save WHERE (save_user_id) = ?';
-        pool.query(consulta,user_id,(err,result)=>{
+  router.get('/save/:user_id/:state_code',(req,res)=>{ //AHORROS POR USUARIO
+        let {user_id} = req.params;
+        let {state_code} = req.params;
+        rows = [user_id,state_code];
+        let query='SELECT * FROM save WHERE (save_user_id) = ? AND (save_state_code)=?';
+        pool.query(query,rows,(err,result)=>{
                 if(!err){
                         res.json(result);
                 }else{
@@ -30,11 +33,11 @@ router.get('/savedelete', (req,res)=>{                                          
 });
 ////////////////////////////////////////////////////////////////////
 router.post('/save', (req, res) => { //Ingresar Ahorro
-        const {save_id, save_descr, save_value,save_pretend,save_user_id,save_creation_date,save_pretend_date,save_state_code} = req.body;
-        const query = `insert into save(save_id, save_descr, save_value,save_pretend,save_user_id,save_creation_date,save_pretend_date,save_state_code)
+        let {save_id, save_descr, save_value,save_pretend,save_user_id,save_creation_date,save_pretend_date,save_state_code} = req.body;
+        let query = `insert into save(save_id, save_descr, save_value,save_pretend,save_user_id,save_creation_date,save_pretend_date,save_state_code)
         values(?, ?, ?,?,?,?,?,?);`;
-        campos = [save_id, save_descr, save_value,save_pretend,save_user_id,save_creation_date,save_pretend_date,save_state_code]
-        pool.query(query, campos, (err, rows, fields) => {
+        rows = [save_id, save_descr, save_value,save_pretend,save_user_id,save_creation_date,save_pretend_date,save_state_code]
+        pool.query(query, rows, (err, rows, fields) => {
           if(!err) {
             res.json({status: 'save Saved'});
           } else {
@@ -44,8 +47,8 @@ router.post('/save', (req, res) => { //Ingresar Ahorro
       });
 ////////////////////////////////////////////////////////////////////
 router.put('/save/:save_id', (req, res) => {  //cambiar ahorro ingresando su ID
-        const {save_id} = req.params;
-        const {save_descr, save_value,save_pretend,save_creation_date,save_pretend_date,save_state_code} = req.body;
+        let {save_id} = req.params;
+        let {save_descr, save_value,save_pretend,save_creation_date,save_pretend_date,save_state_code} = req.body;
         let query =  `UPDATE save
                 SET 
                 save_descr = ?, 
@@ -56,9 +59,8 @@ router.put('/save/:save_id', (req, res) => {  //cambiar ahorro ingresando su ID
                 save_state_code = ?
                 WHERE save_id = ?`;
         save_state_code = 1;
-        campos = [save_descr, save_value,save_pretend,save_creation_date,save_pretend_date,save_state_code,save_id];
-        console.log(campos);
-        pool.query(query,campos, (err, rows, fields) => {
+        rows = [save_descr, save_value,save_pretend,save_creation_date,save_pretend_date,save_state_code,save_id];
+        pool.query(query,rows, (err, rows, fields) => {
           if(!err) {
             res.json({status: 'save Updated'});
           } else {
@@ -68,16 +70,15 @@ router.put('/save/:save_id', (req, res) => {  //cambiar ahorro ingresando su ID
       });
 ////////////////////////////////////////////////////////////////////
 router.put('/savedelete/:save_id', (req, res) => {  //Eliminar ahorro ingresando su ID
-        const {save_id} = req.params;
+        let {save_id} = req.params;
         console.log(save_id);
         console.log(req.body);
         let query =  `UPDATE save
                 SET 
                 save_state_code = 0
                 WHERE save_id = ?`;
-        campos = [save_id];
-        console.log(campos);
-        pool.query(query,campos, (err, rows, fields) => {
+        rows = [save_id];
+        pool.query(query,rows, (err, rows, fields) => {
           if(!err) {
             res.json({status: 'save Eliminado correctamente'});
           } else {
