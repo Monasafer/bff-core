@@ -86,6 +86,19 @@ router.put('/savedelete/:save_id', (req, res) => {  //Eliminar ahorro ingresando
           }
         });
       });
-
+////////////////////////////////////////////////////////////////////
+router.get('/save/:user_id/:startDate/:endDate',(req,res)=>{ //Save POR USUARIO entre Fechas
+        const {user_id} = req.params;
+        const {startDate} = req.params;
+        const {endDate} = req.params;
+        rows = [user_id,startDate,endDate];
+        let query='select * from save where (save_user_id) = ? AND save_creation_date >=?  AND save_pretend_date <=?  ';
+        pool.query(query,rows,(err,result)=>{
+                if(!err){
+                        res.json(result);
+                }else{
+                        console.log(err); }
+        });
+});
 //Exportacion de ruta      
 module.exports = router;

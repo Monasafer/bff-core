@@ -80,5 +80,19 @@ router.put('/monadelete/:mona_id', (req, res) => {  //Eliminar gasto ingresando 
           }
         });
       });
+////////////////////////////////////////////////////////////////////
+router.get('/mona/:user_id/:startDate/:endDate',(req,res)=>{ //MONA POR USUARIO entre Fechas
+        const {user_id} = req.params;
+        const {startDate} = req.params;
+        const {endDate} = req.params;
+        rows = [user_id,startDate,endDate];
+        let query='select * from mona where (mona_user_id) = ? AND mona_creation_date >=?  AND mona_creation_date <=?  ';
+        pool.query(query,rows,(err,result)=>{
+                if(!err){
+                        res.json(result);
+                }else{
+                        console.log(err); }
+        });
+});
 //Exportacion de ruta
 module.exports = router; 
