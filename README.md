@@ -6,28 +6,24 @@ to run :
 Direcciones
 
 Para gastos:
-    /expend    -> Muestra todos los gastos de todos los usuarios
-    /expendelete  -> Muestra todos los gastos eliminados de todos los usuarios
-    /expend/:user_id/:state_code -> Muestra gastos pasandole codigo de usuario
-    /expend    -> Ingresar nuevo valor(POST)
-    /expend/:expen_id -> Con put le pasamos el codigo de gasto que queremos modificar
-    /expendelete/:expen_id -> Con put y el codigo de gasto lo modificamos a state_code 0
-    /expend/:user_id/:startDate/:endDate -> gastos entre fechas por usuario
+    /expend  -> GET:. Header seleccionas usuario, si el usuario se pasa como 0 muestra total de registros. Por parametro seleccionar gastos activos o ya borrados ['user-id']
+    /expend  -> POST: Ingresar nuevo valor pasando el HEADER ID DEL USUARIO ['user-id']
+    /expend  -> PUT: enviamos por header id de gasto a modificar (expen-id)
+    /expend -> DELETE: codigo de gasto por header (expen-id)
+    /expendate -> GET: fechas starDate, endDate por params. Usuario por header
 
 Para Mona:
-    /mona   ->Muestra totalidad de valores 
-    /monadelete ->Muestra todos los valores eliminados
-    /mona/:user_id/:state_code ->Mona por Usuario
-    /mona ->Con post para ingresar un nuevo valor
-    /mona/:mona_id ->Modificar ingresando codigo de mona
-    /monadelete/:mona_id ->Eliminar registro con id
-    /mona/:user_id/:startDate/:endDate -> Mona entre fechas por usuario
+    /mona   -> GET:. Header seleccionas usuario, si el usuario se pasa como 0 muestra total de registros. Por parametro seleccionar gastos activos o ya borrados ['user-id']
+    /mona   -> POST: Ingresar nuevo valor pasando el HEADER ID DEL USUARIO ['user-id']
+    /mona -> PUT: enviamos por header id de gasto a modificar (mona-id)
+    /monadelete/:mona_id -> DELETE: codigo de mona por header (mona-id)
+    /monadates -> GET: fechas starDate, endDate por params. Usuario por header ['user-id']
 
 Para Users:
-    /user ->Muestra todos los usuarios
-    /user/:user_id ->Busqueda de usuario
-    /Createuser ->Crea usuario, verifica que el mail sea correcto (POST)
-    /dash/:id ->Muestra totales por usuario
+    /user -> GET. ['user-id'] = 0 y state_code en params = 1, muestra todos los usuarios activos. Se pueden buscar usuarios pasando su id
+    /user -> POST Creacion de usuario
+    /user -> DELETE Cambia su state a 0 pasando id por heade ['user-id']
+    /dash ->Muestra totales por usuario con header ['user-id']
 
 Para Ahorros:
     /save -> Muestra todos los ahorros

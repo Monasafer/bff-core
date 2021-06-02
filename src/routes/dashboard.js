@@ -3,7 +3,8 @@ const conexion = require('../connection.js');
 const { route } = require('./userRoutes.js');
 const router = express.Router();
 
-router.get('/dash/:id', (req, res) => {
+router.get('/dash', (req, res) => {
+        let   user_id =  req.headers['user-id'];
         let balance;
         let totalSave   = 0 ;
         let totalExpend = 0 ;
@@ -12,19 +13,19 @@ router.get('/dash/:id', (req, res) => {
         queryExpen =    'SELECT * FROM expend WHERE expen_state_code = 1 AND expen_user_id=?';
         queryMona  =    'SELECT * FROM mona WHERE mona_state_code = 1 AND mona_user_id=?';
                
-        conexion.query  (querySave, req.params.id,
+        conexion.query  (querySave, user_id,
                         function (err, result, fields){
                                 if ( err ) throw err;
                                 result.forEach(element => {
                                         totalSave = totalSave + element.save_value;
                         });
-        conexion.query(queryExpen, req.params.id,
+        conexion.query(queryExpen, user_id,
                         function (err, result, fields){
                                 if ( err ) throw err;
                                 result.forEach(element => {
                                         totalExpend = totalExpend + element.expen_value;
                         });
-        conexion.query(queryMona, req.params.id,
+        conexion.query(queryMona, user_id,
                         function (err, result, fields){
                                 if ( err ) throw err;
                                 result.forEach(element => {
