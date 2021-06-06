@@ -27,9 +27,7 @@ Para Users:
 
 Para Ahorros:
     /save -> Muestra todos los ahorros
-    /savedelete -> Ahorros eliminados
-    /save/:user_id/:state_code -> Ahorros por usuario
-    /save -> Creacion de ahorro (POST)
-    /save/:save_id -> Modificar ahorro (PUT)
-    /savedelete/:save_id ->Eliminar ahorro(PUT)
-    /save/:user_id/:startDate/:endDate -> saves entre fechas por usuario
+    /save -> Ingresar nuevo valor pasando el HEADER ID DEL USUARIO ['user-id'] (POST)
+    /save -> Modificar ahorro (PUT)
+    /save -> Eliminar ahorro(PUT)
+    /savedates -> saves entre fechas por usuario

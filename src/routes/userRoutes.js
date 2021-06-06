@@ -1,3 +1,4 @@
+const { text } = require('body-parser');
 const express = require('express');
 const conexion = require('../connection')
 const router = express.Router();
@@ -29,8 +30,9 @@ router.get('/user', (req, res)=>{        //BUSCAR USUARIOS PASANDO SU ID
 });
 //------------------------------------------------------------------------------------------------------
 router.post('/user', (req, res) => { //Crear usuario
-    const {user,pass,mail,creation_date} = req.body;
+    let {user,pass,mail,creation_date} = req.body;
     console.log(mail);
+    mail = mail.toLowerCase();
     var expReg= /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
     var valido=expReg.test(mail);
     if(valido==true){  //Verifico que la direccion de email sea valida
@@ -48,7 +50,7 @@ router.post('/user', (req, res) => { //Crear usuario
     }
   });
 //------------------------------------------------------------------------------------------------------
-router.delete('/user', (req, res) => { //Crear usuario
+router.delete('/user', (req, res) => { //Borrar usuario
     const user = req.headers['user-id'];
     let query =  `UPDATE user
                 SET 
