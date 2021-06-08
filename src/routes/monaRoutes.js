@@ -1,153 +1,99 @@
 const express = require('express');
 const conexion = require('../connection')
 const router = express.Router();
-
-
-
-router.get('/', (req, res)=>{                                    //MONA
-    
-    conexion.query('SELECT * FROM mona WHERE mona_state_code = 1', function(err,result,fields){
-        if (err) throw err;
-
-        console.log(result)
-
-        res.send(result)
-    })  
+const pool = require('../database');
+//------------------------------------------------------------------------------------------------------
+router.get('/mona',(req,res)=>{ //MONA POR USUARIO
+        let user_id = req.headers['user-id'];
+        let   {state} = req.query;
+        if(user_id==0){
+          query ='SELECT * FROM mona WHERE (mona_state_code)=?';
+          rows = [state];
+          pool.query(query,rows,(err,result)=>{
+            if(!err){
+                    res.json(result);
+            }else{
+                    console.log(err); }
+    });
+        }
+        else{
+          query='SELECT * FROM mona WHERE (mona_user_id) = ? AND (mona_state_code)=?';
+          rows = [user_id,state];
+          pool.query(query,rows,(err,result)=>{
+            if(!err){
+                    res.json(result);
+            }else{
+                    console.log(err); }
+    });
+        }
 });
-
-
-router.get('/:id', (req, res) => {
-    
-  conexion.query('SELECT * FROM mona WHERE mona_id=' + req.params.id,
-                  function (err, result, fields){
-                      if ( err ) throw err;
-
-                      res.json(result[0]); //esta con el [0], asi te devuelve el OBJETO de la array y no la array completa
-                  }
-              )
-
-} );
-
-//////////////////////////////////POST - ANDA POR QUERY CON POSTMAN /////////////////////////////////////////////
-router.post('/', (req, res)=>{
-  console.log(req.body)
-          //¿EL NUMERO DE ID IRIA EN PARAMETROS? ejemplo {params.id}      
-  let sql = `INSERT INTO mona (mona_descr, mona_value, mona_user_id, mona_creation_date, mona_state_code) 
-              VALUES (?, ?, ?, ?, ?)`
-  
-  let params = [
-          req.body.descr, 
-          req.body.value, 
-          req.body.idUser = 1,  // solucionado (parametros aclarados en session_routes.js )
-          req.body.creationdate = '2020-04-05T06:00:00.000Z',  
-          req.body.statecode = 1 //TENGO QUE METER ESTA OPCION SI O SI 
-          ];
-         
-          conexion.query(sql, params, function(err,result,fields){
-                let respuesta;
-  
-                if (err){
-                  console.log(err)
-  
-                  respuesta ={
-                                  status: 'error',
-                                  message: 'Error al guardar Mona/ingreso'
-                             }
-                }
-                else{
-                        respuesta = {
-                                          status: 'ok',
-                                          message: 'La Mona/ingreso se guardo satisfactoreamente'
-                                    }
-                }
-                res.json(respuesta);
-          })
-  
-  });
-////////////////////////////////////////////////////////PUT - CHEQUEAR SI ANDA POR POSTMAN////////////////////////////////////////////
-
-// router.put('/:id', (req, res)=>{
-//   console.log(req.query)
-//   let sql = `UPDATE mona
-//           SET mona_descr = ?, 
-//           mona_value = ?, 
-//           mona_user_id = ?, 
-//           mona_creation_date = ?, 
-//           mona_state_code = ?
-//           WHERE mona_id = ?}` // TENGO QUE PONER EL  ---------WHERE mona_id 4{req.params.id}----- para que ande por postman
-  
-//   let params = [
-//           req.query.descr, 
-//           req.query.value, 
-//           req.query.idUser, // tengo que poner req.query.idUser para que lo tome desde el postman
-//           req.query.creationdate,  
-//           req.query.statecode , 
-//           req.params.id //el req.params.id por postman no es necesaro
-//           ];
-          
-//   conexion.query(sql, params, function(err,result,fields){
-
-//           let respuesta;
-
-//           if (err){
-//                   respuesta={
-//                                   status: 'error',
-//                                   message: 'Error al modificar el ingreso',
-//                             }
-//           }
-//           else{
-//                   respuesta= {
-//                                   status: 'ok',
-//                                   message: 'El ingreso se modificó',
-//                             }
-//           }
-//           res.json(respuesta);
-//           console.log(req.query)
-//           console.log(err)
-
-//   })
-
-
-// })
-
-router.put('/:id', (req, res)=>{
-
-        console.log(req.body)
-        console.log(req.params)
-        console.log(req.session)
-        console.log('entre mi reino')
-        let sql = `UPDATE mona
-                SET ?
-                WHERE mona_id = ?`
-        
-        let params = [
-                req.body, 
-                req.params.id
-                ];
-        
-        conexion.query(sql, params, function(err,result,fields){
-
-                let respuesta;
-
-                if (err){
-                        respuesta={
-                                status: 'error',
-                                message: 'Error al modificar la mona',
-                                err: err
-                        }       
-                }
-                else{
-                        respuesta= {
-                                        status: 'ok',
-                                        message: 'la mona se agregó',
-                                  }
-                }
-                res.json(respuesta);
-
-        })
-
-
-})
-
-
+//------------------------------------------------------------------------------------------------------
+router.post('/mona', (req, res) => { //Ingresar Mona
+        let mona_user_id = req.headers['user-id'];
+        let mona_id = 0;
+        const {mona_descr, mona_value,mona_creation_date,mona_state_code} = req.body;
+        const query = `insert into mona(mona_id, mona_descr, mona_value,mona_user_id,mona_creation_date,mona_state_code)
+        values(?, ?, ?,?,?,?);`;
+        rows = [mona_id, mona_descr, mona_value,mona_user_id,mona_creation_date,mona_state_code]
+        pool.query(query, rows, (err, rows, fields) => {
+          if(!err) {
+            res.json({status: 'mona Saved'});
+          } else {
+            console.log(err);
+          }
+        });
+      });
+//------------------------------------------------------------------------------------------------------
+router.put('/mona', (req, res) => {  //cambiar mona ingresando su ID
+        let mona_id = req.headers['mona-id'];
+        let {mona_descr, mona_value,mona_user_id,mona_creation_date,mona_state_code} = req.body;
+        let query =  `UPDATE mona
+                SET 
+                mona_descr = ?, 
+                mona_value = ?, 
+                mona_creation_date = ?, 
+                mona_state_code = ?
+                WHERE mona_id = ?`;
+        rows = [mona_descr, mona_value,mona_creation_date,mona_state_code,mona_id];
+        pool.query(query,rows, (err, rows, fields) => {
+          if(!err) {
+            res.json({status: 'Mona Updated'});
+          } else {
+            console.log(err);
+          }
+        });
+      });
+////////////////////////////////////////////////////////////////////
+router.delete('/mona', (req, res) => {  //Eliminar gasto ingresando su ID
+        let mona_id = req.headers['mona-id'];
+        let {mona_descr, mona_value,mona_user_id,mona_creation_date,mona_state_code} = req.body;
+        let query =  `UPDATE mona
+                SET 
+                mona_state_code = 0
+                WHERE mona_id = ?`;
+        rows = [mona_id];
+        pool.query(query,rows, (err, rows, fields) => {
+          if(!err) {
+            res.json({status: 'Mona Eliminado correctamente'});
+          } else {
+            console.log(err);
+          }
+        });
+      });
+////////////////////////////////////////////////////////////////////
+router.get('/monadates',(req,res)=>{ //MONA POR USUARIO entre Fechas
+        let   user_id =  req.headers['user-id'];
+        const {startDate} = req.query;
+        const {endDate} = req.query;
+        rows = [user_id,startDate,endDate];
+        rows = [user_id,startDate,endDate];
+        let query='select * from mona where (mona_user_id) = ? AND mona_creation_date >=?  AND mona_creation_date <=?  ';
+        pool.query(query,rows,(err,result)=>{
+                if(!err){
+                        res.json(result);
+                }else{
+                        console.log(err); }
+        });
+});
+//Exportacion de ruta
 module.exports = router; 

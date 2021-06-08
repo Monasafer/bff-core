@@ -2,155 +2,101 @@ const express = require('express');
 const conexion = require('../connection')
 const router = express.Router();
 const pool = require('../database');
-
-router.get('/', (req, res)=>{                          //GASTOS 
-        console.log("se llama expend")
-        pool.query('SELECT * FROM expend WHERE expen_state_code = 1', function(err,result,fields){
-                if (err) throw err;
-                
-                //console.log(result);
-                res.json(result);
+//------------------------------------------------------------------------------------------------------
+router.get('/expend',(req,res)=>{ //GASTOS POR USUARIO 
+        let   user_id =  req.headers['user-id'];
+        let   {state} = req.query;
+        
+        if(user_id==0){
+                query ='SELECT * FROM expend WHERE (expen_state_code)=?';
+                rows = [state];
+                pool.query(query,rows,(err,result)=>{
+                        if(!err){
+                                res.json(result);
+                        }else{
+                                console.log(err); }
+                });
+        } else{
+                query ='SELECT * FROM expend WHERE (expen_user_id) = ? AND (expen_state_code)=?';
+                rows = [user_id,state];
+                pool.query(query,rows,(err,result)=>{
+                        if(!err){
+                                res.json(result);
+                        }else{
+                                console.log(err); }
+                });
+        }    
+});
+//------------------------------------------------------------------------------------------------------
+router.post('/expend', (req, res) => { //Ingresar Gasto pasandole 
+        let   expen_user_id =  req.headers['user-id'];
+        let expen_id = 0;
+        const {expen_descr, expen_value,expen_creation_date,expen_finish_date,expen_state_code} = req.body;
+        const  query = `insert into expend(expen_id,expen_descr,expen_value,expen_user_id,expen_creation_date,expen_finish_date,expen_state_code)
+        values(?, ?, ?,?,?,?,?);`;
+        rows = [expen_id, expen_descr, expen_value,expen_user_id,expen_creation_date,expen_finish_date,expen_state_code]
+        pool.query(query, rows, (err, rows, fields) => {
+          if(!err) {
+                res.json({status: 'expend Saved'});
+          } else {
+                console.log(err);
+          }
         });
-                        
-        //res.send('listado de gastos de monadb')
+      });
+//------------------------------------------------------------------------------------------------------
+router.put('/expend', (req, res) => {  //cambiar gasto ingresando su ID
+        let   expen_id =  req.headers['expen-id'];
+        let {expen_descr, expen_value,expen_user_id,expen_creation_date,expen_finish_date,expen_state_code} = req.body;
+        let query      =  `UPDATE expend
+                                SET 
+                                        expen_descr = ?, 
+                                        expen_value = ?, 
+                                        expen_creation_date = ?, 
+                                        expen_finish_date= ?, 
+                                        expen_state_code = ?
+                                        WHERE expen_id = ?`;
+                                        
+        rows = [expen_descr, expen_value,expen_creation_date,expen_finish_date,expen_state_code,expen_id];
+        pool.query(query,rows, (err, rows, fields) => {
+          if(!err) {
+            res.json({status: 'expend Updated'});
+          } else {
+            console.log(err);
+          }
+        });
+      });
+//------------------------------------------------------------------------------------------------------
+router.delete('/expend', (req, res) => {  //Eliminar gasto ingresando su ID
+        let   expen_id =  req.headers['expen-id'];
+        let {expen_descr, expen_value,expen_user_id,expen_creation_date,expen_finish_date,expen_state_code} = req.body;
+        let query =  `UPDATE expend
+                SET 
+                expen_state_code = 0
+                WHERE expen_id = ?`;
+        rows = [expen_id];
+        pool.query(query,rows, (err, rows, fields) => {
+          if(!err) {
+            res.json({status: 'expend Eliminado correctamente'});
+          } else {
+            console.log(err);
+          }
+        });
+      });
+//------------------------------------------------------------------------------------------------------
+router.get('/expendates',(req,res)=>{ //GASTOS POR USUARIO entre Fechas
+        let   user_id =  req.headers['user-id'];
+        const {startDate} = req.query;
+        const {endDate} = req.query;
+        rows = [user_id,startDate,endDate];
+        let query='select * from expend where (expen_user_id) = ? AND expen_creation_date >=?  AND expen_finish_date <=?  ';
+        pool.query(query,rows,(err,result)=>{
+                if(!err){
+                        res.json(result);
+                }else{
+                        console.log(err); }
+        });
 });
 
-router.get('/:id', (req, res) => {
-    
-        conexion.query('SELECT * FROM expend WHERE expen_id=' + req.params.id,
-                        function (err, result, fields){
-                            if ( err ) throw err;
-    
-                            res.json(result[0]); //esta con el [0], asi te devuelve el OBJETO de la array y no la array completa
-                        }
-                    )
-    
-} );
 
-
-
-
-router.post('/', (req, res)=>{
-console.log(req.body)
-        //¿EL NUMERO DE ID IRIA EN PARAMETROS? ejemplo {params.id}      
-let sql = `INSERT INTO expend (expen_descr, expen_value, expen_user_id, expen_creation_date, expen_finish_date, expen_state_code) 
-            VALUES (?, ?, ?, ?, ?, ?)`
-
-let params = [
-        req.body.descr, 
-        req.body.value, 
-        req.session.idUser = 1,  // solucionado (parametros aclarados en session_routes.js )
-        req.body.creationdate, 
-        req.body.finishdate, 
-        req.body.statecode =1 //TENGO QUE METER ESTA OPCION SI O SI 
-        ];
-       
-        conexion.query(sql, params, function(err,result,fields){
-              let respuesta;
-
-              if (err){
-                console.log(err)
-
-                respuesta ={
-                                status: 'error',
-                                message: 'Error al guardar  gasto'
-                           }
-              }
-              else{
-                      respuesta = {
-                                        status: 'ok',
-                                        message: 'El gasto se guardo satisfactoreamente'
-                                  }
-              }
-              res.json(respuesta);
-        })
-
-});
-
-// router.put('/:id' , (req, res)=>{
-        
-//         let sql = `UPDATE expend
-//                 SET expen_descr = ?, 
-//                 expen_value = ?, 
-//                 expen_user_id = ?, 
-//                 expen_creation_date = ?, 
-//                 expen_finish_date= ?, 
-//                 expen_state_code = ?
-//                 WHERE expen_id = ?`
-        
-//         let params = [
-//                 req.body.descr, 
-//                 req.body.value, 
-//                 req.session.idUser = 1, //HARDCODEADO - NO HACE EL EDIT SIN ESTO,
-//                 req.body.creationdate, 
-//                 req.body.finishdate, 
-//                 req.body.statecode = 1, //HARDCODEADO - NO HACE EL EDIT SIN ESTO,SI LE PONES EL STATECODE EN 0 NO MUESTRA POR PANTALLA
-//                 req.params.id
-//                 ];
-        
-//         conexion.query(sql, params, function(err,result,fields){
-
-//                 let respuesta;
-
-//                 if (err){
-//                         respuesta={
-//                                         status: 'error',
-//                                         message: 'Error al modificar la receta',
-//                                   }
-//                 }
-//                 else{
-//                         respuesta= {
-//                                         status: 'ok',
-//                                         message: 'la respuesta se agregó',
-//                                   }
-//                 }
-//                 res.json(respuesta);
-
-//         })
-
-
-// })
-
-
-//////////////////////////////// ES EL ELIMINAR (DELETE) PERO CON METODO PUT /////////////////////
-
-router.put('/:id', (req, res)=>{
-
-        console.log(req.body)
-        console.log(req.params)
-        console.log(req.session)
-        
-        let sql = `UPDATE expend
-                SET ?
-                WHERE expen_id = ?`
-        
-        let params = [
-                req.body, 
-                req.params.id
-                ];
-        
-        conexion.query(sql, params, function(err,result,fields){
-
-                let respuesta;
-
-                if (err){
-                        respuesta={
-                                status: 'error',
-                                message: 'Error al modificar la receta',
-                                err: err
-                        }       
-                }
-                else{
-                        respuesta= {
-                                        status: 'ok',
-                                        message: 'la respuesta se agregó',
-                                  }
-                }
-                res.json(respuesta);
-
-        })
-
-
-})
-
+//Exportacion de ruta
 module.exports = router;

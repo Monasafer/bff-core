@@ -1,163 +1,100 @@
 const express = require('express');
-const conexion = require('../connection.js')
-const router = express.Router();
+let conexion = require('../connection.js');
+let { query } = require('../database');
+let router = express.Router();
+let pool = require('../database');
 
-router.get('/', (req,res)=>{                                           // AHORROS Y PLAN DE AHORRO \\
-   
-    conexion.query('SELECT * FROM save WHERE save_state_code = 1', function (err,result,fields){
-        if (err) throw err;
-
-        console.log(result);
-        res.send(result)
-    })
-
-        
-  })
-
-router.get('/:id', (req, res) => {
-
-conexion.query('SELECT * FROM save WHERE save_id=' + req.params.id,
-                function (err, result, fields){
-                    if ( err ) throw err;
-
-                    res.json(result[0]); //esta con el [0], asi te devuelve el OBJETO de la array y no la array completa
-                }
-            )
-
-} );
-
-
-//////////////////////////////////POST - ANDA POR QUERY CON POSTMAN /////////////////////////////////////////////
-router.post('/', (req, res)=>{
-    console.log(req.body)
-            //¿EL NUMERO DE ID IRIA EN PARAMETROS? ejemplo {params.id}      
-    let sql = `INSERT INTO save (save_descr, save_value, save_user_id, save_creation_date, save_state_code) 
-                VALUES (?, ?, ?, ?, ?)`
-    
-    let params = [
-            req.body.descr, 
-            req.body.value,
-            //req.body.pretend, 
-            req.body.idUser = 1,  // solucionado (parametros aclarados en session_routes.js )
-            req.body.creationdate, 
-            //req.body.pretenddate, 
-            req.body.statecode = 1 //TENGO QUE METER ESTA OPCION SI O SI 
-            ];
-           
-            conexion.query(sql, params, function(err,result,fields){
-                  let respuesta;
-    
-                  if (err){
-                    console.log(err)
-    
-                    respuesta ={
-                                    status: 'error',
-                                    message: 'Error al guardar  gasto'
-                               }
-                  }
-                  else{
-                          respuesta = {
-                                            status: 'ok',
-                                            message: 'El gasto se guardo satisfactoreamente'
-                                      }
-                  }
-                  res.json(respuesta);
-            })
-    
+//------------------------------------------------------------------------------------------------------
+router.get('/save',(req,res)=>{ //SAVES
+  let   user_id =  req.headers['user-id'];
+  let   {state} = req.query;
+  if(user_id==0){
+          query ='SELECT * FROM save WHERE (save_state_code)=?';
+          rows = [state];
+          pool.query(query,rows,(err,result)=>{
+                  if(!err){
+                          res.json(result);
+                  }else{
+                          console.log(err); }
+          });
+  } else{
+          query ='SELECT * FROM save WHERE (save_user_id) = ? AND (save_state_code)=?';
+          rows = [user_id,state];
+          pool.query(query,rows,(err,result)=>{
+                  if(!err){
+                          res.json(result);
+                  }else{
+                          console.log(err); }
+          });
+  }    
 });
-
-////////////////////////////////////////////////////////PUT - CHEQUEAR SI ANDA POR POSTMAN////////////////////////////////////////////
-
-// router.put('/:id', (req, res)=>{ //save_descr, save_value, save_pretend, save_user_id, save_creation_date, save_pretend_date, save_state_code
-//     console.log(req.body)
-//     let sql = `UPDATE save
-//             SET save_descr = ?, 
-//             save_value = ?, 
-//             save_pretend= ?,
-//             save_user_id = ?, 
-//             save_creation_date = ?, 
-//             save_pretend_date= ?,
-//             save_state_code = ?
-//             WHERE save_id = ?` // TENGO QUE PONER EL  ---------WHERE mona_id 4{req.params.id}----- para que ande por postman
-    
-//     let params = [
-//             req.body.descr, 
-//             req.body.value,
-//             req.body.pretend, 
-//             req.body.idUser, // tengo que poner req.query.idUser para que lo tome desde el postman
-//             req.body.creationdate,
-//             req.body.pretenddate,  
-//             req.body.statecode , 
-//             //req.params.id //el req.params.id por postman no es necesaro
-//             ];
-            
-//     conexion.query(sql, params, function(err,result,fields){
-  
-//             let respuesta;
-  
-//             if (err){
-//                     respuesta={
-//                                     status: 'error',
-//                                     message: 'Error al modificar el ingreso',
-//                               }
-//             }
-//             else{
-//                     respuesta= {
-//                                     status: 'ok',
-//                                     message: 'El ingreso se modificó',
-//                               }
-//             }
-//             res.json(respuesta);
-//             console.log(req.query)
-//             console.log(err)
-  
-//     })
-  
-  
-//   })
-  
-  /////EL DELETE VIENE POR JAVASCRIPT, SOLO SE CAMBIA EL STATE CODE A 0 ASI NO SE MUESTRA EN PANTALLA ////
-
-  router.put('/:id', (req, res)=>{
-
-        console.log(req.body)
-        console.log(req.params)
-        console.log(req.session)
-        
-        let sql = `UPDATE save
-                SET ?
-                WHERE save_id = ?`
-        
-        let params = [
-                req.body, 
-                req.params.id
-                ];
-        
-        conexion.query(sql, params, function(err,result,fields){
-
-                let respuesta;
-
-                if (err){
-                        respuesta={
-                                status: 'error',
-                                message: 'Error al modificar la receta',
-                                err: err
-                        }       
-                }
-                else{
-                        respuesta= {
-                                        status: 'ok',
-                                        message: 'la respuesta se agregó',
-                                  }
-                }
-                res.json(respuesta);
-
-        })
-
-
-})
-
-
-
-
+//------------------------------------------------------------------------------------------------------
+router.post('/save', (req, res) => { //Ingresar Ahorro
+        let   save_user_id =  req.headers['user-id'];
+        let {save_id, save_descr, save_value,save_pretend,save_creation_date,save_pretend_date,save_state_code} = req.body;
+        let query = `insert into save(save_id, save_descr, save_value,save_pretend,save_user_id,save_creation_date,save_pretend_date,save_state_code)
+        values(?, ?, ?,?,?,?,?,?);`;
+        rows = [save_id, save_descr, save_value,save_pretend,save_user_id,save_creation_date,save_pretend_date,save_state_code]
+        pool.query(query, rows, (err, rows, fields) => {
+          if(!err) {
+            res.json({status: 'save Saved'});
+          } else {
+            console.log(err);
+          }
+        });
+      });
+//------------------------------------------------------------------------------------------------------
+router.put('/save', (req, res) => {  //cambiar ahorro ingresando su ID
+        let save_id = req.headers['save-id'];
+        let {save_descr, save_value,save_pretend,save_creation_date,save_pretend_date,save_state_code} = req.body;
+        let query =  `UPDATE save
+                SET 
+                save_descr = ?, 
+                save_value = ?, 
+                save_pretend = ?,
+                save_creation_date = ?, 
+                save_pretend_date= ?, 
+                save_state_code = ?
+                WHERE save_id = ?`;
+        save_state_code = 1;
+        rows = [save_descr, save_value,save_pretend,save_creation_date,save_pretend_date,save_state_code,save_id];
+        pool.query(query,rows, (err, rows, fields) => {
+          if(!err) {
+            res.json({status: 'save Updated'});
+          } else {
+            console.log(err);
+          }
+        });
+      });
+//------------------------------------------------------------------------------------------------------
+router.delete('/save', (req, res) => {  //Eliminar ahorro ingresando su ID
+        let save_id = req.headers['save-id'];
+        let query =  `UPDATE save
+                SET 
+                save_state_code = 0
+                WHERE save_id = ?`;
+        rows = [save_id];
+        pool.query(query,rows, (err, rows, fields) => {
+          if(!err) {
+            res.json({status: 'save Eliminado correctamente'});
+          } else {
+            console.log(err);
+          }
+        });
+      });
+//------------------------------------------------------------------------------------------------------
+router.get('/savedates',(req,res)=>{ //SAVES POR USUARIO entre Fechas
+  let   user_id =  req.headers['user-id'];
+  const {startDate} = req.query;
+  const {endDate} = req.query;
+  rows = [user_id,startDate,endDate];
+  let query='select * from save where (save_user_id) = ? AND save_creation_date >=?  AND save_finish_date <=?  ';
+  pool.query(query,rows,(err,result)=>{
+          if(!err){
+                  res.json(result);
+          }else{
+                  console.log(err); }
+  });
+});
+//Exportacion de ruta      
 module.exports = router;
