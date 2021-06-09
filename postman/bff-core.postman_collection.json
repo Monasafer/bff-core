@@ -1,0 +1,195 @@
+{
+	"info": {
+		"_postman_id": "7f5a2f28-9616-40f4-adff-17b7eae78901",
+		"name": "bff-core",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Expend",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true,
+				"disabledSystemHeaders": {
+					"user-agent": true,
+					"accept-encoding": true,
+					"accept": true,
+					"connection": true
+				}
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "user-id",
+						"value": "4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"expen_id\": 24,\r\n    \"expen_descr\": \"Patitos\",\r\n    \"expen_value\": 95,\r\n    \"expen_user_id\": 4,\r\n    \"expen_creation_date\": \"2020-04-05T00:00:00.000Z\",\r\n    \"expen_finish_date\": \"2020-04-05T00:00:00.000Z\",\r\n    \"expen_state_code\": 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/expend",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"expend"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Dashboard",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "user-id",
+						"value": "4",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{url}}/dashboard",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"dashboard"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Mona",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "user-id",
+						"type": "text",
+						"value": "4"
+					}
+				],
+				"url": {
+					"raw": "{{url}}/mona?startDate=2020-03-06&endDate=2021-06-09",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"mona"
+					],
+					"query": [
+						{
+							"key": "startDate",
+							"value": "2020-03-06"
+						},
+						{
+							"key": "endDate",
+							"value": "2021-06-09"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Mona Insert",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "user-id",
+						"type": "text",
+						"value": "4"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"descr\": \"Quinto gasto\",\r\n    \"value\": \"820\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/mona",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"mona"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Mona Update",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "user-id",
+						"type": "text",
+						"value": "24"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"descr\": \"Gasto id 4\",\r\n    \"value\": \"820\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/mona/4",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"mona",
+						"4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Mona Delete",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "user-id",
+						"type": "text",
+						"value": "4"
+					}
+				],
+				"url": {
+					"raw": "{{url}}/mona/74",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"mona",
+						"74"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

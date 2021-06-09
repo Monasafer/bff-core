@@ -6,8 +6,6 @@ var db_config = {
     password: '8dcf085d',
     database: 'heroku_b667af063c5f73a'
 };
-
-  console.log("se carga connection")
   
   var connection;
   
