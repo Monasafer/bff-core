@@ -1,7 +1,6 @@
 
 const express = require('express');
 const monaService = require('../services/monaService')
-
 const router = express.Router();
 
 router.get('/mona', async (req,res)=>{
@@ -16,11 +15,9 @@ router.get('/mona', async (req,res)=>{
 
 router.post('/mona', async (req, res) => {
           let user_id = req.headers['user-id'];
-          const timeElapsed = Date.now();
-          const creation_date = new Date(timeElapsed).toISOString();
           const { descr, value } = req.body;
 
-          const response = await monaService.setMona(user_id, creation_date, descr, value)
+          const response = await monaService.setMona(user_id, descr, value)
           console.log("monaService.setMona Response : " + response);
           res.json(response);  
 });

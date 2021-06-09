@@ -9,8 +9,11 @@ var monaService = {
         return pool.query(query, rows);
     },
 
-    setMona : function(user_id, creation_date, descr, value){
+    setMona : function(user_id, descr, value){
         const query = `insert into mona(descr, value, user_id, creation_date, state_code) values(?,?,?,?,1)`;
+        const timeElapsed = Date.now();
+        const creation_date = new Date(timeElapsed).toISOString();
+
         rows = [descr, value, user_id, creation_date]
         return pool.query(query, rows);
     },
