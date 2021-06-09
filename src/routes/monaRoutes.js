@@ -2,98 +2,77 @@ const express = require('express');
 const conexion = require('../connection')
 const router = express.Router();
 const pool = require('../database');
-//------------------------------------------------------------------------------------------------------
-router.get('/mona',(req,res)=>{ //MONA POR USUARIO
+
+router.get('/mona',(req,res)=>{
         let user_id = req.headers['user-id'];
-        let   {state} = req.query;
-        if(user_id==0){
-          query ='SELECT * FROM mona WHERE (mona_state_code)=?';
-          rows = [state];
-          pool.query(query,rows,(err,result)=>{
-            if(!err){
-                    res.json(result);
-            }else{
-                    console.log(err); }
+        const {startDate} = req.query; //TODO : Agregar valor por defecto principio de este mes
+        const {endDate} = req.query; //TODO : Agregar valor por defecto fin de este mes
+        rows = [user_id,startDate,endDate];
+        query='SELECT * FROM mona WHERE (user_id) = ? AND (state_code)=1 AND creation_date >=? AND creation_date <=?';
+        pool.query(query,rows,(err,result)=>{
+          if(!err){
+            res.json(result);
+          }else{
+            console.log(err); }
     });
-        }
-        else{
-          query='SELECT * FROM mona WHERE (mona_user_id) = ? AND (mona_state_code)=?';
-          rows = [user_id,state];
-          pool.query(query,rows,(err,result)=>{
-            if(!err){
-                    res.json(result);
-            }else{
-                    console.log(err); }
-    });
-        }
+        
 });
-//------------------------------------------------------------------------------------------------------
-router.post('/mona', (req, res) => { //Ingresar Mona
-        let mona_user_id = req.headers['user-id'];
-        let mona_id = 0;
-        const {mona_descr, mona_value,mona_creation_date,mona_state_code} = req.body;
-        const query = `insert into mona(mona_id, mona_descr, mona_value,mona_user_id,mona_creation_date,mona_state_code)
-        values(?, ?, ?,?,?,?);`;
-        rows = [mona_id, mona_descr, mona_value,mona_user_id,mona_creation_date,mona_state_code]
+
+router.post('/mona', (req, res) => {
+        let user_id = req.headers['user-id'];
+        const timeElapsed = Date.now();
+        const creation_date = new Date(timeElapsed).toISOString();
+        const { descr, value } = req.body;
+        const query = `insert into mona(descr, value, user_id, creation_date, state_code) values(?,?,?,?,1)`;
+
+        rows = [descr, value, user_id, creation_date]
+        console.log("Insert Mona with data : " + rows)
+
         pool.query(query, rows, (err, rows, fields) => {
           if(!err) {
-            res.json({status: 'mona Saved'});
+            res.json({status: 'Mona Saved'});
           } else {
             console.log(err);
           }
         });
       });
-//------------------------------------------------------------------------------------------------------
-router.put('/mona', (req, res) => {  //cambiar mona ingresando su ID
-        let mona_id = req.headers['mona-id'];
-        let {mona_descr, mona_value,mona_user_id,mona_creation_date,mona_state_code} = req.body;
+      
+router.put('/mona/:monaId', (req, res) => {
+        //TODO : Validar que el usuario que updetea es el dueño del registro 
+
+        let monaId = req.params.monaId;        
+        const { descr, value } = req.body;
         let query =  `UPDATE mona
                 SET 
-                mona_descr = ?, 
-                mona_value = ?, 
-                mona_creation_date = ?, 
-                mona_state_code = ?
-                WHERE mona_id = ?`;
-        rows = [mona_descr, mona_value,mona_creation_date,mona_state_code,mona_id];
+                descr = ?, 
+                value = ?
+                WHERE id = ?`;
+        rows = [descr, value, monaId];
         pool.query(query,rows, (err, rows, fields) => {
           if(!err) {
-            res.json({status: 'Mona Updated'});
+            res.json({status: 'Mona Id : ' + monaId + ' Updated'});
           } else {
             console.log(err);
           }
         });
       });
-////////////////////////////////////////////////////////////////////
-router.delete('/mona', (req, res) => {  //Eliminar gasto ingresando su ID
-        let mona_id = req.headers['mona-id'];
-        let {mona_descr, mona_value,mona_user_id,mona_creation_date,mona_state_code} = req.body;
+      
+router.delete('/mona/:monaId', (req, res) => {
+            //TODO : Validar que el usuario que deletea es el dueño del registro 
+
+        let monaId = req.params.monaId;
         let query =  `UPDATE mona
                 SET 
-                mona_state_code = 0
-                WHERE mona_id = ?`;
-        rows = [mona_id];
-        pool.query(query,rows, (err, rows, fields) => {
+                state_code = 0
+                WHERE id = ?`;
+        rows = [monaId];
+        pool.query(query,rows, (err, rows) => {
           if(!err) {
-            res.json({status: 'Mona Eliminado correctamente'});
+            res.json({status: 'Mona Id : '+ monaId +' Deleted'});
           } else {
             console.log(err);
           }
         });
       });
-////////////////////////////////////////////////////////////////////
-router.get('/monadates',(req,res)=>{ //MONA POR USUARIO entre Fechas
-        let   user_id =  req.headers['user-id'];
-        const {startDate} = req.query;
-        const {endDate} = req.query;
-        rows = [user_id,startDate,endDate];
-        rows = [user_id,startDate,endDate];
-        let query='select * from mona where (mona_user_id) = ? AND mona_creation_date >=?  AND mona_creation_date <=?  ';
-        pool.query(query,rows,(err,result)=>{
-                if(!err){
-                        res.json(result);
-                }else{
-                        console.log(err); }
-        });
-});
-//Exportacion de ruta
+      
 module.exports = router; 
