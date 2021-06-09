@@ -3,6 +3,8 @@ const pool = require('../database');
 
 var monaService = {
 
+    //TODO : Sanitización de todos los datos. Si es string, no puede tener simbolos <>=?;: , dado que permitiria un query injection.
+
     getMona : function(user_id, startDate, endDate){
         let rows = [user_id,startDate,endDate];
         let query='SELECT * FROM mona WHERE (user_id) = ? AND (state_code)=1 AND creation_date >=? AND creation_date <=?';
