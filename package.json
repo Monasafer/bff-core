@@ -20,14 +20,11 @@
     "express": "^4.17.1",
     "express-fileupload": "^1.1.7-alpha.3",
     "express-handlebars": "^5.2.1",
-    "express-mysql-session": "^2.1.5",
-    "express-session": "^1.17.1",
     "morgan": "^1.10.0",
     "mysql": "^2.18.1",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
     "request": "^2.88.2",
-    "session-file-store": "^1.4.0",
     "timeago.js": "^4.0.2"
   },
   "devDependencies": {
