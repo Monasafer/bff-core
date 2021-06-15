@@ -1,5 +1,6 @@
 const pool = require('../database');
-const Validate = require('./validate')
+const ValidateString = require('./validate')
+const ValidateMail = require('./validateMail')
 
 var userService = {
     //TODO : Sanitización de todos los datos. Si es string, no puede tener simbolos <>=?;: , dado que permitiria un query injection.
@@ -11,14 +12,14 @@ var userService = {
     },
 
     setUser : function(user,pass, mail){
-        if(Validate(user)==true){
+        if(ValidateString(user)==true && ValidateMail(mail)==true){
             const query = `insert into user(user, pass, mail, creation_date, state_code) values(?,?,?,?,1)`;
             const timeElapsed = Date.now();
             const creation_date = new Date(timeElapsed).toISOString();
             rows = [user,pass, mail,creation_date]
             return pool.query(query, rows);
         } else{
-            console.log("No valido simbolos como usuario");
+            console.log("Error al ingresar usuario o mail");
         }
     },
 
