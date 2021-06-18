@@ -1,5 +1,5 @@
 const express = require('express');
-const expendService = require('../services/expendService')
+const expendService = require('../services/expendServices/expendService')
 const router = express.Router();
 
 router.get('/expend', async (req,res)=>{

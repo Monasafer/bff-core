@@ -1,6 +1,7 @@
 const express = require('express');
-const saveService = require('../services/saveService')
+const saveService = require('../services/saveServices/saveService')
 const router = express.Router();
+const validations = require('../services/saveServices/validationsSave')
 
 router.get('/save', async (req,res)=>{
           let user_id = req.headers['user-id'];
@@ -11,7 +12,7 @@ router.get('/save', async (req,res)=>{
           res.json(response);    
 });
 
-router.post('/save', async (req, res) => {
+router.post('/save',validations.validate(validations.createSaveSchema), async (req, res) => {
           const user_id = req.headers['user-id'];
           const { descr, value } = req.body;
           const response = await saveService.setSave(user_id, descr, value,)
@@ -19,7 +20,7 @@ router.post('/save', async (req, res) => {
           res.json(response);  
 });
       
-router.put('/save/:saveId', async (req, res) => {
+router.put('/save/:saveId',validations.validate(validations.updateSaveSchema), async (req, res) => {
         let user_id = req.headers['user-id'];
         let saveId = req.params.saveId;        
         const { descr, value} = req.body;

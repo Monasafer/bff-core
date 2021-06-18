@@ -1,4 +1,3 @@
-
 module.exports = function(validar){
     regex = /^[^'"\\\/<>=*@&]*$/
     var validation= regex.test(validar);

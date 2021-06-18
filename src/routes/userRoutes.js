@@ -1,6 +1,7 @@
 const express = require('express');
-const userService = require('../services/userService')
+const userService = require('../services/userServices/userService')
 const router = express.Router();
+const validations = require('../services/userServices/validationsUser');
 
 router.get('/user', async (req,res)=>{
           let user_id = req.headers['user-id'];
@@ -10,9 +11,8 @@ router.get('/user', async (req,res)=>{
           res.json(response);    
 });
 
-router.post('/user', async (req, res) => {
+router.post('/user',validations.validate(validations.createUserSchema),async (req, res,next) => {
           const { user,pass, mail } = req.body;
-
           const response = await userService.setUser(user,pass, mail)
           console.log("userService.setUser Response : " + response);
           res.json(response);  
