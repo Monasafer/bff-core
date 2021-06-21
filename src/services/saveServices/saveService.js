@@ -1,5 +1,4 @@
 const pool = require('../../database');
-const Validate = require('../validate')
 
 var saveService = {
     //TODO : Sanitización de todos los datos. Si es string, no puede tener simbolos <>=?;: , dado que permitiria un query injection.

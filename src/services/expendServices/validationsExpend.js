@@ -1,10 +1,10 @@
 const expresiones = require('../expressions')
 const yup = require('yup');
 
-const createUserSchema = yup.object().shape({
-    user: yup.string().min(6, 'Minimo deben ser 6 caracteres').matches(expresiones.userValidation, 'El usuario no debe tener simbolos ni caracteres especiales').required(),
-    pass: yup.string().min(10,'Minimo contraseña de 6 caracteres').matches(expresiones.passValidation).required(),
-    mail: yup.string().matches(expresiones.mailValidation).required()
+const expendSchema = yup.object().shape({
+    descr: yup.string().matches(expresiones.descrValidation, 'La descripcion no debe tener simbolos ni caracteres especiales').required(),
+    value: yup.number().positive().required(),
+    finish_date: yup.date().nullable(true),
 });
 
 const validate = (schema) => async (req,res,next)=>{
@@ -17,8 +17,7 @@ const validate = (schema) => async (req,res,next)=>{
     }
 }
 
-
 module.exports = {
     validate,
-    createUserSchema,
+    expendSchema,
 };

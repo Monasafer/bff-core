@@ -1,6 +1,7 @@
 const express = require('express');
 const expendService = require('../services/expendServices/expendService')
 const router = express.Router();
+const validation = require('../services/expendServices/validationsExpend')
 
 router.get('/expend', async (req,res)=>{
           let user_id = req.headers['user-id'];
@@ -11,7 +12,7 @@ router.get('/expend', async (req,res)=>{
           res.json(response);    
 });
 
-router.post('/expend', async (req, res) => {
+router.post('/expend',validation.validate(validation.expendSchema),async (req, res) => {
           const user_id = req.headers['user-id'];
           const { descr, value, finish_date } = req.body;
           const response = await expendService.setExpend(user_id, descr, value, finish_date)
@@ -19,7 +20,7 @@ router.post('/expend', async (req, res) => {
           res.json(response);  
 });
       
-router.put('/expend/:expendId', async (req, res) => {
+router.put('/expend/:expendId',validation.validate(validation.expendSchema), async (req, res) => {
         let user_id = req.headers['user-id'];
         let expendId = req.params.expendId;        
         const { descr, value, finish_date } = req.body;
