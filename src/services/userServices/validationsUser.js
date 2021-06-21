@@ -17,10 +17,28 @@ const validate = (schema) => async (req,res,next)=>{
     }
 }
 
+const validateupdate = (schema) => async (req,res,next)=>{
+    let pass = req.headers['pass'];
+    let new_pass = req.headers['new_pass'];
+    let body = {pass,new_pass} 
+    try{
+        await schema.validate(body);
+        next();
+    }catch(error){
+        next(error);
+    }
+}
+
+const updateUserSchema = yup.object().shape({
+    pass: yup.string().min(10,'Minimo contraseña de 6 caracteres').matches(expresiones.passValidation).required(),
+    new_pass: yup.string().min(10,'Minimo contraseña de 6 caracteres').matches(expresiones.passValidation).required(),
+});
 
 module.exports = {
     validate,
     createUserSchema,
+    validateupdate,
+    updateUserSchema,
 };
 
 

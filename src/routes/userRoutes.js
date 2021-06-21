@@ -18,7 +18,7 @@ router.post('/user',validations.validate(validations.createUserSchema),async (re
           res.json(response);  
 });
       
-router.put('/user/:userId', async (req, res) => {
+router.put('/user/:userId',validations.validateupdate(validations.updateUserSchema) ,async (req, res) => {
         let user_id = req.params.userId;
         let pass = req.headers['pass'];
         let new_pass = req.headers['new_pass'];      
