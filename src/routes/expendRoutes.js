@@ -23,21 +23,12 @@ router.post('/expend',validation.validate(validation.expendSchema),async (req, r
 router.put('/expend/:expendId',validation.validate(validation.expendSchema), async (req, res) => {
         let user_id = req.headers['user-id'];
         let expendId = req.params.expendId;        
-        const { descr, value, finish_date } = req.body;
-        const response = await expendService.updateExpend(user_id, expendId, descr, value, finish_date)
+        const { descr, value, finish_date,payed } = req.body;
+        const response = await expendService.updateExpend(user_id, expendId, descr, value, finish_date,payed)
         console.log("expendService.updateExpend Response : " + response);
         res.json(response);  
       });
 
-router.put('/expend/:expendId/:payed',async (req, res) => {
-        let user_id = req.headers['user-id'];
-        let expendId = req.params.expendId;  
-        let payed = req.params.payed;      
-        const response = await expendService.updateExpendPayed(user_id, expendId,payed)
-        console.log("expendService.updateExpendPayed Response : " + response);
-        res.json(response);  
-      });
-      
 router.delete('/expend/:expendId', async (req, res) => {
         let user_id = req.headers['user-id'];
         let expendId = req.params.expendId;
