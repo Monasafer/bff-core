@@ -29,6 +29,16 @@ var expendService = {
         return pool.query(query, rows);
     },
 
+    updateExpendPayed : function(user_id, expendId,payed){
+        let query =  `UPDATE expend
+            SET 
+            payed = ?
+            WHERE id = ?
+            AND user_id = ?`;
+    rows = [payed, expendId, user_id];
+    return pool.query(query, rows);
+},
+
     deleteExpend : function(user_id, expendId){
         let query =  `UPDATE expend
         SET 

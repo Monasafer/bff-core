@@ -28,6 +28,15 @@ router.put('/expend/:expendId',validation.validate(validation.expendSchema), asy
         console.log("expendService.updateExpend Response : " + response);
         res.json(response);  
       });
+
+router.put('/expend/:expendId/:payed',async (req, res) => {
+        let user_id = req.headers['user-id'];
+        let expendId = req.params.expendId;  
+        let payed = req.params.payed;      
+        const response = await expendService.updateExpendPayed(user_id, expendId,payed)
+        console.log("expendService.updateExpendPayed Response : " + response);
+        res.json(response);  
+      });
       
 router.delete('/expend/:expendId', async (req, res) => {
         let user_id = req.headers['user-id'];
