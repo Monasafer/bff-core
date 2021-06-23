@@ -1,5 +1,5 @@
 
-const pool = require('../database');
+const pool = require('../../database');
 
 var monaService = {
 

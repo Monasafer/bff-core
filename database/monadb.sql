@@ -174,4 +174,10 @@ ALTER TABLE `mona`
 --
 ALTER TABLE `save`
   ADD CONSTRAINT `save_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
+
+--
+-- Columna Payed en expend
+--
+ALTER TABLE 'expend' 
+  ADD 'payed' BIT DEFAULT 0 NULL;
 COMMIT;
