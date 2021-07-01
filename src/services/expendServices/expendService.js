@@ -4,8 +4,8 @@ var expendService = {
     //TODO : Sanitización de todos los datos. Si es string, no puede tener simbolos <>=?;: , dado que permitiria un query injection.
 
     getExpend: function (user_id, startDate, endDate) {
-        let rows = [user_id,endDate];
-        let query = 'SELECT * FROM expend WHERE (user_id) = ? AND (state_code)=1 AND (finish_date>? OR finish_date IS NULL)';
+        let rows = [user_id, startDate, endDate];
+        let query = 'SELECT * FROM expend WHERE (user_id) = ? AND (state_code)=1 AND creation_date > ? AND (finish_date < ? OR finish_date IS NULL)';
         return pool.query(query, rows);
     },
 
