@@ -19,7 +19,6 @@ app.use(require('./src/routes/expendRoutes'));
 app.use(require('./src/routes/saveRoutes'));
 app.use(require('./src/routes/monaRoutes'));
 app.use(require('./src/routes/userRoutes'));
-app.use(require('./src/routes/dashboard'));
 app.use(require('./src/routes/specialExpendRoutes'))
 
 //Starting
