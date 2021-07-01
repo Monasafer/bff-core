@@ -2,8 +2,7 @@
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
-CREATE DATABASE IF NOT EXISTS `monadb` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
-USE `heroku_b667af063c5f73a`;
+USE `heroku_8a551bcfa4d3d31`;
 
 --
 -- Base de datos: `monadb`
@@ -15,11 +14,13 @@ USE `heroku_b667af063c5f73a`;
 
 CREATE TABLE `expend` (
   `id` int(11) NOT NULL,
-  `descr` text CHARACTER SET latin1 COLLATE latin1_bin NOT NULL,
+  `desc` text CHARACTER SET latin1 COLLATE latin1_bin NOT NULL,
   `value` int(100) NOT NULL,
   `user_id` int(11) NOT NULL,
+  `payed` int(11) NOT null default 0,
+  `recurrent` int(11) NOT NULL,
+  `month` text CHARACTER SET latin1 COLLATE latin1_bin NOT NULL,
   `creation_date` date NOT NULL,
-  `finish_date` date NOT NULL,
   `state_code` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -29,11 +30,11 @@ CREATE TABLE `expend` (
 
 CREATE TABLE `special_expend` (
   `id` int(11) NOT NULL,
-  `descr` text CHARACTER SET latin1 COLLATE latin1_bin NOT NULL,
+  `desc` text CHARACTER SET latin1 COLLATE latin1_bin NOT NULL,
   `value` int(100) NOT NULL,
   `user_id` int(11) NOT NULL,
+  `month` text CHARACTER SET latin1 COLLATE latin1_bin NOT NULL,
   `creation_date` date NOT NULL,
-  `finish_date` date NOT NULL,
   `state_code` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -43,9 +44,10 @@ CREATE TABLE `special_expend` (
 
 CREATE TABLE `mona` (
   `id` int(11) NOT NULL,
-  `descr` text CHARACTER SET latin1 COLLATE latin1_bin NOT NULL,
+  `desc` text CHARACTER SET latin1 COLLATE latin1_bin NOT NULL,
   `value` int(100) NOT NULL,
   `user_id` int(11) NOT NULL,
+  `month` text CHARACTER SET latin1 COLLATE latin1_bin NOT NULL,
   `creation_date` date NOT NULL,
   `state_code` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -56,9 +58,11 @@ CREATE TABLE `mona` (
 
 CREATE TABLE `save` (
   `id` int(11) NOT NULL,
-  `descr` text CHARACTER SET latin1 COLLATE latin1_bin NOT NULL,
+  `desc` text CHARACTER SET latin1 COLLATE latin1_bin NOT NULL,
   `value` int(100) NOT NULL,
   `user_id` int(11) NOT NULL,
+  `saved` int(11) NOT null default 0,
+  `month` text CHARACTER SET latin1 COLLATE latin1_bin NOT NULL,
   `creation_date` date NOT NULL,
   `state_code` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -174,10 +178,3 @@ ALTER TABLE `mona`
 --
 ALTER TABLE `save`
   ADD CONSTRAINT `save_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
-
---
--- Columna Payed en expend
---
-ALTER TABLE 'expend' 
-  ADD 'payed' BIT DEFAULT 0 NULL;
-COMMIT;

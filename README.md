@@ -4,6 +4,8 @@ to run :
 to run tests: 
     npm test
 
+ver URL DATABASE :
+    heroku config
 
 --------------------------------------------------------------------------------------------
 Direcciones
