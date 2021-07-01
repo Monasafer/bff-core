@@ -9,11 +9,11 @@ var expendService = {
         return pool.query(query, rows);
     },
 
-    setExpend: function (user_id, descr, value, finish_date) {
-        const query = `insert into expend(descr, value, user_id, creation_date,finish_date, state_code) values(?,?,?,?,?,1)`;
+    setExpend: function (user_id, desc, value, finish_date) {
+        const query = `insert into expend(desc, value, user_id, creation_date,finish_date, state_code) values(?,?,?,?,?,1)`;
         const timeElapsed = Date.now();
         const creation_date = new Date(timeElapsed).toISOString();
-        rows = [descr, value, user_id, creation_date, finish_date]
+        rows = [desc, value, user_id, creation_date, finish_date]
         try {
             if(finish_date>creation_date || finish_date==null){
                 return pool.query(query, rows);
@@ -23,16 +23,16 @@ var expendService = {
         }
     },
 
-    updateExpend: function (user_id, expendId, descr, value, finish_date, payed) {
+    updateExpend: function (user_id, expendId, desc, value, finish_date, payed) {
         let query = `UPDATE expend
                 SET 
-                descr = ?, 
+                desc = ?, 
                 value = ?,
                 finish_date = ?,
                 payed = ?
                 WHERE id = ?
                 AND user_id = ?`;
-        rows = [descr, value, finish_date, payed, expendId, user_id];
+        rows = [desc, value, finish_date, payed, expendId, user_id];
         try {
             if(finish_date>creation_date || finish_date==null){
                 return pool.query(query, rows);

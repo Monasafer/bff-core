@@ -16,9 +16,9 @@ router.get('/mona', async (req,res)=>{
 
 router.post('/mona',validations.validate(validations.monaSchema), async (req, res) => {
           let user_id = req.headers['user-id'];
-          const { descr, value } = req.body;
+          const { desc, value } = req.body;
 
-          const response = await monaService.setMona(user_id, descr, value)
+          const response = await monaService.setMona(user_id, desc, value)
           console.log("monaService.setMona Response : " + response);
           res.json(response);  
 });
@@ -26,9 +26,9 @@ router.post('/mona',validations.validate(validations.monaSchema), async (req, re
 router.put('/mona/:monaId',validations.validate(validations.monaSchema), async (req, res) => {
         let user_id = req.headers['user-id'];
         let monaId = req.params.monaId;        
-        const { descr, value } = req.body;
+        const { desc, value } = req.body;
 
-        const response = await monaService.updateMona(user_id, monaId, descr, value)
+        const response = await monaService.updateMona(user_id, monaId, desc, value)
         console.log("monaService.updateMona Response : " + response);
         res.json(response);  
       });

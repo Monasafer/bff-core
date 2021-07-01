@@ -3,31 +3,31 @@ INSERT INTO `user`
 VALUES('feder', 'asdf', 'federicomarilungo@gmail.com', '2020-04-05', 1);
 
 INSERT INTO expend
-(descr, value, user_id, creation_date, finish_date, state_code)
+(desc, value, user_id, creation_date, finish_date, state_code)
 VALUES('', 1111, 4, '2020-04-05', '2020-04-05', 1);
 
 INSERT INTO special_expend
-(descr, value, user_id, creation_date, finish_date, state_code)
+(desc, value, user_id, creation_date, finish_date, state_code)
 VALUES('daily', 12, 4, '2020-04-05', '2020-04-05', 1);
 
 INSERT INTO special_expend
-(descr, value, user_id, creation_date, finish_date, state_code)
+(desc, value, user_id, creation_date, finish_date, state_code)
 VALUES('weekly', 12, 4, '2020-04-05', '2020-04-05', 1);
 
 INSERT INTO special_expend
-(descr, value, user_id, creation_date, finish_date, state_code)
+(desc, value, user_id, creation_date, finish_date, state_code)
 VALUES('fsi', 12, 4, '2020-04-05', '2020-04-05', 1);
 
 INSERT INTO mona
-(descr, value, user_id, creation_date, state_code)
+(desc, value, user_id, creation_date, state_code)
 VALUES('gastodesdebase', 2111, 4, '2020-04-05', 1);
 
 insert into mona
-(descr, value, user_id, creation_date, 1)
+(desc, value, user_id, creation_date, 1)
 values('Primer gasto', 720,'4','2020-04-05T03:00:00.000Z');
 
 INSERT INTO save
-(descr, value, user_id, creation_date, state_code)
+(desc, value, user_id, creation_date, state_code)
 VALUES('', 50, 4, '2020-04-05', 1);
 
 select  * from `user`

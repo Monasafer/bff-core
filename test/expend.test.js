@@ -18,7 +18,7 @@ it('Insert Expend', function(done) {
         },
         body: JSON.stringify(
           {
-            "descr": desc,
+            "desc": desc,
             "value": value,
             "month": month,
             "recurrent": 0
@@ -57,7 +57,7 @@ it('Get Expend', function(done) {
       expect(res).to.deep.include(
         {
         "id": insertedExpendId,
-        "descr": desc,
+        "desc": desc,
         "value": value,
         "user_id": 204,
         "creation_date": "2021-07-01T03:00:00.000Z",

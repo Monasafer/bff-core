@@ -14,8 +14,8 @@ router.get('/save', async (req,res)=>{
 
 router.post('/save',validations.validate(validations.createSaveSchema), async (req, res) => {
           const user_id = req.headers['user-id'];
-          const { descr, value } = req.body;
-          const response = await saveService.setSave(user_id, descr, value,)
+          const { desc, value } = req.body;
+          const response = await saveService.setSave(user_id, desc, value,)
           console.log("saveService.setSave Response : " + response);
           res.json(response);  
 });
@@ -23,8 +23,8 @@ router.post('/save',validations.validate(validations.createSaveSchema), async (r
 router.put('/save/:saveId',validations.validate(validations.updateSaveSchema), async (req, res) => {
         let user_id = req.headers['user-id'];
         let saveId = req.params.saveId;        
-        const { descr, value} = req.body;
-        const response = await saveService.updateSave(user_id, saveId, descr, value)
+        const { desc, value} = req.body;
+        const response = await saveService.updateSave(user_id, saveId, desc, value)
         console.log("saveService.updateSave Response : " + response);
         res.json(response);  
       });

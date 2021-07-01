@@ -2,10 +2,10 @@ const mysql = require('mysql');
 const {promisify} = require('util');
 
 var db_config = {
-  host: 'us-cdbr-east-04.cleardb.com',
-  user: 'ba46bc2da80b73',
-  password: 'd43a9c88f2f5daf',
-  database: 'heroku_8a551bcfa4d3d31'
+  host: process.env.DATABASE_HOST,
+  user: process.env.DATABASE_USER,
+  password: process.env.DATABASE_PASSWORD,
+  database: process.env.DATABASE_NAME
 };
 
 const pool = mysql.createPool(db_config);
