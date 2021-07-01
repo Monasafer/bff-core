@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node .",
-    "dev": "nodemon --watch src src/server.js"
+    "dev": "nodemon --watch src src/server.js",
+    "test": "node_modules/.bin/mocha -w"
   },
   "keywords": [],
   "author": "",
@@ -30,6 +31,9 @@
     "yup": "^0.32.9"
   },
   "devDependencies": {
-    "nodemon": "^2.0.2"
+    "chai": "^4.3.4",
+    "mocha": "^9.0.1",
+    "nodemon": "^2.0.2",
+    "supertest": "^6.1.3"
   }
 }
