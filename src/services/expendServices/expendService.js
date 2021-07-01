@@ -4,7 +4,7 @@ var expendService = {
 
     getExpend: function (user_id, month) {
         let rows = [user_id, month];
-        let query = 'SELECT * FROM expend WHERE (user_id) = ? AND month > ? AND (state_code)=1 ';
+        let query = 'SELECT * FROM expend WHERE (user_id) = ? AND month = ? AND (state_code)=1 ';
         return pool.query(query, rows);
     },
 
