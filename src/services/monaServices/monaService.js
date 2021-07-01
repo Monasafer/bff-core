@@ -5,18 +5,18 @@ var monaService = {
 
     //TODO : Sanitización de todos los datos. Si es string, no puede tener simbolos <>=?;: , dado que permitiria un query injection.
 
-    getMona : function(user_id, startDate, endDate){
-        let rows = [user_id,startDate,endDate];
-        let query='SELECT * FROM mona WHERE (user_id) = ? AND (state_code)=1 AND creation_date >=? AND creation_date <=?';
+    getMona : function(user_id, month){
+        let rows = [user_id, month];
+        let query='SELECT * FROM mona WHERE (user_id) = ? AND (month) = ? AND (state_code)=1 ';
         return pool.query(query, rows);
     },
 
-    setMona : function(user_id, name, value){
-        const query = `insert into mona(name, value, user_id, creation_date, state_code) values(?,?,?,?,1)`;
+    setMona : function(user_id, name, value, month){
+        const query = `insert into mona(name, value, user_id, creation_date, month, state_code) values(?,?,?,?, ?,1)`;
         const timeElapsed = Date.now();
         const creation_date = new Date(timeElapsed).toISOString();
 
-        rows = [name, value, user_id, creation_date]
+        rows = [name, value, user_id, creation_date, month]
         return pool.query(query, rows);
     },
 

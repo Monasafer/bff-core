@@ -59,7 +59,7 @@ it('Get Expend', function(done) {
         "id": insertedExpendId,
         "name": name,
         "value": value,
-        "user_id": 204,
+        "user_id": userId,
         "creation_date": "2021-07-01T03:00:00.000Z",
         "month": "2021-07",
         "recurrent" : 0,

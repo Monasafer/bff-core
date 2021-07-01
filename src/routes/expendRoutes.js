@@ -15,7 +15,7 @@ router.post('/expend',validation.validate(validation.expendSchema),async (req, r
           const user_id = req.headers['user-id'];
           const { name, value, month, recurrent, payed } = req.body;
           const response = await expendService.setExpend(user_id, name, value, month, recurrent, payed)
-          console.log("expendService.setExpend Response : " + response);
+          console.log("expendService.setExpend Response : " + JSON.stringify(response));
           res.json(response);  
 });
       
