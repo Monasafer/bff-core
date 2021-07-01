@@ -3,7 +3,7 @@ var request = require('request');
 
 let insertedExpendId;
 let userId = '204'
-let desc = "Zapatillas"
+let name = "Zapatillas"
 let value = 15000
 let month = "2021-07"
 let url = 'http://localhost:3000/'
@@ -18,7 +18,7 @@ it('Insert Expend', function(done) {
         },
         body: JSON.stringify(
           {
-            "desc": desc,
+            "name": name,
             "value": value,
             "month": month,
             "recurrent": 0
@@ -57,7 +57,7 @@ it('Get Expend', function(done) {
       expect(res).to.deep.include(
         {
         "id": insertedExpendId,
-        "desc": desc,
+        "name": name,
         "value": value,
         "user_id": 204,
         "creation_date": "2021-07-01T03:00:00.000Z",

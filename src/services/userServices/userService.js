@@ -2,8 +2,8 @@ const pool = require('../../database');
 var userService = {
     //TODO : Sanitización de todos los datos. Si es string, no puede tener simbolos <>=?;: , dado que permitiria un query injection.
 
-    getUser : function(user_id,pass){
-        let rows = [user_id,pass];
+    getUser : function(user_id, pass){
+        let rows = [user_id, pass];
         let query='SELECT * FROM user WHERE (id) = ? AND pass = ? AND state_code =1';
         return pool.query(query, rows);
     },

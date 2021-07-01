@@ -14,7 +14,7 @@ USE `heroku_8a551bcfa4d3d31`;
 
 CREATE TABLE `expend` (
   `id` int(11) NOT NULL,
-  `desc` text CHARACTER SET latin1 COLLATE latin1_bin NOT NULL,
+  `name` text CHARACTER SET latin1 COLLATE latin1_bin NOT NULL,
   `value` int(100) NOT NULL,
   `user_id` int(11) NOT NULL,
   `payed` int(11) NOT null default 0,
@@ -30,7 +30,7 @@ CREATE TABLE `expend` (
 
 CREATE TABLE `special_expend` (
   `id` int(11) NOT NULL,
-  `desc` text CHARACTER SET latin1 COLLATE latin1_bin NOT NULL,
+  `name` text CHARACTER SET latin1 COLLATE latin1_bin NOT NULL,
   `value` int(100) NOT NULL,
   `user_id` int(11) NOT NULL,
   `month` text CHARACTER SET latin1 COLLATE latin1_bin NOT NULL,
@@ -44,7 +44,7 @@ CREATE TABLE `special_expend` (
 
 CREATE TABLE `mona` (
   `id` int(11) NOT NULL,
-  `desc` text CHARACTER SET latin1 COLLATE latin1_bin NOT NULL,
+  `name` text CHARACTER SET latin1 COLLATE latin1_bin NOT NULL,
   `value` int(100) NOT NULL,
   `user_id` int(11) NOT NULL,
   `month` text CHARACTER SET latin1 COLLATE latin1_bin NOT NULL,
@@ -58,7 +58,7 @@ CREATE TABLE `mona` (
 
 CREATE TABLE `save` (
   `id` int(11) NOT NULL,
-  `desc` text CHARACTER SET latin1 COLLATE latin1_bin NOT NULL,
+  `name` text CHARACTER SET latin1 COLLATE latin1_bin NOT NULL,
   `value` int(100) NOT NULL,
   `user_id` int(11) NOT NULL,
   `saved` int(11) NOT null default 0,

@@ -9,11 +9,11 @@ var specialExpendService = {
         return pool.query(query, rows);
     },
 
-    setSpecialExpend: function (user_id, descr, value, finish_date) {
-        const query = `insert into special_expend(descr, value, user_id, creation_date,finish_date, state_code) values(?,?,?,?,?,1)`;
+    setSpecialExpend: function (user_id, name, value, finish_date) {
+        const query = `insert into special_expend(name, value, user_id, creation_date,finish_date, state_code) values(?,?,?,?,?,1)`;
         const timeElapsed = Date.now();
         const creation_date = new Date(timeElapsed).toISOString();
-        rows = [descr, value, user_id, creation_date, finish_date]
+        rows = [name, value, user_id, creation_date, finish_date]
         try {
             if(finish_date>creation_date || finish_date==null){
                 return pool.query(query, rows);
@@ -23,15 +23,15 @@ var specialExpendService = {
         }
     },
 
-    updateSpecialExpend: function (user_id, specialExpendId, descr, value, finish_date, payed) {
+    updateSpecialExpend: function (user_id, specialExpendId, name, value, finish_date, payed) {
         let query = `UPDATE special_expend
                 SET 
-                descr = ?, 
+                name = ?, 
                 value = ?,
                 finish_date = ?,
                 WHERE id = ?
                 AND user_id = ?`;
-        rows = [descr, value, finish_date, specialExpendId, user_id];
+        rows = [name, value, finish_date, specialExpendId, user_id];
         try {
             if(finish_date>creation_date || finish_date==null){
                 return pool.query(query, rows);

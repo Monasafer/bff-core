@@ -11,7 +11,7 @@ router.get('/user', async (req,res)=>{
           res.json(response);    
 });
 
-router.post('/user',validations.validate(validations.createUserSchema),async (req, res,next) => {
+router.post('/user',validations.validate(validations.createUserSchema),async (req, res, next) => {
           const { user,pass, mail } = req.body;
           const response = await userService.setUser(user,pass, mail)
           console.log("userService.setUser Response : " + response);

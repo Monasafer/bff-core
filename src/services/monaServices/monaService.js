@@ -11,23 +11,23 @@ var monaService = {
         return pool.query(query, rows);
     },
 
-    setMona : function(user_id, desc, value){
-        const query = `insert into mona(desc, value, user_id, creation_date, state_code) values(?,?,?,?,1)`;
+    setMona : function(user_id, name, value){
+        const query = `insert into mona(name, value, user_id, creation_date, state_code) values(?,?,?,?,1)`;
         const timeElapsed = Date.now();
         const creation_date = new Date(timeElapsed).toISOString();
 
-        rows = [desc, value, user_id, creation_date]
+        rows = [name, value, user_id, creation_date]
         return pool.query(query, rows);
     },
 
-    updateMona : function(user_id, monaId, desc, value){
+    updateMona : function(user_id, monaId, name, value){
         let query =  `UPDATE mona
                 SET 
-                desc = ?, 
+                name = ?, 
                 value = ?
                 WHERE id = ?
                 AND user_id = ?`;
-        rows = [desc, value, monaId, user_id];
+        rows = [name, value, monaId, user_id];
         return pool.query(query, rows);
     },
 
