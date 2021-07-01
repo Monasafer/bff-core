@@ -64,6 +64,41 @@
 			"response": []
 		},
 		{
+			"name": "Special Expend",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "user-id",
+						"type": "text",
+						"value": "4"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/specialExpend?startDate=2018-03-06&endDate=2019-06-09",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"specialExpend"
+					],
+					"query": [
+						{
+							"key": "startDate",
+							"value": "2018-03-06"
+						},
+						{
+							"key": "endDate",
+							"value": "2019-06-09"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "User",
 			"request": {
 				"method": "GET",
@@ -205,6 +240,40 @@
 			"response": []
 		},
 		{
+			"name": "Special Expend Insert",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "user-id",
+						"type": "text",
+						"value": "4"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"descr\": \"Semanal\",\r\n    \"value\": \"1020\",\r\n    \"finish_date\":\"2022-06-11\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/specialExpend",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"specialExpend"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "User Insert",
 			"request": {
 				"method": "POST",
@@ -218,7 +287,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"user\": \"Mariano\",\r\n    \"pass\": \"Arturito\",\r\n    \"mail\":\"lysholm@gmail.com\"\r\n}",
+					"raw": "{\r\n    \"user\": \"Lucas\",\r\n    \"pass\": \"Felipito\",\r\n    \"mail\":\"lysholmx98@gmail.com\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -336,6 +405,41 @@
 					"port": "3000",
 					"path": [
 						"expend",
+						"14"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Special Expend Update",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "user-id",
+						"type": "text",
+						"value": "4"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"descr\": \"Expend id 4 Cambiado\",\r\n    \"value\": \"1050\",\r\n    \"finish_date\": \"2022-01-05\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/specialExpend/14",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"specialExpend",
 						"14"
 					]
 				}
@@ -473,6 +577,32 @@
 					"path": [
 						"expend",
 						"4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Special Expend Delete",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "user-id",
+						"type": "text",
+						"value": "4"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/specialExpend/64",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"specialExpend",
+						"64"
 					]
 				}
 			},
