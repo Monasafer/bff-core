@@ -33,8 +33,8 @@ it('Insert User', function(done) {
       if (error) throw new Error(error);
       let res = JSON.parse(response.body);
 
-      console.log("body is " + JSON.stringify(res));
-      console.log("affectedRows is " + res.affectedRows);
+      //console.log("body is " + JSON.stringify(res));
+      //console.log("affectedRows is " + res.affectedRows);
 
       insertedUserId = res.insertId;
 

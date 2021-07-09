@@ -1,13 +1,14 @@
 var expect  = require('chai').expect;
 var request = require('request');
+var randomstring = require("randomstring");
 
 let insertedMonaId;
 let userId = 5
-let name = "Test"
+let name = randomstring.generate(7);
 let value = 15000
 let month = "2021-07"
 let url = 'http://localhost:3000/'
-let creation_date = "2021-09-01T03:00:00.000Z"
+var creation_date = '2021-07-09'
 
 it('Insert Mona', function(done) {
     var options = {
@@ -30,8 +31,8 @@ it('Insert Mona', function(done) {
         if (error) throw new Error(error);
         let res = JSON.parse(response.body);
 
-        console.log("body is " + JSON.stringify(res));
-        console.log("affectedRows is " + res.affectedRows);
+        //console.log("body is " + JSON.stringify(res));
+        //console.log("affectedRows is " + res.affectedRows);
 
         insertedMonaId = res.insertId;
 
@@ -41,7 +42,7 @@ it('Insert Mona', function(done) {
 });
 
 it('Get Mona', function(done) {
-  var options = {
+  var options =  {
       'method': 'GET',
       'url': url + 'mona?month=' + month,
       'headers': {
@@ -52,16 +53,14 @@ it('Get Mona', function(done) {
 
     request(options, function (error, response) {
       if (error) throw new Error(error);
-      let res = JSON.parse(response.body);
-
-      expect(res).to.deep.include(
+      let res =  JSON.parse(response.body);
+       expect(res[res.length - 1]).to.deep.include(
         {
         "id": insertedMonaId,
         "name": name,
         "value": value,
         "user_id": userId,
         "month": month,
-        "creation_date": creation_date,
         "state_code": 1
       });
       done();
@@ -107,14 +106,13 @@ it('Get Mona Updated', function(done) {
       if (error) throw new Error(error);
       let res = JSON.parse(response.body);
 
-      expect(res).to.deep.include(
+      expect(res[res.length - 1]).to.deep.include(
         {
         "id": insertedMonaId,
         "name": name + "changed",
         "value": value + 999,
         "user_id": userId,
         "month": "2021-07",
-        "creation_date": "2021-07-01T03:00:00.000Z",
         "state_code": 1
       });
       done();
@@ -139,3 +137,4 @@ it('Delete Mona', function(done) {
       done();
     });
 });
+
