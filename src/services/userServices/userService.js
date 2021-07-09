@@ -17,7 +17,7 @@ var userService = {
     },
 
     updateUser : function(user_id, pass,new_pass){
-            let query =  `UPDATE user
+        let query =  `UPDATE user
                 SET 
                 pass = ?
                 WHERE id = ? AND pass = ?`;

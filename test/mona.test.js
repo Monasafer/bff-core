@@ -3,10 +3,11 @@ var request = require('request');
 
 let insertedMonaId;
 let userId = 5
-let name = "Sueldo"
+let name = "Test"
 let value = 15000
 let month = "2021-07"
 let url = 'http://localhost:3000/'
+let creation_date = "2021-09-01T03:00:00.000Z"
 
 it('Insert Mona', function(done) {
     var options = {
@@ -59,8 +60,8 @@ it('Get Mona', function(done) {
         "name": name,
         "value": value,
         "user_id": userId,
-        "month": "2021-07",
-        "creation_date": "2021-07-01T03:00:00.000Z",
+        "month": month,
+        "creation_date": creation_date,
         "state_code": 1
       });
       done();

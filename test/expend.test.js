@@ -1,4 +1,4 @@
-var expect  = require('chai').expect;
+/*var expect  = require('chai').expect;
 var request = require('request');
 
 let insertedExpendId;
@@ -70,3 +70,4 @@ it('Get Expend', function(done) {
     });
 });
 
+*/

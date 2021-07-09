@@ -18,8 +18,8 @@ router.post('/user',validations.validate(validations.createUserSchema),async (re
           res.json(response);  
 });
       
-router.put('/user/:userId',validations.validateupdate(validations.updateUserSchema) ,async (req, res) => {
-        let user_id = req.params.userId;
+router.put('/user',validations.validateupdate(validations.updateUserSchema) ,async (req, res) => {
+        let user_id = req.headers['user-id'];
         let pass = req.headers['pass'];
         let new_pass = req.headers['new_pass'];      
         const response = await userService.updateUser(user_id, pass,new_pass)
