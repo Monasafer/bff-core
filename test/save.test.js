@@ -8,7 +8,8 @@ let name = randomstring.generate(7);
 let value = 1000
 let valueUpdated = 1500;
 let month = "2021-07-31";
-let url = 'http://localhost:3000/'
+let verifymonth = "2021-07-31T03:00:00.000Z";
+let url = 'http://localhost:3000/';
 
 
 it('Insert Save', function(done) {
@@ -59,6 +60,7 @@ it('Get Save', function(done) {
         "name": name,
         "value": value,
         "user_id": userId,
+        "month": verifymonth,
         "state_code": 1
       });
       done();
@@ -110,6 +112,7 @@ it('Get Save Updated', function(done) {
         "name": name + "changed",
         "value": valueUpdated,
         "user_id": userId,
+        "month": verifymonth,
         "state_code": 1
       });
       done();
