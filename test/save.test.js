@@ -7,15 +7,14 @@ let userId = 5
 let name = randomstring.generate(7);
 let value = 1000
 let valueUpdated = 1500;
-let month = "2021-07"
-var creation_date = '2021-07-09'
+let month = "2021-07-31";
 let url = 'http://localhost:3000/'
 
 
-it('Insert Mona', function(done) {
+it('Insert Save', function(done) {
     var options = {
         'method': 'POST',
-        'url': url + 'mona',
+        'url': url + 'save',
         'headers': {
           'user-id': userId,
           'Content-Type': 'application/json'
@@ -25,16 +24,12 @@ it('Insert Mona', function(done) {
             "name": name,
             "value": value,
             "month": month,
-            "recurrent": 0
         })
       };
 
       request(options, function (error, response) {
         if (error) throw new Error(error);
         let res = JSON.parse(response.body);
-
-        //console.log("body is " + JSON.stringify(res));
-        //console.log("affectedRows is " + res.affectedRows);
 
         insertedSaveId = res.insertId;
 
@@ -43,10 +38,10 @@ it('Insert Mona', function(done) {
       });
 });
 
-it('Get Mona', function(done) {
+it('Get Save', function(done) {
   var options =  {
       'method': 'GET',
-      'url': url + 'mona?month=' + month,
+      'url': url + 'save?month=' + month,
       'headers': {
         'user-id': userId,
         'Content-Type': 'application/json'
@@ -56,13 +51,14 @@ it('Get Mona', function(done) {
     request(options, function (error, response) {
       if (error) throw new Error(error);
       let res =  JSON.parse(response.body);
+
+
        expect(res[res.length - 1]).to.deep.include(
         {
         "id": insertedSaveId,
         "name": name,
         "value": value,
         "user_id": userId,
-        "month": month,
         "state_code": 1
       });
       done();
@@ -70,10 +66,10 @@ it('Get Mona', function(done) {
 });
 
 
-it('Update Mona', function(done) {
+it('Update Save', function(done) {
   var options = {
       'method': 'PUT',
-      'url': url + 'mona/' + insertedSaveId,
+      'url': url + 'save?id=' + insertedSaveId,
       'headers': {
         'user-id': userId,
         'Content-Type': 'application/json'
@@ -94,10 +90,10 @@ it('Update Mona', function(done) {
     });
 });
 
-it('Get Mona Updated', function(done) {
+it('Get Save Updated', function(done) {
   var options = {
       'method': 'GET',
-      'url': url + 'mona?month=' + month,
+      'url': url + 'save?month=' + month,
       'headers': {
         'user-id': userId,
         'Content-Type': 'application/json'
@@ -110,21 +106,20 @@ it('Get Mona Updated', function(done) {
 
       expect(res[res.length - 1]).to.deep.include(
         {
-        "id": insertedMonaId,
+        "id": insertedSaveId,
         "name": name + "changed",
         "value": valueUpdated,
         "user_id": userId,
-        "month": "2021-07",
         "state_code": 1
       });
       done();
     });
 });
 
-it('Delete Mona', function(done) {
+it('Delete Save', function(done) {
   var options = {
       'method': 'DELETE',
-      'url': url + 'mona/' + insertedMonaId,
+      'url': url + 'save?id=' + insertedSaveId,
       'headers': {
         'user-id': userId,
         'Content-Type': 'application/json'

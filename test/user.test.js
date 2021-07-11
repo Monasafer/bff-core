@@ -9,8 +9,6 @@ let pass = randomstring.generate(12);
 let new_pass = randomstring.generate(12);
 let mail = randomstring.generate(12) + "@gmail.com";
 let url = 'http://localhost:3000/';
-let creation_date = "2021-07-09T03:00:00.000Z";
-let userId = 25;
 
 
 
@@ -32,9 +30,6 @@ it('Insert User', function(done) {
     request(options, function (error, response) {
       if (error) throw new Error(error);
       let res = JSON.parse(response.body);
-
-      //console.log("body is " + JSON.stringify(res));
-      //console.log("affectedRows is " + res.affectedRows);
 
       insertedUserId = res.insertId;
 
@@ -65,7 +60,6 @@ it('Get User', function(done) {
           "user": user,
           "pass": pass,
           "mail": mail,
-          "creation_date": creation_date,
           "state_code": 1
         });
         done();

@@ -4,7 +4,7 @@ const yup = require('yup');
 const createSaveSchema = yup.object().shape({
     name: yup.string().matches(expresiones.nameValidation, 'Name should not have symbols').required(),
     value: yup.number().positive().required(),
-    month: yup.date(),
+    month: yup.date().required(),
 });
 
 const updateSaveSchema = yup.object().shape({
