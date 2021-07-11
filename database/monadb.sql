@@ -19,7 +19,7 @@ CREATE TABLE `expend` (
   `user_id` int(11) NOT NULL,
   `payed` int(11) NOT null default 0,
   `recurrent` int(11) NOT NULL,
-  `month` text CHARACTER SET latin1 COLLATE latin1_bin NOT NULL,
+  `month` date NOT NULL,
   `creation_date` date NOT NULL,
   `state_code` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -33,7 +33,7 @@ CREATE TABLE `special_expend` (
   `name` text CHARACTER SET latin1 COLLATE latin1_bin NOT NULL,
   `value` int(100) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `month` text CHARACTER SET latin1 COLLATE latin1_bin NOT NULL,
+  `month` date NOT NULL,
   `creation_date` date NOT NULL,
   `state_code` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -47,7 +47,7 @@ CREATE TABLE `mona` (
   `name` text CHARACTER SET latin1 COLLATE latin1_bin NOT NULL,
   `value` int(100) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `month` text CHARACTER SET latin1 COLLATE latin1_bin NOT NULL,
+  `month` date NOT NULL,
   `creation_date` date NOT NULL,
   `state_code` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -62,7 +62,7 @@ CREATE TABLE `save` (
   `value` int(100) NOT NULL,
   `user_id` int(11) NOT NULL,
   `saved` int(11) NOT null default 0,
-  `month` text CHARACTER SET latin1 COLLATE latin1_bin NOT NULL,
+  `month` date NOT NULL,
   `creation_date` date NOT NULL,
   `state_code` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
