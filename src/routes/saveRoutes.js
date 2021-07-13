@@ -13,7 +13,7 @@ router.get('/save', async (req, res) => {
 
 router.post('/save', validations.validate(validations.createSaveSchema), async (req, res) => {
   const user_id = req.headers['user-id'];
-  const { name, value,month } = req.body;
+  const { name, value, month } = req.body;
   const response = await saveService.setSave(user_id, name, value, month)
   console.log("saveService.setSave Response : " + response);
   res.json(response);

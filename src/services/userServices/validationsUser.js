@@ -27,6 +27,7 @@ const validateupdate = (schema) => async (req, res, next) => {
     let new_pass = req.headers['new_pass'];
     let body = { pass, new_pass }
     try {
+        if (pass == new_pass) throw new Error("La antigua y nueva contraseña no pueden ser iguales");
         await schema.validate(body);
         next();
     } catch (error) {
