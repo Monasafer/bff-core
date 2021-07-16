@@ -1,4 +1,3 @@
-
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
@@ -13,13 +12,13 @@ USE `heroku_8a551bcfa4d3d31`;
 --
 
 CREATE TABLE `expend` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` text CHARACTER SET latin1 COLLATE latin1_bin NOT NULL,
   `value` int(100) NOT NULL,
-  `user_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL KEY,
   `payed` int(11) NOT null default 0,
   `recurrent` int(11) NOT NULL,
-  `month` text CHARACTER SET latin1 COLLATE latin1_bin NOT NULL,
+  `month` date NOT NULL,
   `creation_date` date NOT NULL,
   `state_code` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -29,11 +28,11 @@ CREATE TABLE `expend` (
 --
 
 CREATE TABLE `special_expend` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `name` text CHARACTER SET latin1 COLLATE latin1_bin NOT NULL,
   `value` int(100) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `month` text CHARACTER SET latin1 COLLATE latin1_bin NOT NULL,
+  `user_id` int(11) NOT NULL KEY,
+  `month` date NOT NULL,
   `creation_date` date NOT NULL,
   `state_code` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -43,11 +42,11 @@ CREATE TABLE `special_expend` (
 --
 
 CREATE TABLE `mona` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `name` text CHARACTER SET latin1 COLLATE latin1_bin NOT NULL,
   `value` int(100) NOT NULL,
-  `user_id` int(11) NOT NULL,
-  `month` text CHARACTER SET latin1 COLLATE latin1_bin NOT NULL,
+  `user_id` int(11) NOT NULL KEY,
+  `month` date NOT NULL,
   `creation_date` date NOT NULL,
   `state_code` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -57,12 +56,12 @@ CREATE TABLE `mona` (
 --
 
 CREATE TABLE `save` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `name` text CHARACTER SET latin1 COLLATE latin1_bin NOT NULL,
   `value` int(100) NOT NULL,
-  `user_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL KEY,
   `saved` int(11) NOT null default 0,
-  `month` text CHARACTER SET latin1 COLLATE latin1_bin NOT NULL,
+  `month` date NOT NULL,
   `creation_date` date NOT NULL,
   `state_code` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -72,83 +71,15 @@ CREATE TABLE `save` (
 --
 
 CREATE TABLE `user` (
-  `id` int(11) NOT NULL,
-  `user` varchar(20) CHARACTER SET latin1 COLLATE latin1_bin NOT NULL,
+  `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  `user` varchar(20) CHARACTER SET latin1 COLLATE latin1_bin NOT NULL UNIQUE KEY,
   `pass` varchar(20) CHARACTER SET latin1 COLLATE latin1_bin NOT NULL,
-  `mail` varchar(320) CHARACTER SET latin1 COLLATE latin1_bin NOT NULL,
+  `mail` varchar(320) CHARACTER SET latin1 COLLATE latin1_bin NOT NULL UNIQUE,
   `creation_date` date NOT NULL,
   `state_code` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
---
--- Indices de la tabla `expend`
---
-ALTER TABLE `expend`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `user_id` (`user_id`);
- 
- --
--- Indices de la tabla `special_expend`
---
-ALTER TABLE `special_expend`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `user_id` (`user_id`);
-
---
--- Indices de la tabla `mona`
---
-ALTER TABLE `mona`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `user_id` (`user_id`);
-
---
--- Indices de la tabla `save`
---
-ALTER TABLE `save`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `user_id` (`user_id`);
-
---
--- Indices de la tabla `user`
---
-ALTER TABLE `user`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `user` (`user`);
-
---
--- AUTO_INCREMENT de las tablas volcadas
---
-
---
--- AUTO_INCREMENT de la tabla `expend`
---
-ALTER TABLE `expend`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
- 
---
--- AUTO_INCREMENT de la tabla `expend`
---
-ALTER TABLE `special_expend`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `mona`
---
-ALTER TABLE `mona`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `save`
---
-ALTER TABLE `save`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT de la tabla `user`
---
-ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Restricciones para tablas volcadas

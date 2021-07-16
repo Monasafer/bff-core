@@ -1,7 +1,13 @@
 const expresiones = require('../expressions')
 const yup = require('yup');
 
-const monaSchema = yup.object().shape({
+const createMonaSchema = yup.object().shape({
+    name: yup.string().matches(expresiones.nameValidation, 'Name should not have symbols').required(),
+    value: yup.number().positive().required(),
+    month: yup.date().required(),
+});
+
+const updateMonaSchema = yup.object().shape({
     name: yup.string().matches(expresiones.nameValidation, 'Name should not have symbols').required(),
     value: yup.number().positive().required(),
 });
@@ -18,6 +24,7 @@ const validate = (schema) => async (req,res,next)=>{
 
 module.exports = {
     validate,
-    monaSchema,
+    updateMonaSchema,
+    createMonaSchema
 };
 
