@@ -78,13 +78,14 @@ it('Update Save', function(done) {
       },
       body: JSON.stringify(
         {
-          "name": name + "changed",
+          "name": name + " changed",
           "value": valueUpdated
       })
     };
 
     request(options, function (error, response) {
       if (error) throw new Error(error);
+      console.log
       let res = JSON.parse(response.body);
       expect(res.affectedRows).to.equal(1);
       expect(res.changedRows).to.equal(1);
@@ -109,7 +110,7 @@ it('Get Save Updated', function(done) {
       expect(res[res.length - 1]).to.deep.include(
         {
         "id": insertedSaveId,
-        "name": name + "changed",
+        "name": name + " changed",
         "value": valueUpdated,
         "user_id": userId,
         "month": verifymonth,

@@ -16,10 +16,13 @@ app.use(cors({credentials: true,
 
 //Routes
 app.use(require('./src/routes/expendRoutes'));
+app.use(require('./src/routes/relFixedExpendRoutes'));
+app.use(require('./src/routes/specialExpendRoutes'));
 app.use(require('./src/routes/saveRoutes'));
 app.use(require('./src/routes/monaRoutes'));
 app.use(require('./src/routes/userRoutes'));
-app.use(require('./src/routes/specialExpendRoutes'))
+
+
 
 //Error handing
 

@@ -25,6 +25,7 @@ it('Insert User', function(done) {
           "pass": pass,
           "mail": mail
       })
+      
     };
 
     request(options, function (error, response) {
@@ -44,7 +45,7 @@ it('Get User', function(done) {
         'method': 'GET',
         'url': url + 'user',
         'headers': {
-          'user-id': insertedUserId,
+          'user': user,
           'pass': pass,
           'Content-Type': 'application/json'
         }  
@@ -53,7 +54,6 @@ it('Get User', function(done) {
       request(options, function (error, response) {
         if (error) throw new Error(error);
         let res = JSON.parse(response.body);
-  
         expect(res[0]).to.deep.include(
           {
           "id": insertedUserId,
@@ -66,17 +66,19 @@ it('Get User', function(done) {
       });
   });
 
+
   it('Update User', function(done) {
     var options = {
         'method': 'PUT',
         'url': url + 'user',
         'headers': {
-          'user-id': insertedUserId,
+          'user': user,
           'pass': pass,
           'new_pass':new_pass,
           'Content-Type': 'application/json'
         }
       };
+    
   
       request(options, function (error, response) {
         if (error) throw new Error(error);
@@ -92,7 +94,7 @@ it('Get User', function(done) {
         'method': 'DELETE',
         'url': url + 'user',
         'headers': {
-          'user-id': insertedUserId,
+          'user': user,
           'pass': new_pass,
           'Content-Type': 'application/json'
         }
