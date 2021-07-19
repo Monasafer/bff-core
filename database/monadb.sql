@@ -26,7 +26,7 @@ CREATE TABLE `expend` (
 --
 
 CREATE TABLE `rel_fixed_expend` (
-  `id_fe` int(11) NOT null default 0 PRIMARY KEY,
+  `id_fe` int(11) NOT null AUTO_INCREMENT PRIMARY KEY,
   `user_id` int(11) NOT NULL,
   `creation_date` date NOT NULL,
   `state` int(1) NOT NULL,

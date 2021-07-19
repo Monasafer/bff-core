@@ -11,13 +11,13 @@ var fixedExpendService = {
         return pool.query(query, rows);
     },
 
-    setFixedExpend: function (id_fe, user_id) {
-        const query = `insert into rel_fixed_expend(id_fe,user_id,creation_date,state,active) values(?,?,?,?,?)`;
+    setFixedExpend: function (user_id) {
+        const query = `insert into rel_fixed_expend(user_id,creation_date,state,active) values(?,?,?,?)`;
         state = 1;
         active = 1;
         const timeElapsed = Date.now();
         const creation_date = new Date(timeElapsed).toISOString();
-        rows = [id_fe, user_id, creation_date, state, active];
+        rows = [user_id, creation_date, state, active];
         return pool.query(query, rows);
     },
 
