@@ -2,10 +2,17 @@ const pool = require('../../database');
 
 var expendService = {
 
-    getExpend: function (user_id, month) {
+    getExpend: function (user_id, month, id, fixed) {
         let state = 1;
-        let rows = [user_id, month, state];
-        let query = 'SELECT * FROM expend WHERE (user_id) = ? AND (month) = ? AND (state)=? ';
+        if (fixed == 1) {
+            getFixed = " AND id = ?";
+            rows = [user_id, month, state, id];
+        } else if (fixed == 0) {
+            getFixed = " ";
+            rows = [user_id, month, state];
+        }
+
+        let query = 'SELECT * FROM expend WHERE (user_id) = ? AND (month) = ? AND (state)=?' + getFixed;
         return pool.query(query, rows);
     },
 
@@ -24,6 +31,21 @@ var expendService = {
                 WHERE id = ?
                 AND user_id = ?`;
         rows = [name, value, id, user_id];
+        return pool.query(query, rows);
+    },
+
+    updateMultipleExpend: function (id_fe, user_id, name, value, month, additional) {
+        if (additional == "") {
+            rows = [name, value, id_fe, user_id];
+        } else {
+            rows = [name, value, id_fe, user_id, month];
+        }
+        let query = `UPDATE expend
+                SET 
+                name = ?, 
+                value = ?
+                WHERE id_fe = ?
+                AND user_id = ?` + additional;
         return pool.query(query, rows);
     },
 

@@ -5,14 +5,15 @@ const validate = require('../services/expendServices/validationsExpend');
 
 router.get('/expend', async (req, res) => {
     let user_id = req.headers['user-id'];
+    const { fixed } = req.query;
     const { month } = req.query;
-    const response = await expendService.getExpend(user_id, month);
+    const response = await expendService.getExpend(user_id, month, null ,fixed);
     console.log(response[0]);
     console.log("expendService.getExpend Response : " + response);
     res.json(response);
 });
 
-router.post('/expend',validate.validate(validate.createExpendSchema), async (req, res) => {
+router.post('/expend', validate.validate(validate.createExpendSchema), async (req, res) => {
     const user_id = req.headers['user-id'];
     const { name, value, month, id_fe } = req.body;
     const response = await expendService.setExpend(user_id, name, value, month, id_fe)
@@ -20,7 +21,7 @@ router.post('/expend',validate.validate(validate.createExpendSchema), async (req
     res.json(response);
 });
 
-router.put('/expend',validate.validate(validate.updateExpendSchema) ,async (req, res) => {
+router.put('/expend', validate.validate(validate.updateExpendSchema), async (req, res) => {
     const user_id = req.headers['user-id'];
     const { id } = req.query;
     const { name, value } = req.body;
