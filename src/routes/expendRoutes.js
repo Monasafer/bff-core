@@ -5,10 +5,9 @@ const validate = require('../services/expendServices/validationsExpend');
 
 router.get('/expend', async (req, res) => {
     let user_id = req.headers['user-id'];
-    const { fixed } = req.query;
+    const { fixed } = 0;
     const { month } = req.query;
     const response = await expendService.getExpend(user_id, month, null ,fixed);
-    console.log(response[0]);
     console.log("expendService.getExpend Response : " + response);
     res.json(response);
 });
@@ -33,7 +32,7 @@ router.put('/expend', validate.validate(validate.updateExpendSchema), async (req
 router.delete('/expend', async (req, res) => {
     const user_id = req.headers['user-id'];
     const { id } = req.query;
-    const response = await expendService.deleteExpend(id, user_id);
+    const response = await expendService.deleteExpend(id, user_id,null);
     console.log("expendService.DeleteExpend Response: " + JSON.stringify(response));
     res.json(response);
 })

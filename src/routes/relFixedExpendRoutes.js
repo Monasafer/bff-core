@@ -10,6 +10,15 @@ router.get('/relFixedExpend', async (req, res) => {
     res.json(response);
 });
 
+router.get('/getFixedExpendsAndValues', async (req, res) => {
+    let user_id = req.headers['user_id'];
+    const { month } = req.body;
+    const response = await fixedExpendService.getFixedExpendsAndValues(user_id, month);
+    console.log(response.length);
+    console.log("FixedExpendService.getFixedExpend Response : " + response);
+    res.json(response);
+});
+
 router.post('/relFixedExpend',validate.validate(validate.createFixedExpendSchema), async (req, res) => {
     const user_id = req.headers['user_id'];
     const response = await fixedExpendService.setFixedExpend(user_id);

@@ -4,14 +4,12 @@ var expendService = {
 
     getExpend: function (user_id, month, id, fixed) {
         let state = 1;
+        getFixed = "";
+        rows = [user_id, month, state];
         if (fixed == 1) {
             getFixed = " AND id = ?";
             rows = [user_id, month, state, id];
-        } else if (fixed == 0) {
-            getFixed = " ";
-            rows = [user_id, month, state];
         }
-
         let query = 'SELECT * FROM expend WHERE (user_id) = ? AND (month) = ? AND (state)=?' + getFixed;
         return pool.query(query, rows);
     },
@@ -20,6 +18,12 @@ var expendService = {
         const query = `insert into expend(user_id,name,value,month,state,id_fe) values(?,?,?,?,?,?)`;
         state = 1;
         rows = [user_id, name, value, month, state, id_fe]
+        return pool.query(query, rows);
+    },
+
+    setMultipleExpends: function (additional) {
+        const query = `insert into expend(user_id,name,value,month,state,id_fe) values ${additional}`;
+        rows = [];
         return pool.query(query, rows);
     },
 
@@ -57,6 +61,18 @@ var expendService = {
                 AND user_id = ?`;
         state = 0;
         rows = [state, id, user_id];
+        return pool.query(query, rows);
+    },
+
+    deleteMultipleExpend: function (id_fe, user_id, month) {
+        let query = `UPDATE expend
+                SET 
+                state = ?
+                WHERE id_fe = ?
+                AND user_id = ?
+                AND month >= ?`;
+        state = 0;
+        rows = [state, id_fe, user_id, month];
         return pool.query(query, rows);
     }
 }

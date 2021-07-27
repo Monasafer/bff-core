@@ -18,7 +18,7 @@ CREATE TABLE `expend` (
   `value` int(100) NOT NULL,
   `month` date NOT NULL,
   `state` int(1) NOT NULL,
-  `id_fe` int(11) UNIQUE
+  `id_fe` int(11)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -69,7 +69,7 @@ CREATE TABLE `save` (
   `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `name` text CHARACTER SET latin1 COLLATE latin1_bin NOT NULL,
   `value` int(100) NOT NULL,
-  `user_id` int(11) NOT NULL KEY,
+  `user_id` int(11) NOT NULL,
   `saved` int(11) NOT null default 0,
   `month` date NOT NULL,
   `creation_date` date NOT NULL,
@@ -89,7 +89,16 @@ CREATE TABLE `user` (
   `state_code` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Estructura de tabla para la tabla `month`
+--
 
+CREATE TABLE `month` (
+  `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `month` date NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `state` int(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Restricciones para tablas volcadas

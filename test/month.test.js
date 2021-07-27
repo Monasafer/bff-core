@@ -1,38 +1,43 @@
 var expect = require('chai').expect;
 var request = require('request');
-const random = require('random')
 
+let insertedMonthId;
 let userId = 5
+let month = "2021-07-31";
+let verifymonth = "2021-07-31T03:00:00.000Z";
 let url = 'http://localhost:3000/'
 
-it('Insert FixedExpend', function (done) {
+it('Insert Month', function (done) {
   var options = {
     'method': 'POST',
-    'url': url + 'relFixedExpend',
+    'url': url + 'month',
     'headers': {
-      'user_id': userId,
+      'user-id': userId,
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(
       {
+        "month": month
       })
   };
 
   request(options, function (error, response) {
     if (error) throw new Error(error);
     let res = JSON.parse(response.body);
-    id_fe = res.insertId;
+
+    insertedMonthId = res.insertId;
+
     expect(res.affectedRows).to.equal(1);
     done();
   });
 });
 
-it('Get FixedExpend', function (done) {
+it('Get Month', function (done) {
   var options = {
     'method': 'GET',
-    'url': url + 'relFixedExpend',
+    'url': url + 'month?month='+month,
     'headers': {
-      'user_id': userId,
+      'user-id': userId,
       'Content-Type': 'application/json'
     },
   };
@@ -42,21 +47,21 @@ it('Get FixedExpend', function (done) {
     let res = JSON.parse(response.body);
     expect(res[res.length - 1]).to.deep.include(
       {
+        "id": insertedMonthId,
         "user_id": userId,
-        "state": 1,
-        "active": 1,
-        "id_fe": id_fe
+        "month": verifymonth,
+        "state": 1
       });
     done();
   });
 });
 
-it('Delete FixedExpend', function (done) {
+it('Delete Month', function (done) {
   var options = {
     'method': 'DELETE',
-    'url': url + 'relFixedExpend?id_fe=' + id_fe,
+    'url': url + 'month?id=' + insertedMonthId,
     'headers': {
-      'user_id': userId,
+      'user-id': userId,
       'Content-Type': 'application/json'
     }
   };
@@ -69,4 +74,5 @@ it('Delete FixedExpend', function (done) {
     done();
   });
 });
+
 

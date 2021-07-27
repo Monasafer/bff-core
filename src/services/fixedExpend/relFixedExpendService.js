@@ -11,6 +11,25 @@ var fixedExpendService = {
         return pool.query(query, rows);
     },
 
+    getFixedExpendsAndValues: function (user_id, month) {
+        let active = 1;
+        let state = 1;
+        let rows = [month, state, active, user_id];
+        let query = `select rel_fixed_expend.id_fe,rel_fixed_expend.user_id,name,value,month from rel_fixed_expend
+                     inner join expend 
+                        on rel_fixed_expend.id_fe = expend.id_fe
+                        where month <= ?
+                        and expend.state = ?
+                        and active = ? 
+                        and rel_fixed_expend.user_id = ?
+                        and (expend.id_fe,month) IN 
+                            (SELECT expend.id_fe, MAX(month)
+                            FROM expend 
+                            GROUP BY expend.id_fe
+                            );`;
+        return pool.query(query, rows);
+    },
+
     setFixedExpend: function (user_id) {
         const query = `insert into rel_fixed_expend(user_id,creation_date,state,active) values(?,?,?,?)`;
         state = 1;
@@ -38,7 +57,7 @@ var fixedExpendService = {
             active = ?
             WHERE id_fe = ?
             AND user_id = ?`;
-        state = 0;
+        state = 1;
         active = 0;
         rows = [state, active, id_fe, user_id];
         return pool.query(query, rows);
