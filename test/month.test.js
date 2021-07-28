@@ -1,6 +1,5 @@
 var expect = require('chai').expect;
 var request = require('request');
-
 let insertedMonthId;
 let userId = 5
 let month = "2021-07-31";
@@ -8,6 +7,7 @@ let verifymonth = "2021-07-31T03:00:00.000Z";
 let url = 'http://localhost:3000/'
 
 it('Insert Month', function (done) {
+  console.log("TEST MONTH");
   var options = {
     'method': 'POST',
     'url': url + 'month',
@@ -35,7 +35,7 @@ it('Insert Month', function (done) {
 it('Get Month', function (done) {
   var options = {
     'method': 'GET',
-    'url': url + 'month?month='+month,
+    'url': url + 'month?month=' + month,
     'headers': {
       'user-id': userId,
       'Content-Type': 'application/json'

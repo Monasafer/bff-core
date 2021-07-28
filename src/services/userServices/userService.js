@@ -9,11 +9,11 @@ var userService = {
     },
 
     setUser: function (user, pass, mail) {
-                const query = `insert into user(user, pass, mail, creation_date, state_code) values(?,?,?,?,1)`;
-                const timeElapsed = Date.now();
-                const creation_date = new Date(timeElapsed).toISOString();
-                rows = [user, pass, mail, creation_date]
-                return pool.query(query, rows);
+        const query = `insert into user(user, pass, mail, creation_date, state_code) values(?,?,?,?,1)`;
+        const timeElapsed = Date.now();
+        const creation_date = new Date(timeElapsed).toISOString();
+        rows = [user, pass, mail, creation_date]
+        return pool.query(query, rows);
     },
 
     updateUser: function (user, pass, new_pass) {

@@ -13,7 +13,10 @@ let id_fe = random.int((min = 0), (max = 55000));
 let verifymonth = "2021-07-31T03:00:00.000Z";
 let url = 'http://localhost:3000/'
 
+
+
 it('Insert Expend', function (done) {
+  console.log("TEST EXPEND");
   var options = {
     'method': 'POST',
     'url': url + 'expend',
@@ -39,7 +42,7 @@ it('Insert Expend', function (done) {
     expect(res.affectedRows).to.equal(1);
     done();
   });
-});
+}).timeout(15000);
 
 it('Get Expend', function (done) {
   var options = {
@@ -66,7 +69,7 @@ it('Get Expend', function (done) {
       });
     done();
   });
-});
+}).timeout(15000);
 
 
 it('Update Expend', function (done) {
@@ -91,7 +94,7 @@ it('Update Expend', function (done) {
     expect(res.changedRows).to.equal(1);
     done();
   });
-});
+}).timeout(15000);
 
 it('Get Expend Updated', function (done) {
   var options = {
@@ -118,7 +121,7 @@ it('Get Expend Updated', function (done) {
       });
     done();
   });
-});
+}).timeout(15000);
 
 it('Delete Expend', function (done) {
   var options = {
@@ -137,5 +140,5 @@ it('Delete Expend', function (done) {
     expect(res.changedRows).to.equal(1);
     done();
   });
-});
+}).timeout(15000);
 

@@ -8,7 +8,7 @@ router.get('/expend', async (req, res) => {
     const { fixed } = 0;
     const { month } = req.query;
     const response = await expendService.getExpend(user_id, month, null ,fixed);
-    console.log("expendService.getExpend Response : " + response);
+    console.log("expendService.getExpend Response : " + JSON.stringify(response));
     res.json(response);
 });
 

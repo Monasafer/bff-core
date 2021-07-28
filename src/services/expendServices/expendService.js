@@ -38,19 +38,26 @@ var expendService = {
         return pool.query(query, rows);
     },
 
-    updateMultipleExpend: function (id_fe, user_id, name, value, month, additional) {
-        if (additional == "") {
-            rows = [name, value, id_fe, user_id];
-        } else {
-            rows = [name, value, id_fe, user_id, month];
+    updateMultipleExpend: function (id_fe, user_id, name, value, month, valueChanges) {
+        if (valueChanges == 0) {
+            rows = [name, id_fe, user_id];
+            let query = `UPDATE expend
+                    SET 
+                    name = ?
+                    WHERE id_fe = ?
+                    AND user_id = ?`;
+            return pool.query(query, rows);
         }
-        let query = `UPDATE expend
+        else if (valueChanges == 1) {
+            rows = [value, id_fe, user_id, month];
+            let query = `UPDATE expend
                 SET 
-                name = ?, 
                 value = ?
                 WHERE id_fe = ?
-                AND user_id = ?` + additional;
-        return pool.query(query, rows);
+                AND user_id = ?
+                AND month >= ?`;
+            return pool.query(query, rows);
+        }
     },
 
     deleteExpend: function (id, user_id) {

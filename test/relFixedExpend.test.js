@@ -1,16 +1,15 @@
 var expect = require('chai').expect;
 var request = require('request');
-const random = require('random')
-
 let userId = 5
 let url = 'http://localhost:3000/'
 
 it('Insert FixedExpend', function (done) {
+  console.log("TEST FIXED EXPEND");
   var options = {
     'method': 'POST',
     'url': url + 'relFixedExpend',
     'headers': {
-      'user_id': userId,
+      'user-id': userId,
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(
@@ -32,7 +31,7 @@ it('Get FixedExpend', function (done) {
     'method': 'GET',
     'url': url + 'relFixedExpend',
     'headers': {
-      'user_id': userId,
+      'user-id': userId,
       'Content-Type': 'application/json'
     },
   };
@@ -56,7 +55,7 @@ it('Delete FixedExpend', function (done) {
     'method': 'DELETE',
     'url': url + 'relFixedExpend?id_fe=' + id_fe,
     'headers': {
-      'user_id': userId,
+      'user-id': userId,
       'Content-Type': 'application/json'
     }
   };

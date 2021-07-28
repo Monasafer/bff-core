@@ -1,7 +1,6 @@
 var expect = require('chai').expect;
 var request = require('request');
 var randomstring = require("randomstring");
-
 let insertedMonaId;
 let userId = 5
 let name = randomstring.generate(7);
@@ -11,7 +10,9 @@ let month = "2021-07-31";
 let verifymonth = "2021-07-31T03:00:00.000Z";
 let url = 'http://localhost:3000/'
 
+
 it('Insert Mona', function (done) {
+  console.log("TEST MONA");
   var options = {
     'method': 'POST',
     'url': url + 'mona',

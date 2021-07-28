@@ -1,17 +1,17 @@
 const express = require('express');
 const router = express.Router();
-const monthService = require("../services/monthServices/monthService")
+const monthService = require("../services/monthServices/monthService");
+const validations = require('../services/monthServices/validationsMonth');
 
 router.get('/month', async (req, res) => {
     let user_id = req.headers['user-id'];
     const { month } = req.query;
     const response = await monthService.getMonth(user_id, month);
-    console.log("monthService.getMonth Response : " + response);
-    console.log(response[0].month);
+    console.log("monthService.getMonth Response : " + JSON.stringify(response));
     res.json(response);
 });
 
-router.post('/month', async (req, res) => {
+router.post('/month',validations.validate(validations.createMonthSchema), async (req, res) => {
     const user_id = req.headers['user-id'];
     const { month } = req.body;
     const response = await monthService.setMonth(user_id, month)

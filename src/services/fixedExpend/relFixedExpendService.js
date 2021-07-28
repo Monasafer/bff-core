@@ -14,7 +14,7 @@ var fixedExpendService = {
     getFixedExpendsAndValues: function (user_id, month) {
         let active = 1;
         let state = 1;
-        let rows = [month, state, active, user_id];
+        let rows = [month, state, active, user_id, month];
         let query = `select rel_fixed_expend.id_fe,rel_fixed_expend.user_id,name,value,month from rel_fixed_expend
                      inner join expend 
                         on rel_fixed_expend.id_fe = expend.id_fe
@@ -25,6 +25,7 @@ var fixedExpendService = {
                         and (expend.id_fe,month) IN 
                             (SELECT expend.id_fe, MAX(month)
                             FROM expend 
+                            where month < ?
                             GROUP BY expend.id_fe
                             );`;
         return pool.query(query, rows);

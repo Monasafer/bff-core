@@ -9,7 +9,6 @@ var monthService = {
     },
 
     setMonth: function (user_id, month) {
-        console.log(month);
         const query = `insert into month (user_id,month,state) values(?,?,1)`;
         rows = [user_id, month]
         return pool.query(query, rows);
