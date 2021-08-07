@@ -5,7 +5,7 @@ const validate = require('../services/expendServices/validationsExpend');
 
 router.get('/expend', async (req, res) => {
     let user_id = req.headers['user-id'];
-    const { fixed } = 0;
+    const { fixed } = req.query;
     const { month } = req.query;
     const response = await expendService.getExpend(user_id, month, null ,fixed);
     console.log("expendService.getExpend Response : " + JSON.stringify(response));

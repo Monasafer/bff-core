@@ -4,13 +4,19 @@ var expendService = {
 
     getExpend: function (user_id, month, id, fixed) {
         let state = 1;
-        getFixed = "";
         rows = [user_id, month, state];
-        if (fixed == 1) {
+        getFixed = "";
+        if(fixed == 1){
+            getFixed = "AND id_fe != 'null'";
+        }else if(fixed == 0){
+            getFixed = "AND id_fe is null";
+
+        } 
+        if (id != null) {
             getFixed = " AND id = ?";
             rows = [user_id, month, state, id];
         }
-        let query = 'SELECT * FROM expend WHERE (user_id) = ? AND (month) = ? AND (state)=?' + getFixed;
+        let query = 'SELECT * FROM expend WHERE (user_id) = ? AND (month) = ? AND (state)=? ' + getFixed;
         return pool.query(query, rows);
     },
 
