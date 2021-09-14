@@ -2,51 +2,90 @@ const pool = require('../../database');
 
 var expendService = {
 
-    getExpend: function (user_id, month) {
-        let rows = [user_id, month];
-        let query = 'SELECT * FROM expend WHERE (user_id) = ? AND month = ? AND (state_code)=1 ';
+    getExpend: function (user_id, month, id, fixed) {
+        let state = 1;
+        rows = [user_id, month, state];
+        getFixed = "";
+        if(fixed == 1){
+            getFixed = "AND id_fe != 'null'";
+        }else if(fixed == 0){
+            getFixed = "AND id_fe is null";
+
+        } 
+        if (id != null) {
+            getFixed = " AND id = ?";
+            rows = [user_id, month, state, id];
+        }
+        let query = 'SELECT * FROM expend WHERE (user_id) = ? AND (month) = ? AND (state)=? ' + getFixed;
         return pool.query(query, rows);
     },
 
-    setExpend: function (user_id, name, value, month, payed, recurrent) {
-        const query = `insert into expend(name, value, user_id, creation_date, month, payed, recurrent, state_code) values(?,?,?,?,?,?,?,1)`;
-        const timeElapsed = Date.now();
-        const creation_date = new Date(timeElapsed).toISOString();
-        rows = [name, value, user_id, creation_date, month, payed, recurrent]
-        console.log("Llega hasta aca?");
-        try {
-            return pool.query(query, rows);
-        } catch (error) {
-            next(error);
-        }
+    setExpend: function (user_id, name, value, month, id_fe) {
+        const query = `insert into expend(user_id,name,value,month,state,id_fe) values(?,?,?,?,?,?)`;
+        state = 1;
+        rows = [user_id, name, value, month, state, id_fe]
+        return pool.query(query, rows);
     },
 
-    updateExpend: function (user_id, expendId, name, value, recurrent, payed) {
+    setMultipleExpends: function (additional) {
+        const query = `insert into expend(user_id,name,value,month,state,id_fe) values ${additional}`;
+        rows = [];
+        return pool.query(query, rows);
+    },
+
+    updateExpend: function (id, user_id, name, value) {
         let query = `UPDATE expend
                 SET 
                 name = ?, 
-                value = ?,
-                recurrent = ?,
-                payed = ?
+                value = ?
                 WHERE id = ?
                 AND user_id = ?`;
-        rows = [name, value, finish_date, payed, recurrent, expendId, user_id];
-        try {
-            if(finish_date>creation_date || finish_date==null){
-                return pool.query(query, rows);
-            }
-        } catch (error) {
-            next(error);
+        rows = [name, value, id, user_id];
+        return pool.query(query, rows);
+    },
+
+    updateMultipleExpend: function (id_fe, user_id, name, value, month, valueChanges) {
+        if (valueChanges == 0) {
+            rows = [name, id_fe, user_id];
+            let query = `UPDATE expend
+                    SET 
+                    name = ?
+                    WHERE id_fe = ?
+                    AND user_id = ?`;
+            return pool.query(query, rows);
+        }
+        else if (valueChanges == 1) {
+            rows = [value, id_fe, user_id, month];
+            let query = `UPDATE expend
+                SET 
+                value = ?
+                WHERE id_fe = ?
+                AND user_id = ?
+                AND month >= ?`;
+            return pool.query(query, rows);
         }
     },
 
-    deleteExpend: function (user_id, expendId) {
+    deleteExpend: function (id, user_id) {
         let query = `UPDATE expend
-        SET 
-        state_code = 0
-        WHERE id = ?
-        AND user_id = ?`;
-        rows = [expendId, user_id];
+                SET 
+                state = ?
+                WHERE id = ?
+                AND user_id = ?`;
+        state = 0;
+        rows = [state, id, user_id];
+        return pool.query(query, rows);
+    },
+
+    deleteMultipleExpend: function (id_fe, user_id, month) {
+        let query = `UPDATE expend
+                SET 
+                state = ?
+                WHERE id_fe = ?
+                AND user_id = ?
+                AND month >= ?`;
+        state = 0;
+        rows = [state, id_fe, user_id, month];
         return pool.query(query, rows);
     }
 }

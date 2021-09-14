@@ -1,15 +1,20 @@
 const expresiones = require('../expressions')
 const yup = require('yup');
 
-const createExpendSchema = yup.object().shape({
+const BffCreateExpend = yup.object().shape({
     name: yup.string().matches(expresiones.nameValidation, 'Name should not have symbols').required(),
     value: yup.number().positive().required(),
     month: yup.date().required(),
+    fixed: yup.number()
 });
 
-const updateExpendSchema = yup.object().shape({
+const BffUpdateExpend = yup.object().shape({
     name: yup.string().matches(expresiones.nameValidation, 'Name should not have symbols').required(),
-    value: yup.number().positive().required(),
+    value: yup.number().positive().required()
+});
+
+const BffCreateMonth = yup.object().shape({
+    month: yup.date().required()
 });
 
 const validate = (schema) => async (req,res,next)=>{
@@ -24,7 +29,8 @@ const validate = (schema) => async (req,res,next)=>{
 
 module.exports = {
     validate,
-    updateExpendSchema,
-    createExpendSchema
+    BffCreateExpend,
+    BffUpdateExpend,
+    BffCreateMonth
 };
 

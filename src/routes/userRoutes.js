@@ -4,35 +4,34 @@ const router = express.Router();
 const validations = require('../services/userServices/validationsUser');
 
 router.get('/user', async (req, res) => {
-  let user_id = req.headers['user-id'];
+  let user = req.headers['user'];
   let pass = req.headers['pass'];
-  const response = await userService.getUser(user_id, pass);
-  console.log("userService.getUser Response : " + response);
+  const response = await userService.getUser(user, pass);
+  console.log("userService.getUser Response : " + JSON.stringify(response));
   res.json(response);
 });
 
 router.post('/user', validations.validate(validations.createUserSchema), async (req, res, next) => {
   const { user, pass, mail } = req.body;
   const response = await userService.setUser(user, pass, mail)
-  console.log("userService.setUser Response : " + response);
+  console.log("userService.setUser Response : " + JSON.stringify(response));
   res.json(response);
 });
 
 router.put('/user', validations.validateupdate(validations.updateUserSchema), async (req, res, next) => {
-    let user_id = req.headers['user-id'];
+    let user = req.headers['user'];
     let pass = req.headers['pass'];
     let new_pass = req.headers['new_pass'];
-    const response = await userService.updateUser(user_id, pass, new_pass)
-    console.log("userService.updateUser Response : " + response);
+    const response = await userService.updateUser(user, pass, new_pass)
+    console.log("userService.updateUser Response : " + JSON.stringify(response));
     res.json(response);
 });
 
 router.delete('/user', async (req, res) => {
-  let user_id = req.headers['user-id'];
+  let user = req.headers['user'];
   let pass = req.headers['pass']
-
-  const response = await userService.deleteUser(user_id, pass)
-  console.log("userService.deleteUser Response : " + response);
+  const response = await userService.deleteUser(user, pass)
+  console.log("userService.deleteUser Response : " + JSON.stringify(response));
   res.json(response);
 });
 

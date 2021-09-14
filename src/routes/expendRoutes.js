@@ -1,39 +1,40 @@
 const express = require('express');
-const expendService = require('../services/expendServices/expendService')
+const expendService = require('../services/expendServices/expendService');
 const router = express.Router();
-const validation = require('../services/expendServices/validationsExpend')
+const validate = require('../services/expendServices/validationsExpend');
 
-router.get('/expend', async (req,res)=>{
-          let user_id = req.headers['user-id'];
-          const {month} = req.query;
-          const response = await expendService.getExpend(user_id, month);
-          console.log("expendService.getExpend Response : " + response);
-          res.json(response);    
+router.get('/expend', async (req, res) => {
+    let user_id = req.headers['user-id'];
+    const { fixed } = req.query;
+    const { month } = req.query;
+    const response = await expendService.getExpend(user_id, month, null ,fixed);
+    console.log("expendService.getExpend Response : " + JSON.stringify(response));
+    res.json(response);
 });
 
-router.post('/expend',validation.validate(validation.expendSchema),async (req, res) => {
-          const user_id = req.headers['user-id'];
-          const { name, value, month, recurrent, payed } = req.body;
-          const response = await expendService.setExpend(user_id, name, value, month, recurrent, payed)
-          console.log("expendService.setExpend Response : " + JSON.stringify(response));
-          res.json(response);  
+router.post('/expend', validate.validate(validate.createExpendSchema), async (req, res) => {
+    const user_id = req.headers['user-id'];
+    const { name, value, month, id_fe } = req.body;
+    const response = await expendService.setExpend(user_id, name, value, month, id_fe)
+    console.log("expendService.setExpend Response : " + JSON.stringify(response));
+    res.json(response);
 });
-      
-router.put('/expend/:expendId',validation.validate(validation.expendSchema), async (req, res) => {
-        let user_id = req.headers['user-id'];
-        let expendId = req.params.expendId;        
-        const { name, value, recurrent, payed } = req.body;
-        const response = await expendService.updateExpend(user_id, expendId, name, value, recurrent, payed)
-        console.log("expendService.updateExpend Response : " + response);
-        res.json(response);  
-      });
 
-router.delete('/expend/:expendId', async (req, res) => {
-        let user_id = req.headers['user-id'];
-        let expendId = req.params.expendId;
-        const response = await expendService.deleteExpend(user_id, expendId)
-        console.log("expendService.deleteExpend Response : " + response);
-        res.json(response);  
-      });
-      
-module.exports = router; 
+router.put('/expend', validate.validate(validate.updateExpendSchema), async (req, res) => {
+    const user_id = req.headers['user-id'];
+    const { id } = req.query;
+    const { name, value } = req.body;
+    const response = await expendService.updateExpend(id, user_id, name, value);
+    console.log("ExpendService.UpdateExpend Response: " + JSON.stringify(response));
+    res.json(response);
+})
+
+router.delete('/expend', async (req, res) => {
+    const user_id = req.headers['user-id'];
+    const { id } = req.query;
+    const response = await expendService.deleteExpend(id, user_id,null);
+    console.log("expendService.DeleteExpend Response: " + JSON.stringify(response));
+    res.json(response);
+})
+
+module.exports = router;

@@ -1,7 +1,6 @@
 const pool = require('../../database');
 
 var saveService = {
-    //TODO : Sanitización de todos los datos. Si es string, no puede tener simbolos <>=?;: , dado que permitiria un query injection.
 
     getSave: function (user_id, month) {
         let rows = [user_id, month];

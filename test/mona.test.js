@@ -1,7 +1,6 @@
 var expect = require('chai').expect;
 var request = require('request');
 var randomstring = require("randomstring");
-
 let insertedMonaId;
 let userId = 5
 let name = randomstring.generate(7);
@@ -11,7 +10,9 @@ let month = "2021-07-31";
 let verifymonth = "2021-07-31T03:00:00.000Z";
 let url = 'http://localhost:3000/'
 
+
 it('Insert Mona', function (done) {
+  console.log("TEST MONA");
   var options = {
     'method': 'POST',
     'url': url + 'mona',
@@ -23,8 +24,7 @@ it('Insert Mona', function (done) {
       {
         "name": name,
         "value": value,
-        "month": month,
-        "recurrent": 0
+        "month": month
       })
   };
 
@@ -69,7 +69,7 @@ it('Get Mona', function (done) {
 it('Update Mona', function (done) {
   var options = {
     'method': 'PUT',
-    'url': url + 'mona/' + insertedMonaId,
+    'url': url + 'mona?id=' + insertedMonaId,
     'headers': {
       'user-id': userId,
       'Content-Type': 'application/json'
@@ -99,7 +99,6 @@ it('Get Mona Updated', function (done) {
       'Content-Type': 'application/json'
     },
   };
-
   request(options, function (error, response) {
     if (error) throw new Error(error);
     let res = JSON.parse(response.body);
@@ -120,7 +119,7 @@ it('Get Mona Updated', function (done) {
 it('Delete Mona', function (done) {
   var options = {
     'method': 'DELETE',
-    'url': url + 'mona/' + insertedMonaId,
+    'url': url + 'mona?id=' + insertedMonaId,
     'headers': {
       'user-id': userId,
       'Content-Type': 'application/json'
