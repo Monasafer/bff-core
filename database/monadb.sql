@@ -130,3 +130,29 @@ ALTER TABLE `mona`
 --
 ALTER TABLE `save`
   ADD CONSTRAINT `save_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
+
+--
+-- Add special Column 
+--
+ALTER TABLE 'rel_fixed_expend' ADD special int(1) DEFAULT 0 NOT NULL;
+
+
+--
+-- Add Daily Column 
+--
+ALTER TABLE 'expend' ADD dailyUse int(1) DEFAULT 0 NOT NULL;
+
+--
+-- Special Expend table
+--
+
+CREATE TABLE `special_expend` (
+  `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `user_id` int(11) NOT NULL,
+  `name` text CHARACTER SET latin1 COLLATE latin1_bin NOT NULL,
+  `capacity` int(100) NOT NULL,
+  `stock` int(100) NOT NULL,
+  `month` date NOT NULL,
+  `state_code` int(1) NOT NULL,
+  `id_fe` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;

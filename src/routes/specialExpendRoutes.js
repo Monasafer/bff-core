@@ -1,40 +1,79 @@
 const express = require('express');
 const specialExpendService = require('../services/specialExpendServices/specialExpendService')
 const router = express.Router();
+const fixedExpendService = require('../services/fixedExpend/relFixedExpendService');
 const validation = require('../services/specialExpendServices/validationSpecialExpend')
 
-router.get('/specialExpend', async (req,res)=>{
-          let user_id = req.headers['user-id'];
-          const {startDate} = req.query; //TODO : Agregar valor por defecto principio de este mes
-          const {endDate} = req.query; //TODO : Agregar valor por defecto fin de este mes
-          const response = await specialExpendService.getSpecialExpend(user_id, startDate, endDate);
-          console.log("SpecialExpendService.getSpecialExpend Response : " + response);
-          res.json(response);    
+router.get('/specialExpend', async(req, res) => {
+    let user_id = req.headers['user-id'];
+    const { month } = req.query;
+    const response = await specialExpendService.getSpecialExpend(user_id, month, 0);
+    console.log("expendService.getSpecialExpend Response : " + JSON.stringify(response));
+    res.json(response);
 });
 
-router.post('/specialExpend',validation.validate(validation.specialExpendSchema),async (req, res) => {
-          const user_id = req.headers['user-id'];
-          const { name, value, finish_date } = req.body;
-          const response = await specialExpendService.setSpecialExpend(user_id, name, value, finish_date)
-          console.log("SpecialExpendService.setSpecialExpend Response : " + response);
-          res.json(response);  
+router.post('/specialExpend', async(req, res) => {
+    const user_id = req.headers['user-id'];
+    const { name, capacity, month, } = req.body;
+    stock = capacity;
+    const special = 1
+    const responseFixed = await fixedExpendService.setFixedExpend(user_id, special);
+    id_fe = responseFixed.insertId;
+    const responseSpecialExpend = await specialExpendService.setSpecialExpend(user_id, name, capacity, stock, month, id_fe);
+    console.log("expendService.setSpecialExpend Response : " + JSON.stringify(responseSpecialExpend));
+    response = responseSpecialExpend;
+    res.json(response);
 });
-      
-router.put('/specialExpend/:expendId',validation.validate(validation.specialExpendSchema), async (req, res) => {
-        let user_id = req.headers['user-id'];
-        let specialExpendId = req.params.expendId;        
-        const { name, value, finish_date,payed } = req.body;
-        const response = await specialExpendService.updateSpecialExpend(user_id, specialExpendId, name, value, finish_date,payed)
-        console.log("SpecialExpendService.updateSpecialExpend Response : " + response);
-        res.json(response);  
-      });
 
-router.delete('/specialExpend/:expendId', async (req, res) => {
-        let user_id = req.headers['user-id'];
-        let specialExpendId = req.params.expendId;
-        const response = await specialExpendService.deleteSpecialExpend(user_id, specialExpendId)
-        console.log("SpecialExpendService.deleteSpecialExpend Response : " + response);
-        res.json(response);  
-      });
-      
-module.exports = router; 
+router.put('/specialExpend', async(req, res) => {
+    const user_id = req.headers['user-id'];
+    const { month } = req.query;
+    const { id } = req.query;
+    const { name, capacity, stock } = req.body;
+    responseGet = await specialExpendService.getSpecialExpend(user_id, month, id);
+    if (responseGet = []) {
+        responseGet = 'not defined';
+        console.log(responseGet);
+    } else {
+        id_fe = responseGet[0].id_fe; //capture its id_fe to make a query
+        fieldName = responseGet[0].name; //capture the name, to see if it is what is modified
+        fieldCapacity = responseGet[0].capacity;
+        fieldStock = responseGet[0].stock; //capture the value, to see if it is what is modified
+        if (name != fieldName) {
+            console.log("Name is changed");
+            additional = 0;
+            responseUpdateMultipleSpecialExpend = await specialExpendService.updateMultipleSpecialExpend(id_fe, user_id, name, capacity, month, 0);
+            console.log("ExpendService.UpdateExpend Response: " + JSON.stringify(responseUpdateMultipleSpecialExpend));
+            responseName = responseUpdateMultipleSpecialExpend;
+        }
+        if (capacity != fieldCapacity) {
+            console.log("Capacity is modified");
+            responseUpdateMultipleSpecialExpend = await specialExpendService.updateMultipleSpecialExpend(id_fe, user_id, name, capacity, month, 1);
+            console.log("ExpendService.UpdateExpend Response: " + JSON.stringify(responseUpdateMultipleSpecialExpend));
+            responseValue = responseUpdateMultipleSpecialExpend;
+        }
+        if (stock != fieldStock) {
+            console.log("Stock is updated");
+            responseUpdateStock = await specialExpendService.updateStock(user_id, id, stock, month);
+            console.log('UpdateStock response: ' + JSON.stringify(responseUpdateStock));
+        }
+    }
+    res.json(responseGet);
+});
+
+
+router.delete('/specialExpend', async(req, res) => {
+    const user_id = req.headers['user-id'];
+    const { id } = req.query;
+    const { month } = req.query;
+    responseGet = await specialExpendService.getSpecialExpend(user_id, month, id); //looking for the expense to which I refer
+    id_fe = responseGet[0].id_fe; //Capture its id_fe to make a query
+    responseExpend = await specialExpendService.deleteMultipleSpecialExpend(id_fe, user_id, month);
+    responseFixed = await fixedExpendService.deleteFixedExpend(user_id, id_fe)
+    response = Object.assign(responseExpend, responseFixed);
+    console.log("ExpendService.DeleteExpend Response: " + JSON.stringify(response));
+    res.json(response);
+})
+
+
+module.exports = router;

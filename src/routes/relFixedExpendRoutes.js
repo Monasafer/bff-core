@@ -3,14 +3,14 @@ const fixedExpendService = require('../services/fixedExpend/relFixedExpendServic
 const router = express.Router();
 const validate = require('../services/fixedExpend/validationsRelFixedExpend')
 
-router.get('/relFixedExpend', async (req, res) => {
+router.get('/relFixedExpend', async(req, res) => {
     let user_id = req.headers['user-id'];
     const response = await fixedExpendService.getFixedExpend(user_id);
     console.log("FixedExpendService.getFixedExpend Response : " + JSON.stringify(response));
     res.json(response);
 });
 
-router.get('/getFixedExpendsAndValues', async (req, res) => {
+router.get('/getFixedExpendsAndValues', async(req, res) => {
     let user_id = req.headers['user-id'];
     const { month } = req.body;
     const response = await fixedExpendService.getFixedExpendsAndValues(user_id, month);
@@ -18,14 +18,15 @@ router.get('/getFixedExpendsAndValues', async (req, res) => {
     res.json(response);
 });
 
-router.post('/relFixedExpend', async (req, res) => {
+router.post('/relFixedExpend', async(req, res) => {
     const user_id = req.headers['user-id'];
-    const response = await fixedExpendService.setFixedExpend(user_id);
+    const special = 0;
+    const response = await fixedExpendService.setFixedExpend(user_id, special);
     console.log("FixedExpendService.setFixedExpend Response : " + JSON.stringify(response));
     res.json(response);
 });
 
-router.put('/relFixedExpend', async (req, res) => {
+router.put('/relFixedExpend', async(req, res) => {
     const user_id = req.headers['user-id'];
     const { id_fe } = req.query;
     const { active } = req.body;
@@ -34,7 +35,7 @@ router.put('/relFixedExpend', async (req, res) => {
     res.json(response);
 })
 
-router.delete('/relFixedExpend', async (req, res) => {
+router.delete('/relFixedExpend', async(req, res) => {
     const user_id = req.headers['user-id'];
     const { id_fe } = req.query;
     const response = await fixedExpendService.deleteFixedExpend(user_id, id_fe)
