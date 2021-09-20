@@ -1,11 +1,13 @@
 const expresiones = require('../expressions')
 const yup = require('yup');
 
-const specialExpendSchema = yup.object().shape({
+const createSpecialExpendSchema = yup.object().shape({
     name: yup.string().matches(expresiones.nameValidation, expresiones.invalidName).required(expresiones.required),
-    value: yup.number().typeError(expresiones.invalidNumber).positive().required(expresiones.required),
-    finish_date: yup.date(expresiones.invalidDate).nullable(true),
+    capacity: yup.number().typeError(expresiones.invalidNumber).positive().required(expresiones.required),
+    month: yup.date().typeError(expresiones.invalidDate).nullable(true).required(expresiones.required),
 });
+
+
 
 const validate = (schema) => async(req, res, next) => {
     const body = req.body;
@@ -19,5 +21,5 @@ const validate = (schema) => async(req, res, next) => {
 
 module.exports = {
     validate,
-    specialExpendSchema,
+    createSpecialExpendSchema,
 };

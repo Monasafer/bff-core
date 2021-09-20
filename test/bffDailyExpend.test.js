@@ -37,9 +37,9 @@ it('BFF Create Daily Expend', function(done) {
         if (error) throw new Error(error);
         let res = JSON.parse(response.body);
 
-        insertedId_Fe = res.insertId;
+        insertedId_Fe = res.response.insertId;
 
-        expect(res.affectedRows).to.equal(1);
+        expect(res.response.affectedRows).to.equal(1);
         done();
     });
 }).timeout(15000);

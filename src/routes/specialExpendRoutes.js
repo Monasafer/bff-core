@@ -3,6 +3,7 @@ const specialExpendService = require('../services/specialExpendServices/specialE
 const router = express.Router();
 const fixedExpendService = require('../services/fixedExpend/relFixedExpendService');
 const validation = require('../services/specialExpendServices/validationSpecialExpend')
+var { error } = 0;
 
 router.get('/specialExpend', async(req, res) => {
     let user_id = req.headers['user-id'];
@@ -12,7 +13,7 @@ router.get('/specialExpend', async(req, res) => {
     res.json(response);
 });
 
-router.post('/specialExpend', async(req, res) => {
+router.post('/specialExpend', validation.validate(validation.createSpecialExpendSchema), async(req, res) => {
     const user_id = req.headers['user-id'];
     const { name, capacity, month, } = req.body;
     stock = capacity;
@@ -22,7 +23,8 @@ router.post('/specialExpend', async(req, res) => {
     const responseSpecialExpend = await specialExpendService.setSpecialExpend(user_id, name, capacity, stock, month, id_fe);
     console.log("expendService.setSpecialExpend Response : " + JSON.stringify(responseSpecialExpend));
     response = responseSpecialExpend;
-    res.json(response);
+    error = 0;
+    res.json({ error, response });
 });
 
 router.put('/specialExpend', async(req, res) => {
@@ -58,7 +60,8 @@ router.put('/specialExpend', async(req, res) => {
             console.log('UpdateStock response: ' + JSON.stringify(responseUpdateStock));
         }
     }
-    res.json(responseGet);
+    error = 0;
+    res.json({ error, responseGet });
 });
 
 
@@ -72,7 +75,8 @@ router.delete('/specialExpend', async(req, res) => {
     responseFixed = await fixedExpendService.deleteFixedExpend(user_id, id_fe)
     response = Object.assign(responseExpend, responseFixed);
     console.log("ExpendService.DeleteExpend Response: " + JSON.stringify(response));
-    res.json(response);
+    error = 0;
+    res.json({ error, response });
 })
 
 

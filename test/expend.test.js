@@ -37,9 +37,9 @@ it('Insert Expend', function(done) {
         if (error) throw new Error(error);
         let res = JSON.parse(response.body);
 
-        insertedExpendId = res.insertId;
+        insertedExpendId = res.response.insertId;
 
-        expect(res.affectedRows).to.equal(1);
+        expect(res.response.affectedRows).to.equal(1);
         done();
     });
 }).timeout(15000);
@@ -88,8 +88,8 @@ it('Update Expend', function(done) {
     request(options, function(error, response) {
         if (error) throw new Error(error);
         let res = JSON.parse(response.body);
-        expect(res.affectedRows).to.equal(1);
-        expect(res.changedRows).to.equal(1);
+        expect(res.response.affectedRows).to.equal(1);
+        expect(res.response.changedRows).to.equal(1);
         done();
     });
 }).timeout(15000);
@@ -133,8 +133,8 @@ it('Delete Expend', function(done) {
     request(options, function(error, response) {
         if (error) throw new Error(error);
         let res = JSON.parse(response.body);
-        expect(res.affectedRows).to.equal(1);
-        expect(res.changedRows).to.equal(1);
+        expect(res.response.affectedRows).to.equal(1);
+        expect(res.response.changedRows).to.equal(1);
         done();
     });
 }).timeout(15000);

@@ -2,6 +2,7 @@ const express = require('express');
 const expendService = require('../services/expendServices/expendService');
 const router = express.Router();
 const validate = require('../services/expendServices/validationsExpend');
+var { error } = 1;
 
 router.get('/expend', async(req, res) => {
     let user_id = req.headers['user-id'];
@@ -41,7 +42,8 @@ router.post('/expend', validate.validate(validate.createExpendSchema), async(req
     const { name, value, month, id_fe, dailyUse } = req.body;
     const response = await expendService.setExpend(user_id, name, value, month, id_fe, dailyUse)
     console.log("expendService.setExpend Response : " + JSON.stringify(response));
-    res.json(response);
+    error = 0;
+    res.json({ error, response });
 });
 
 router.put('/expend', validate.validate(validate.updateExpendSchema), async(req, res) => {
@@ -50,7 +52,8 @@ router.put('/expend', validate.validate(validate.updateExpendSchema), async(req,
     const { name, value } = req.body;
     const response = await expendService.updateExpend(id, user_id, name, value);
     console.log("ExpendService.UpdateExpend Response: " + JSON.stringify(response));
-    res.json(response);
+    error = 0;
+    res.json({ error, response });
 })
 
 router.delete('/expend', async(req, res) => {
@@ -58,7 +61,8 @@ router.delete('/expend', async(req, res) => {
     const { id } = req.query;
     const response = await expendService.deleteExpend(id, user_id, null);
     console.log("expendService.DeleteExpend Response: " + JSON.stringify(response));
-    res.json(response);
+    error = 0;
+    res.json({ error, response });
 })
 
 module.exports = router;

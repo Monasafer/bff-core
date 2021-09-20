@@ -36,10 +36,8 @@ it('BFF Create Fixed Expend', function(done) {
     request(options, function(error, response) {
         if (error) throw new Error(error);
         let res = JSON.parse(response.body);
-
-        insertedId_Fe = res.insertId;
-
-        expect(res.affectedRows).to.equal(1);
+        insertedId_Fe = res.response.insertId;
+        expect(res.response.affectedRows).to.equal(1);
         done();
     });
 }).timeout(15000);
@@ -88,9 +86,9 @@ it('BFF Create  NOT Fixed Expend', function(done) {
         if (error) throw new Error(error);
         let res = JSON.parse(response.body);
 
-        insertedId = res.insertId;
+        insertedId = res.response.insertId;
 
-        expect(res.affectedRows).to.equal(1);
+        expect(res.response.affectedRows).to.equal(1);
         done();
     });
 }).timeout(15000);
@@ -137,8 +135,8 @@ it('BBF Update No-Fixed Expend', function(done) {
     request(options, function(error, response) {
         if (error) throw new Error(error);
         let res = JSON.parse(response.body);
-        expect(res.affectedRows).to.equal(1);
-        expect(res.changedRows).to.equal(1);
+        expect(res.response.affectedRows).to.equal(1);
+        expect(res.response.changedRows).to.equal(1);
         done();
     });
 }).timeout(15000);

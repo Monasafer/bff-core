@@ -4,6 +4,7 @@ const fixedExpendService = require('../services/fixedExpend/relFixedExpendServic
 const monthService = require('../services/monthServices/monthService');
 const validations = require('../services/bffExpendServices/validationsBffExpend')
 const router = express.Router();
+var { error } = 1;
 
 router.post('/bff/createExpend', validations.validate(validations.BffCreateExpend), async(req, res) => {
     const user_id = req.headers['user-id'];
@@ -16,15 +17,18 @@ router.post('/bff/createExpend', validations.validate(validations.BffCreateExpen
         const responseExpend = await expendService.setExpend(user_id, name, value, month, id_fe, dailyUse) //insert to Expend
         console.log("expendService.setExpend Response : " + JSON.stringify(responseExpend));
         response = responseFixed
+        error = 0;
     } else if (fixed == 0) {
         id_fe = null; //If the expense is only variable - Create only in Expend 
         const responseExpend = await expendService.setExpend(user_id, name, value, month, id_fe, dailyUse)
         console.log("expendService.setExpend Response : " + JSON.stringify(responseExpend));
         response = responseExpend;
+        error = 0;
     } else {
         response = { message: 'It must be defined if the value is fixed or variable correctly' } //passing Fixed other than 0 or 1
+        error = 0;
     }
-    res.json(response);
+    res.json({ error, response });
 });
 
 
@@ -80,6 +84,7 @@ router.put('/bff/updateExpend', validations.validate(validations.BffUpdateExpend
     if (fixed == 0) { // In case of being variable, I perform update as always -reuse service
         const responseUpdateExpend = await expendService.updateExpend(id, user_id, name, value);
         response = responseUpdateExpend;
+        state = 1;
     } else if (fixed == 1) { //In case of being fixed
         id_fe = responseGet[0].id_fe; //capture its id_fe to make a query
         fieldName = responseGet[0].name; //capture the name, to see if it is what is modified
@@ -103,11 +108,13 @@ router.put('/bff/updateExpend', validations.validate(validations.BffUpdateExpend
         if (value == fieldValue && name == fieldName) {
             response = { message: 'No modifications have been made' };
         }
+        error = 0;
     } else {
         response = { message: 'It must be defined if the value is fixed or variable correctly' }
+        error = 0;
     }
     console.log("ExpendService.UpdateExpend Response: " + JSON.stringify(response));
-    res.json(response);
+    res.json({ error, response });
 })
 
 router.delete('/bff/deleteExpend', async(req, res) => {
@@ -125,7 +132,8 @@ router.delete('/bff/deleteExpend', async(req, res) => {
         response = Object.assign(responseExpend, responseFixed);
     }
     console.log("ExpendService.DeleteExpend Response: " + JSON.stringify(response));
-    res.json(response);
+    error = 0;
+    res.json({ error, response });
 })
 
 module.exports = router;
