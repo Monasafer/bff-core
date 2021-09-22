@@ -6,29 +6,6 @@
 	},
 	"item": [
 		{
-			"name": "Dashboard",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "user-id",
-						"value": "4",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "{{url}}/dashboard",
-					"host": [
-						"{{url}}"
-					],
-					"path": [
-						"dashboard"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "Expend",
 			"request": {
 				"method": "GET",
@@ -36,11 +13,11 @@
 					{
 						"key": "user-id",
 						"type": "text",
-						"value": "5"
+						"value": "1085"
 					}
 				],
 				"url": {
-					"raw": "http://localhost:3000/expend?month=2020-07",
+					"raw": "http://localhost:3000/expend?month=2021/10/01",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -51,9 +28,117 @@
 					],
 					"query": [
 						{
+							"key": "fixed",
+							"value": "0",
+							"disabled": true
+						},
+						{
+							"key": "id",
+							"value": "null",
+							"disabled": true
+						},
+						{
+							"key": "dailyUse",
+							"value": "1",
+							"disabled": true
+						},
+						{
 							"key": "month",
-							"value": "2020-07"
+							"value": "2021/10/01"
 						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Special Expend",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "user-id",
+						"type": "text",
+						"value": "1085"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/specialExpend?month=2021-10-01",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"specialExpend"
+					],
+					"query": [
+						{
+							"key": "month",
+							"value": "2021-10-01"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "relFixedExpend",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "user-id",
+						"type": "text",
+						"value": "5"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/relFixedExpend",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"relFixedExpend"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getFixedExpendsAndValues",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "user-id",
+						"type": "text",
+						"value": "5"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"month\":\"2021/10/01\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/getFixedExpendsAndValues",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"getFixedExpendsAndValues"
 					]
 				}
 			},
@@ -67,11 +152,11 @@
 					{
 						"key": "user",
 						"type": "text",
-						"value": "Mariano"
+						"value": "Marian"
 					},
 					{
 						"key": "pass",
-						"value": "TestingPassword2",
+						"value": "IngCivil98",
 						"type": "text"
 					}
 				],
@@ -98,6 +183,37 @@
 		},
 		{
 			"name": "Mona",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "user-id",
+						"type": "text",
+						"value": "1085"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/mona?month=2021-09-01",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"mona"
+					],
+					"query": [
+						{
+							"key": "month",
+							"value": "2021-09-01"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Month",
 			"request": {
 				"method": "GET",
 				"header": [
@@ -175,6 +291,109 @@
 				],
 				"body": {
 					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"BFF1\",\r\n    \"value\": \"11200\",\r\n    \"month\":\"2021/9/01\",\r\n    \"id_fe\":\"55\",\r\n    \"dailyUse\": 0\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/expend",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"expend"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "bff Create Expend",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "user-id",
+						"type": "text",
+						"value": "1085"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":  \"Test No special\",\r\n    \"value\": \"200\",\r\n    \"month\": \"2021/10/01\",\r\n    \"fixed\": \"1\",\r\n    \"dailyUse\": \"1\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/bff/createExpend",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"bff",
+						"createExpend"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Special Expend",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "user-id",
+						"type": "text",
+						"value": "1085"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":  \"Test Special\",\r\n    \"capacity\": \"200\",\r\n    \"month\": \"2021/10/01\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/specialExpend",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"specialExpend"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "bffCreateMonth",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "user-id",
+						"type": "text",
+						"value": "5"
+					}
+				],
+				"body": {
+					"mode": "raw",
 					"raw": "{\r\n    \"name\": \"Comida\",\r\n    \"value\": \"1000\",\r\n    \"month\":\"2021-10\",\r\n    \"recurrent\":\"0\",\r\n    \"payed\":\"0\"\r\n}",
 					"options": {
 						"raw": {
@@ -197,7 +416,76 @@
 			"response": []
 		},
 		{
+			"name": "relFixedExpend Insert",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "user_id",
+						"type": "text",
+						"value": "5"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/relFixedExpend",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"relFixedExpend"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "User Insert",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "",
+						"type": "text",
+						"value": "",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"user\": \"Soledad25\",\r\n    \"pass\": \"IngCivil98\",\r\n    \"mail\":\"juancutiogmail.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/user",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "month Insert",
 			"request": {
 				"method": "POST",
 				"header": [
@@ -239,12 +527,12 @@
 					{
 						"key": "user-id",
 						"type": "text",
-						"value": "5"
+						"value": "1085"
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"Gatitos\",\r\n    \"value\": \"920\",\r\n    \"month\": \"2021/07/31\"\r\n}",
+					"raw": "{\r\n    \"name\": \"Mona Septiembre\",\r\n    \"value\": \"4000\",\r\n    \"month\": \"2021/09/01\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -273,12 +561,12 @@
 					{
 						"key": "user-id",
 						"type": "text",
-						"value": "5"
+						"value": "1085"
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"SaveInsert\",\r\n    \"value\": \"2500\",\r\n    \"month\": \"2021/07/31\"\r\n}",
+					"raw": "{\r\n    \"name\": \"SaveSeptiembre\",\r\n    \"value\": \"1341\",\r\n    \"month\": \"2021/09/01\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -300,7 +588,135 @@
 			"response": []
 		},
 		{
+			"name": "BffExpend",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "user-id",
+						"type": "text",
+						"value": "5"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"UPDATEDDATA\",\r\n    \"value\": \"696969\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/bff/updateExpend?fixed=1&month=2021-07-31&id=95",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"bff",
+						"updateExpend"
+					],
+					"query": [
+						{
+							"key": "fixed",
+							"value": "1"
+						},
+						{
+							"key": "month",
+							"value": "2021-07-31"
+						},
+						{
+							"key": "id",
+							"value": "95"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "specialExpend",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "user-id",
+						"type": "text",
+						"value": "1085"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Test Special\",\r\n    \"capacity\": \"200\",\r\n    \"stock\": \"55\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/specialExpend?month=2021-10-01&id=51",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"specialExpend"
+					],
+					"query": [
+						{
+							"key": "month",
+							"value": "2021-10-01"
+						},
+						{
+							"key": "id",
+							"value": "51"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Expend Update",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "user-id",
+						"type": "text",
+						"value": "4"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"descr\": \"Expend id 4 Cambiado\",\r\n    \"value\": \"1050\",\r\n    \"finish_date\": \"2022-01-05\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/expend/14",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"expend",
+						"14"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "relFixedExpend Update",
 			"request": {
 				"method": "PUT",
 				"header": [
@@ -466,19 +882,161 @@
 					{
 						"key": "user-id",
 						"type": "text",
-						"value": "4"
+						"value": "25"
 					}
 				],
 				"url": {
-					"raw": "http://localhost:3000/expend/4",
+					"raw": "http://localhost:3000/expend?id=25",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
-						"expend",
-						"4"
+						"expend"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "25"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Month Delete",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "user-id",
+						"type": "text",
+						"value": "5"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/month?id=5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"month"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "5"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "bffExpend Delete",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "user-id",
+						"type": "text",
+						"value": "5"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/bff/deleteExpend?id=75&month=2019-10-01&fixed=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"bff",
+						"deleteExpend"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "75"
+						},
+						{
+							"key": "month",
+							"value": "2019-10-01"
+						},
+						{
+							"key": "fixed",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SpecialExpend Delete",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "user-id",
+						"type": "text",
+						"value": "25"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/specialExpend?id&month",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"specialExpend"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": null
+						},
+						{
+							"key": "month",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "relFixedExpend Delete",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "user-id",
+						"type": "text",
+						"value": "5"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:3000/relFixedExpend?id_fe=22",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"relFixedExpend"
+					],
+					"query": [
+						{
+							"key": "id_fe",
+							"value": "22"
+						}
 					]
 				}
 			},
@@ -534,19 +1092,24 @@
 					{
 						"key": "user-id",
 						"type": "text",
-						"value": "25"
+						"value": "5"
 					}
 				],
 				"url": {
-					"raw": "http://localhost:3000/mona/74",
+					"raw": "http://localhost:3000/mona?id=5",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
-						"mona",
-						"74"
+						"mona"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "5"
+						}
 					]
 				}
 			},
@@ -560,23 +1123,34 @@
 					{
 						"key": "user-id",
 						"type": "text",
-						"value": "4"
+						"value": "5"
 					}
 				],
 				"url": {
-					"raw": "http://localhost:3000/save/4",
+					"raw": "http://localhost:3000/save?id=65",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
-						"save",
-						"4"
+						"save"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "65"
+						}
 					]
 				}
 			},
 			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "http://localhost:3000/"
 		}
 	]
 }
