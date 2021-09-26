@@ -2,19 +2,19 @@ const pool = require('../../database');
 
 var expendService = {
 
-    getExpend: function(user_id, month, id, fixed, dailyUse) {
+    getExpend: function(user_id, month, id, fixed, isDailyUse) {
         let state = 1;
         let query;
         let getFixed;
         let rows = [user_id, month, state];
-        if (fixed == null && dailyUse == null && id == null) {
+        if (fixed == null && isDailyUse == null && id == null) {
             query = 'SELECT * FROM expend WHERE (user_id) = ? AND (month) = ? AND (state)=? ';
         } else {
             if (fixed == 1 && id == null) {
                 getFixed = "AND id_fe != 'null'";
-                getDaily = "AND dailyUse = ?"
+                getDaily = "AND isDailyUse = ?"
                 query = 'SELECT * FROM expend WHERE (user_id) = ? AND (month) = ? AND (state)=? ' + getFixed + getDaily;
-                rows = [user_id, month, state, dailyUse];
+                rows = [user_id, month, state, isDailyUse];
             } else if (fixed == 0 && id == null) {
                 getFixed = "AND id_fe is null";
                 query = 'SELECT * FROM expend WHERE (user_id) = ? AND (month) = ? AND (state)=? ' + getFixed;
@@ -28,15 +28,15 @@ var expendService = {
         return pool.query(query, rows);
     },
 
-    setExpend: function(user_id, name, value, month, id_fe, dailyUse) {
-        const query = `insert into expend(user_id,name,value,month,state,id_fe,dailyUse) values(?,?,?,?,?,?,?)`;
+    setExpend: function(user_id, name, value, month, id_fe, isDailyUse) {
+        const query = `insert into expend(user_id,name,value,month,state,id_fe,isDailyUse) values(?,?,?,?,?,?,?)`;
         state = 1;
-        rows = [user_id, name, value, month, state, id_fe, dailyUse]
+        rows = [user_id, name, value, month, state, id_fe, isDailyUse]
         return pool.query(query, rows);
     },
 
     setMultipleExpends: function(additional) {
-        const query = `insert into expend(user_id,name,value,month,state,id_fe,dailyUse) values ${additional}`;
+        const query = `insert into expend(user_id,name,value,month,state,id_fe,isDailyUse) values ${additional}`;
         rows = [];
         return pool.query(query, rows);
     },

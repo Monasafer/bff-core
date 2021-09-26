@@ -2,13 +2,14 @@ const express = require('express');
 const specialExpendService = require('../services/specialExpendServices/specialExpendService')
 const router = express.Router();
 const fixedExpendService = require('../services/fixedExpend/relFixedExpendService');
-const validation = require('../services/specialExpendServices/validationSpecialExpend')
+const validation = require('../services/specialExpendServices/validationSpecialExpend');
+let { response } = require('express');
 var { error } = 0;
 
 router.get('/specialExpend', async(req, res) => {
     let user_id = req.headers['user-id'];
     const { month } = req.query;
-    const response = await specialExpendService.getSpecialExpend(user_id, month, 0);
+    let response = await specialExpendService.getSpecialExpend(user_id, month, 0);
     console.log("expendService.getSpecialExpend Response : " + JSON.stringify(response));
     res.json(response);
 });
@@ -17,8 +18,8 @@ router.post('/specialExpend', validation.validate(validation.createSpecialExpend
     const user_id = req.headers['user-id'];
     const { name, capacity, month, } = req.body;
     stock = capacity;
-    const special = 1
-    const responseFixed = await fixedExpendService.setFixedExpend(user_id, special);
+    const isSpecial = 1
+    const responseFixed = await fixedExpendService.setFixedExpend(user_id, isSpecial);
     id_fe = responseFixed.insertId;
     const responseSpecialExpend = await specialExpendService.setSpecialExpend(user_id, name, capacity, stock, month, id_fe);
     console.log("expendService.setSpecialExpend Response : " + JSON.stringify(responseSpecialExpend));
@@ -32,8 +33,10 @@ router.put('/specialExpend', async(req, res) => {
     const { month } = req.query;
     const { id } = req.query;
     const { name, capacity, stock } = req.body;
+    console.log(user_id, month, id, name, capacity, stock);
     responseGet = await specialExpendService.getSpecialExpend(user_id, month, id);
-    if (responseGet = []) {
+    console.log(responseGet);
+    if (responseGet == []) {
         responseGet = 'not defined';
         console.log(responseGet);
     } else {
@@ -54,7 +57,7 @@ router.put('/specialExpend', async(req, res) => {
             console.log("ExpendService.UpdateExpend Response: " + JSON.stringify(responseUpdateMultipleSpecialExpend));
             responseValue = responseUpdateMultipleSpecialExpend;
         }
-        if (stock != fieldStock) {
+        if (stock != fieldStock && stock != undefined) {
             console.log("Stock is updated");
             responseUpdateStock = await specialExpendService.updateStock(user_id, id, stock, month);
             console.log('UpdateStock response: ' + JSON.stringify(responseUpdateStock));

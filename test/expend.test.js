@@ -1,7 +1,7 @@
 var expect = require('chai').expect;
 var request = require('request');
 var randomstring = require("randomstring");
-const random = require('random')
+const random = require('random');
 
 let insertedExpendId;
 let userId = 5
@@ -29,7 +29,7 @@ it('Insert Expend', function(done) {
             "value": value,
             "month": month,
             "id_fe": id_fe,
-            "dailyUse": "0"
+            "isDailyUse": "0"
         })
     };
 

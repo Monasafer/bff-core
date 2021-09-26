@@ -1,22 +1,17 @@
 var expect = require('chai').expect;
 var request = require('request');
 var randomstring = require("randomstring");
-let DateGenerator = require('random-date-generator');
 
-let insertedMonthId;
 let userId = 5
 let name = randomstring.generate(7);
 let value = 10000
 let fixed = "1";
-let NoFixed = "0";
-let dailyUse = "1";
-let notDailyUse = "0";
-let month = new Date(DateGenerator.getRandomDate().toDateString());
-let verifyMonth = month.toISOString().split('T')[0];
+let isDailyUse = "1";
+let month = '2021/10/01';
 let url = 'http://localhost:3000/'
 
 it('BFF Create Daily Expend', function(done) {
-    console.log("TEST DAILY EXPEND");
+    console.log("TEST BFF DAILY EXPEND");
     var options = {
         'method': 'POST',
         'url': url + 'bff/createExpend',
@@ -29,7 +24,7 @@ it('BFF Create Daily Expend', function(done) {
             "value": value,
             "month": month,
             "fixed": fixed,
-            "dailyUse": dailyUse
+            "isDailyUse": isDailyUse
         })
     };
 
@@ -62,6 +57,31 @@ it('Bff GET DAILY-FIXED EXPEND', function(done) {
             "user_id": userId,
             "state": 1,
             "active": 1
+        });
+        done();
+    });
+}).timeout(15000);
+
+
+it('BFF Get Daily Expend', function(done) {
+    var options = {
+        'method': 'GET',
+        'url': url + `expend?month=2021/10/01`,
+        'headers': {
+            'user-id': userId,
+            'Content-Type': 'application/json'
+        },
+    };
+
+    request(options, function(error, response) {
+        if (error) throw new Error(error);
+        let res = JSON.parse(response.body);
+        expect(res.listDaily[res.listDaily.length - 1]).to.deep.include({
+            "name": name,
+            "value": value,
+            "id_fe": insertedId_Fe,
+            "user_id": userId,
+            "state": 1
         });
         done();
     });

@@ -11,18 +11,18 @@ router.get('/expend', async(req, res) => {
     let listVariable = [];
     const { fixed } = req.query;
     const { month } = req.query;
-    const { dailyUse } = req.query;
-    const response = await expendService.getExpend(user_id, month, null, fixed, dailyUse);
+    const { isDailyUse } = req.query;
+    const response = await expendService.getExpend(user_id, month, null, fixed, isDailyUse);
     console.log("expendService.getExpend Response : " + JSON.stringify(response));
     results = JSON.parse(JSON.stringify(response));
     results.forEach(element => {
-        if (element.dailyUse == 1) {
+        if (element.isDailyUse == 1) {
             listDaily.push(element);
         }
         if (element.id_fe == null) {
             listVariable.push(element);
         }
-        if (element.id_fe != null && element.dailyUse == 0) {
+        if (element.id_fe != null && element.isDailyUse == 0) {
             listFixed.push(element);
         }
     });
@@ -39,8 +39,8 @@ router.get('/expend', async(req, res) => {
 
 router.post('/expend', validate.validate(validate.createExpendSchema), async(req, res) => {
     const user_id = req.headers['user-id'];
-    const { name, value, month, id_fe, dailyUse } = req.body;
-    const response = await expendService.setExpend(user_id, name, value, month, id_fe, dailyUse)
+    const { name, value, month, id_fe, isDailyUse } = req.body;
+    const response = await expendService.setExpend(user_id, name, value, month, id_fe, isDailyUse)
     console.log("expendService.setExpend Response : " + JSON.stringify(response));
     error = 0;
     res.json({ error, response });

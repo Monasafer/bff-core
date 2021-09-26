@@ -19,7 +19,7 @@ CREATE TABLE `expend` (
   `month` date NOT NULL,
   `state` int(1) NOT NULL,
   `id_fe` int(11),
-  `dailyUse` int(1) NOT NULL,
+  `isDailyUse` int(1) NOT NULL,
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -143,4 +143,4 @@ ALTER TABLE 'rel_fixed_expend' ADD special int(1) DEFAULT 0 NOT NULL;
 --
 -- Add Daily Column 
 --
-ALTER TABLE 'expend' ADD dailyUse int(1) DEFAULT 0 NOT NULL;
+ALTER TABLE 'expend' ADD isDailyUse int(1) DEFAULT 0 NOT NULL;

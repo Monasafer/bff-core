@@ -8,19 +8,19 @@ var { error } = 1;
 
 router.post('/bff/createExpend', validations.validate(validations.BffCreateExpend), async(req, res) => {
     const user_id = req.headers['user-id'];
-    const special = 0;
-    const { name, value, month, fixed, dailyUse } = req.body;
+    const isSpecial = 0;
+    const { name, value, month, fixed, isDailyUse } = req.body;
     //decide the path depending on whether it is fixed or variable
     if (fixed == 1) {
-        const responseFixed = await fixedExpendService.setFixedExpend(user_id, special);
+        const responseFixed = await fixedExpendService.setFixedExpend(user_id, isSpecial);
         id_fe = responseFixed.insertId; //capture the id inserted in FixedExpend
-        const responseExpend = await expendService.setExpend(user_id, name, value, month, id_fe, dailyUse) //insert to Expend
+        const responseExpend = await expendService.setExpend(user_id, name, value, month, id_fe, isDailyUse) //insert to Expend
         console.log("expendService.setExpend Response : " + JSON.stringify(responseExpend));
         response = responseFixed
         error = 0;
     } else if (fixed == 0) {
         id_fe = null; //If the expense is only variable - Create only in Expend 
-        const responseExpend = await expendService.setExpend(user_id, name, value, month, id_fe, dailyUse)
+        const responseExpend = await expendService.setExpend(user_id, name, value, month, id_fe, isDailyUse)
         console.log("expendService.setExpend Response : " + JSON.stringify(responseExpend));
         response = responseExpend;
         error = 0;
@@ -50,8 +50,8 @@ router.post('/bff/createMonth', validations.validate(validations.BffCreateMonth)
                 id_fe = responseGet[i].id_fe;
                 value = responseGet[i].value;
                 name = JSON.stringify(responseGet[i].name);
-                dailyUse = responseGet[i].dailyUse;
-                additional = `(${user_id},${name},${value},${month},${state},${id_fe},${dailyUse}),` + additional; //Create String for Query
+                isDailyUse = responseGet[i].isDailyUse;
+                additional = `(${user_id},${name},${value},${month},${state},${id_fe},${isDailyUse}),` + additional; //Create String for Query
             }
             additional = additional.substring(0, additional.length - 1);
             responseMultipleExpend = await expendService.setMultipleExpends(additional);

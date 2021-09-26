@@ -1,45 +1,50 @@
 var expect = require('chai').expect;
 var request = require('request');
 var randomstring = require("randomstring");
+let DateGenerator = require('random-date-generator');
 const random = require('random');
 
 let userId = random.int((min = 0), (max = 2500));
-let name = randomstring.generate(4);
-let value = 10000;
-let valueUpdated = 12000;
+let name = randomstring.generate(7);
+let value = 10000
+let fixed = "1";
+let NoFixed = "0";
+let isDailyUse = "1";
+let notisDailyUse = "0";
+let month = '2021/10/01';
 let url = 'http://localhost:3000/'
 
-it('BFF Create Special Expend', function(done) {
-    console.log("TEST SPECIAL EXPEND");
+it('BFF Create Fixed Expend', function(done) {
+    console.log("TEST BFF FIXED EXPEND");
     var options = {
         'method': 'POST',
-        'url': url + 'specialExpend',
+        'url': url + 'bff/createExpend',
         'headers': {
             'user-id': userId,
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
             "name": name,
-            "capacity": value,
-            "month": '2021/10/01'
+            "value": value,
+            "month": month,
+            "fixed": fixed,
+            "isDailyUse": notisDailyUse
         })
     };
 
     request(options, function(error, response) {
         if (error) throw new Error(error);
         let res = JSON.parse(response.body);
-
-        insertedId = res.response.insertId;
-
+        insertedId_Fe = res.response.insertId;
         expect(res.response.affectedRows).to.equal(1);
         done();
     });
 }).timeout(15000);
 
-it('Bff GET SPECIAL EXPEND', function(done) {
+it('Bff GET FIXED EXPEND RELATION', function(done) {
     var options = {
         'method': 'GET',
-        'url': url + 'specialExpend?month=2021/10/01',
+        'url': url + 'relFixedExpend',
         'headers': {
             'user-id': userId,
             'Content-Type': 'application/json'
@@ -50,10 +55,34 @@ it('Bff GET SPECIAL EXPEND', function(done) {
         if (error) throw new Error(error);
         let res = JSON.parse(response.body);
         expect(res[res.length - 1]).to.deep.include({
-            "id": insertedId,
+            "id_fe": insertedId_Fe,
+            "user_id": userId,
+            "state": 1,
+            "active": 1
+        });
+        done();
+    });
+}).timeout(15000);
+
+it('BFF Get Fixed Expend Values', function(done) {
+    var options = {
+        'method': 'GET',
+        'url': url + `expend?month=2021/10/01`,
+        'headers': {
+            'user-id': userId,
+            'Content-Type': 'application/json'
+        },
+    };
+
+    request(options, function(error, response) {
+        if (error) throw new Error(error);
+        let res = JSON.parse(response.body);
+        //console.log(res.listVariable[0]);
+        inserted_iD = res.listFixed[res.listFixed.length - 1].id;
+        expect(res.listFixed[res.listFixed.length - 1]).to.deep.include({
+            "id_fe": insertedId_Fe,
             "name": name,
-            "capacity": value,
-            "stock": value,
+            "value": value,
             "user_id": userId,
         });
         done();
@@ -61,34 +90,35 @@ it('Bff GET SPECIAL EXPEND', function(done) {
 }).timeout(15000);
 
 
-it('BFF Create Special January', function(done) {
+it('BFF Create Fixed Expend January', function(done) {
+    console.log("TEST BFF FIXED EXPEND");
     var options = {
         'method': 'POST',
-        'url': url + 'specialExpend',
+        'url': url + 'bff/createExpend',
         'headers': {
             'user-id': userId,
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
             "name": name,
-            "capacity": value,
-            "month": '2021/01/01'
+            "value": value,
+            "month": "2021/01/01",
+            "fixed": fixed,
+            "isDailyUse": notisDailyUse
         })
     };
 
     request(options, function(error, response) {
         if (error) throw new Error(error);
         let res = JSON.parse(response.body);
-
-        insertedId = res.response.insertId;
-
+        insertedId_Fe = res.response.insertId;
         expect(res.response.affectedRows).to.equal(1);
         done();
     });
 }).timeout(15000);
 
 
-it('Create Special February', function(done) {
+it('Create Fixed February', function(done) {
     var options = {
         'method': 'POST',
         'url': url + 'bff/createMonth',
@@ -108,7 +138,7 @@ it('Create Special February', function(done) {
     });
 }).timeout(15000);
 
-it('Create Special March', function(done) {
+it('Create Fixed March', function(done) {
     var options = {
         'method': 'POST',
         'url': url + 'bff/createMonth',
@@ -128,17 +158,17 @@ it('Create Special March', function(done) {
     });
 }).timeout(15000);
 
-it('BBF Update Special February', function(done) {
+it('BBF Update Fixed February', function(done) {
     var options = {
         'method': 'PUT',
-        'url': url + 'specialExpend?fixed=0&month=2021/02/01&id=' + (insertedId + 10),
+        'url': url + 'bff/updateExpend?fixed=1&month=2021/02/01&id=' + (inserted_iD + 20),
         'headers': {
             'user-id': userId,
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
             "name": name + "changed",
-            "capacity": valueUpdated
+            "value": "7000"
         })
     };
 
@@ -150,10 +180,10 @@ it('BBF Update Special February', function(done) {
     });
 }).timeout(15000);
 
-it('Bff GET SPECIAL EXPEND January', function(done) {
+it('BFF Get Fixed Expend January', function(done) {
     var options = {
         'method': 'GET',
-        'url': url + 'specialExpend?month=2021/01/01',
+        'url': url + `expend?month=2021/01/01`,
         'headers': {
             'user-id': userId,
             'Content-Type': 'application/json'
@@ -163,21 +193,22 @@ it('Bff GET SPECIAL EXPEND January', function(done) {
     request(options, function(error, response) {
         if (error) throw new Error(error);
         let res = JSON.parse(response.body);
-        expect(res[res.length - 1]).to.deep.include({
-            "id": insertedId,
-            "user_id": userId,
+        //console.log(res.listVariable[0]);
+        inserted_iD = res.listFixed[res.listFixed.length - 1].id;
+        expect(res.listFixed[res.listFixed.length - 1]).to.deep.include({
+            "id_fe": insertedId_Fe,
             "name": name + "changed",
-            "capacity": value,
-
+            "value": value,
+            "user_id": userId,
         });
         done();
     });
 }).timeout(15000);
 
-it('Bff GET SPECIAL EXPEND February', function(done) {
+it('BFF Get Fixed Expend February', function(done) {
     var options = {
         'method': 'GET',
-        'url': url + 'specialExpend?month=2021/02/01',
+        'url': url + `expend?month=2021/02/01`,
         'headers': {
             'user-id': userId,
             'Content-Type': 'application/json'
@@ -187,21 +218,21 @@ it('Bff GET SPECIAL EXPEND February', function(done) {
     request(options, function(error, response) {
         if (error) throw new Error(error);
         let res = JSON.parse(response.body);
-        expect(res[res.length - 1]).to.deep.include({
-            "id": (insertedId + 10),
-            "user_id": userId,
+        //console.log(res.listVariable[0]);
+        expect(res.listFixed[res.listFixed.length - 1]).to.deep.include({
+            "id_fe": insertedId_Fe,
             "name": name + "changed",
-            "capacity": valueUpdated,
-
+            "value": 7000,
+            "user_id": userId,
         });
         done();
     });
 }).timeout(15000);
 
-it('Bff GET SPECIAL EXPEND March', function(done) {
+it('BFF Get Fixed Expend February', function(done) {
     var options = {
         'method': 'GET',
-        'url': url + 'specialExpend?month=2021/03/01',
+        'url': url + `expend?month=2021/03/01`,
         'headers': {
             'user-id': userId,
             'Content-Type': 'application/json'
@@ -211,12 +242,12 @@ it('Bff GET SPECIAL EXPEND March', function(done) {
     request(options, function(error, response) {
         if (error) throw new Error(error);
         let res = JSON.parse(response.body);
-        expect(res[res.length - 1]).to.deep.include({
-            "id": insertedId + 20,
-            "user_id": userId,
+        //console.log(res.listVariable[0]);
+        expect(res.listFixed[res.listFixed.length - 1]).to.deep.include({
+            "id_fe": insertedId_Fe,
             "name": name + "changed",
-            "capacity": valueUpdated,
-
+            "value": 7000,
+            "user_id": userId,
         });
         done();
     });

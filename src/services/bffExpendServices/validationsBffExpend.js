@@ -6,7 +6,7 @@ const BffCreateExpend = yup.object().shape({
     value: yup.number().typeError(expresiones.invalidNumber).positive().required(expresiones.required),
     month: yup.date().typeError(expresiones.invalidDate).required(),
     fixed: yup.number().required(),
-    dailyUse: yup.number().required()
+    isDailyUse: yup.number().required()
 });
 
 const BffUpdateExpend = yup.object().shape({
