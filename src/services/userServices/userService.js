@@ -1,14 +1,17 @@
 const pool = require('../../database');
 var userService = {
-    //TODO : Sanitización de todos los datos. Si es string, no puede tener simbolos <>=?;: , dado que permitiria un query injection.
-
-    getUser: function (user, pass) {
+    getUser: function(user, pass) {
         let rows = [user, pass];
         let query = 'SELECT * FROM user WHERE (user) = ? AND pass = ? AND state_code =1';
         return pool.query(query, rows);
     },
 
-    setUser: function (user, pass, mail) {
+    loginUser: function(user) {
+        let query = 'Select user,pass,id FROM user WHERE (user)=?';
+        return pool.query(query, user);
+    },
+
+    setUser: function(user, pass, mail) {
         const query = `insert into user(user, pass, mail, creation_date, state_code) values(?,?,?,?,1)`;
         const timeElapsed = Date.now();
         const creation_date = new Date(timeElapsed).toISOString();
@@ -16,7 +19,7 @@ var userService = {
         return pool.query(query, rows);
     },
 
-    updateUser: function (user, pass, new_pass) {
+    updateUser: function(user, pass, new_pass) {
         let query = `UPDATE user
                 SET 
                 pass = ?
@@ -25,7 +28,7 @@ var userService = {
         return pool.query(query, rows);
     },
 
-    deleteUser: function (user, pass) {
+    deleteUser: function(user, pass) {
         let query = `UPDATE user
         SET 
         state_code = 0

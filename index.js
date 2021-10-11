@@ -1,12 +1,14 @@
 const express = require('express');
 const cors = require('cors')
-
+const authJwt = require('./JsonWT/jwt');
 //Settings
 const app = express();
 
 //Middleware
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json())
+app.use(authJwt());
+
 app.use(express.static('../public')) //esto es para las imagenes
 app.use(cors({
     credentials: true,
@@ -40,6 +42,7 @@ app.use((error, req, res, next) => {
         }
     });
 });
+
 
 //Starting
 app.listen(process.env.PORT || 3000, () => { console.log('MonaAPI Starting...') });

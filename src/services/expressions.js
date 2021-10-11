@@ -9,7 +9,8 @@ const expresiones = {
     required: 'Data is missing',
     invalidName: 'Name should not have symbols',
     invalidUser: 'User with no symbols between 7 and 20 characters',
-    invalidMail: 'Invalid email'
+    invalidMail: 'Invalid email',
+    secret: 'monasafer-private-key-token-'
 }
 
 module.exports = expresiones;
