@@ -2,17 +2,17 @@ const expresiones = require('../expressions')
 const yup = require('yup');
 
 const createUserSchema = yup.object().shape({
-    user: yup.string().min(6, 'Minimo deben ser 6 caracteres').matches(expresiones.userValidation, 'El usuario no debe tener simbolos ni caracteres especiales').required(),
-    pass: yup.string().min(10, 'Minimo contraseña de 10 caracteres').matches(expresiones.passValidation).required(),
-    mail: yup.string().matches(expresiones.mailValidation).required()
+    user: yup.string().min(6, 'Minimo deben ser 7 caracteres').matches(expresiones.userValidation, expresiones.invalidUser).required(expresiones.required),
+    pass: yup.string().min(10, 'Minimo contraseña de 7 caracteres').matches(expresiones.passValidation).required(expresiones.required),
+    mail: yup.string().matches(expresiones.mailValidation).typeError(expresiones.invalidMail).required()
 });
 
 const updateUserSchema = yup.object().shape({
-    pass: yup.string().min(10, 'Minimo contraseña de 10 caracteres').matches(expresiones.passValidation).required(),
-    new_pass: yup.string().min(10, 'Minimo contraseña de 10 caracteres').matches(expresiones.passValidation).required(),
+    pass: yup.string().min(10, 'Minimo contraseña de 7 caracteres').matches(expresiones.passValidation).required(expresiones.required),
+    new_pass: yup.string().min(10, 'Minimo contraseña de 10 caracteres').matches(expresiones.passValidation).required(expresiones.required),
 });
 
-const validate = (schema) => async (req, res, next) => {
+const validate = (schema) => async(req, res, next) => {
     const body = req.body;
     try {
         await schema.validate(body);
@@ -22,7 +22,7 @@ const validate = (schema) => async (req, res, next) => {
     }
 }
 
-const validateupdate = (schema) => async (req, res, next) => {
+const validateupdate = (schema) => async(req, res, next) => {
     let pass = req.headers['pass'];
     let new_pass = req.headers['new_pass'];
     let body = { pass, new_pass }
@@ -41,13 +41,3 @@ module.exports = {
     validateupdate,
     updateUserSchema,
 };
-
-
-
-
-
-
-
-
-
-

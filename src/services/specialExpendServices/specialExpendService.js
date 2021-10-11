@@ -1,53 +1,70 @@
 const pool = require('../../database');
 
 var specialExpendService = {
-    //TODO : Sanitización de todos los datos. Si es string, no puede tener simbolos <>=?;: , dado que permitiria un query injection.
 
-    getSpecialExpend: function (user_id, startDate, endDate) {
-        let rows = [user_id,endDate];
-        let query = 'SELECT * FROM special_expend WHERE (user_id) = ? AND (state_code)=1 AND (finish_date>? OR finish_date IS NULL)';
+    getSpecialExpend: function(user_id, month, id) {
+        let query = '';
+        let rows = [];
+        if (id == 0) {
+            query = `select * from special_expend WHERE user_id = ? AND month = ? AND state_code = 1`;
+            rows = [user_id, month];
+        } else {
+            query = `select * from special_expend WHERE user_id = ? AND month = ? AND state_code = 1 AND id = ?`;
+            rows = [user_id, month, id];
+        }
         return pool.query(query, rows);
     },
 
-    setSpecialExpend: function (user_id, name, value, finish_date) {
-        const query = `insert into special_expend(name, value, user_id, creation_date,finish_date, state_code) values(?,?,?,?,?,1)`;
-        const timeElapsed = Date.now();
-        const creation_date = new Date(timeElapsed).toISOString();
-        rows = [name, value, user_id, creation_date, finish_date]
-        try {
-            if(finish_date>creation_date || finish_date==null){
-                return pool.query(query, rows);
-            }
-        } catch (error) {
-            next(error);
+    setSpecialExpend: function(user_id, name, capacity, stock, month, id_fe) {
+        const query = `insert into special_expend(user_id, name,capacity, stock,month,state_code,id_fe) values(?,?,?,?,?,?,?)`;
+        state = 1;
+        rows = [user_id, name, capacity, stock, month, state, id_fe];
+        return pool.query(query, rows);
+    },
+
+    updateMultipleSpecialExpend: function(id_fe, user_id, name, capacity, month, capacityChanges) {
+        if (capacityChanges == 0) {
+            rows = [name, id_fe, user_id];
+            let query = `UPDATE special_expend
+                    SET 
+                    name = ?
+                    WHERE id_fe = ?
+                    AND user_id = ?`;
+            return pool.query(query, rows);
+        } else if (capacityChanges == 1) {
+            rows = [capacity, id_fe, user_id, month];
+            let query = `UPDATE special_expend
+                SET 
+                capacity = ?
+                WHERE id_fe = ?
+                AND user_id = ?
+                AND month >= ?`;
+            return pool.query(query, rows);
         }
     },
 
-    updateSpecialExpend: function (user_id, specialExpendId, name, value, finish_date, payed) {
+    updateStock: function(user_id, id, stock, month) {
+        rows = [stock, id, user_id, month];
         let query = `UPDATE special_expend
                 SET 
-                name = ?, 
-                value = ?,
-                finish_date = ?,
+                stock = ?
                 WHERE id = ?
-                AND user_id = ?`;
-        rows = [name, value, finish_date, specialExpendId, user_id];
-        try {
-            if(finish_date>creation_date || finish_date==null){
-                return pool.query(query, rows);
-            }
-        } catch (error) {
-            next(error);
-        }
+                AND user_id = ?
+                AND month = ?`;
+        return pool.query(query, rows);
     },
 
-    deleteSpecialExpend: function (user_id, specialExpendId) {
+
+
+    deleteMultipleSpecialExpend: function(id_fe, user_id, month) {
         let query = `UPDATE special_expend
-        SET 
-        state_code = 0
-        WHERE id = ?
-        AND user_id = ?`;
-        rows = [specialExpendId, user_id];
+                SET 
+                state_code = ?
+                WHERE id_fe = ?
+                AND user_id = ?
+                AND month >= ?`;
+        state = 0;
+        rows = [state, id_fe, user_id, month];
         return pool.query(query, rows);
     }
 }

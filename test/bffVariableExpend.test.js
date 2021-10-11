@@ -1,21 +1,25 @@
 var expect = require('chai').expect;
 var request = require('request');
 var randomstring = require("randomstring");
+let DateGenerator = require('random-date-generator');
 
-let insertedSaveId;
 let userId = 5
 let name = randomstring.generate(7);
-let value = 1000
-let valueUpdated = 1500;
-let month = "2021-07-31";
-let verifymonth = "2021-07-31T03:00:00.000Z";
-let url = 'http://localhost:3000/';
+let value = 10000
+let fixed = "1";
+let NoFixed = "0";
+let isDailyUse = "1";
+let notisDailyUse = "0";
+let month = new Date(DateGenerator.getRandomDate().toDateString());
+let verifyMonth = month.toISOString().split('T')[0];
+let url = 'http://localhost:3000/'
 
-it('Insert Save', function(done) {
-    console.log("TEST SAVE");
+
+it('BFF Create  Variable Expend', function(done) {
+    console.log("TEST BFF VARIABLE EXPEND");
     var options = {
         'method': 'POST',
-        'url': url + 'save',
+        'url': url + 'bff/createExpend',
         'headers': {
             'user-id': userId,
             'Content-Type': 'application/json'
@@ -23,7 +27,9 @@ it('Insert Save', function(done) {
         body: JSON.stringify({
             "name": name,
             "value": value,
-            "month": month,
+            "month": "2021/10/01",
+            "fixed": NoFixed,
+            "isDailyUse": notisDailyUse
         })
     };
 
@@ -31,17 +37,17 @@ it('Insert Save', function(done) {
         if (error) throw new Error(error);
         let res = JSON.parse(response.body);
 
-        insertedSaveId = res.response.insertId;
+        insertedId = res.response.insertId;
 
         expect(res.response.affectedRows).to.equal(1);
         done();
     });
-});
+}).timeout(15000);
 
-it('Get Save', function(done) {
+it('BFF Get No-Fixed Expend', function(done) {
     var options = {
         'method': 'GET',
-        'url': url + 'save?month=' + month,
+        'url': url + `expend?fixed=0&month=2021/10/01&id=null`,
         'headers': {
             'user-id': userId,
             'Content-Type': 'application/json'
@@ -51,49 +57,47 @@ it('Get Save', function(done) {
     request(options, function(error, response) {
         if (error) throw new Error(error);
         let res = JSON.parse(response.body);
-
-
-        expect(res[res.length - 1]).to.deep.include({
-            "id": insertedSaveId,
+        //console.log(res.listVariable[0]);
+        expect(res.listVariable[res.listVariable.length - 1]).to.deep.include({
+            "id": insertedId,
+            "id_fe": null,
             "name": name,
             "value": value,
             "user_id": userId,
-            "month": verifymonth,
-            "state_code": 1
+            "state": 1
         });
         done();
     });
-});
+}).timeout(15000);
 
 
-it('Update Save', function(done) {
+it('BBF Update No-Fixed Expend', function(done) {
     var options = {
         'method': 'PUT',
-        'url': url + 'save?id=' + insertedSaveId,
+        'url': url + 'bff/updateExpend?fixed=0&month=2021/10/01&id=' + insertedId,
         'headers': {
             'user-id': userId,
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            "name": name + " changed",
-            "value": valueUpdated
+            "name": "BFF" + name + "changed",
+            "value": 7777
         })
     };
 
     request(options, function(error, response) {
         if (error) throw new Error(error);
-        console.log
         let res = JSON.parse(response.body);
         expect(res.response.affectedRows).to.equal(1);
         expect(res.response.changedRows).to.equal(1);
         done();
     });
-});
+}).timeout(15000);
 
-it('Get Save Updated', function(done) {
+it('BFF Get No-Fixed Expend Updated', function(done) {
     var options = {
         'method': 'GET',
-        'url': url + 'save?month=' + month,
+        'url': url + `expend?fixed=0&month=2021/10/01&id=null`,
         'headers': {
             'user-id': userId,
             'Content-Type': 'application/json'
@@ -103,34 +107,15 @@ it('Get Save Updated', function(done) {
     request(options, function(error, response) {
         if (error) throw new Error(error);
         let res = JSON.parse(response.body);
-
-        expect(res[res.length - 1]).to.deep.include({
-            "id": insertedSaveId,
-            "name": name + " changed",
-            "value": valueUpdated,
+        //console.log(res.listVariable[0]);
+        expect(res.listVariable[res.listVariable.length - 1]).to.deep.include({
+            "id": insertedId,
+            "id_fe": null,
+            "name": "BFF" + name + "changed",
+            "value": 7777,
             "user_id": userId,
-            "month": verifymonth,
-            "state_code": 1
+            "state": 1
         });
         done();
     });
-});
-
-it('Delete Save', function(done) {
-    var options = {
-        'method': 'DELETE',
-        'url': url + 'save?id=' + insertedSaveId,
-        'headers': {
-            'user-id': userId,
-            'Content-Type': 'application/json'
-        }
-    };
-
-    request(options, function(error, response) {
-        if (error) throw new Error(error);
-        let res = JSON.parse(response.body);
-        expect(res.response.affectedRows).to.equal(1);
-        expect(res.response.changedRows).to.equal(1);
-        done();
-    });
-});
+}).timeout(15000);
