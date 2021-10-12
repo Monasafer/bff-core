@@ -5,9 +5,14 @@ const fixedExpendService = require('../services/fixedExpend/relFixedExpendServic
 const validation = require('../services/specialExpendServices/validationSpecialExpend');
 let { response } = require('express');
 var { error } = 0;
+const jwt = require('jsonwebtoken');
+const expresiones = require('../services/expressions');
 
 router.get('/specialExpend', async(req, res) => {
-    let user_id = req.headers['user-id'];
+    const userToken = req.headers.authorization;
+    const token = userToken.split(' ');
+    const decode = jwt.verify(token[1], expresiones.secret);
+    const user_id = decode.userId;
     const { month } = req.query;
     let response = await specialExpendService.getSpecialExpend(user_id, month, 0);
     console.log("expendService.getSpecialExpend Response : " + JSON.stringify(response));
@@ -15,7 +20,10 @@ router.get('/specialExpend', async(req, res) => {
 });
 
 router.post('/specialExpend', validation.validate(validation.createSpecialExpendSchema), async(req, res) => {
-    const user_id = req.headers['user-id'];
+    const userToken = req.headers.authorization;
+    const token = userToken.split(' ');
+    const decode = jwt.verify(token[1], expresiones.secret);
+    const user_id = decode.userId;
     const { name, capacity, month, } = req.body;
     stock = capacity;
     const isSpecial = 1
@@ -29,7 +37,10 @@ router.post('/specialExpend', validation.validate(validation.createSpecialExpend
 });
 
 router.put('/specialExpend', async(req, res) => {
-    const user_id = req.headers['user-id'];
+    const userToken = req.headers.authorization;
+    const token = userToken.split(' ');
+    const decode = jwt.verify(token[1], expresiones.secret);
+    const user_id = decode.userId;
     const { month } = req.query;
     const { id } = req.query;
     const { name, capacity, stock } = req.body;
@@ -69,7 +80,10 @@ router.put('/specialExpend', async(req, res) => {
 
 
 router.delete('/specialExpend', async(req, res) => {
-    const user_id = req.headers['user-id'];
+    const userToken = req.headers.authorization;
+    const token = userToken.split(' ');
+    const decode = jwt.verify(token[1], expresiones.secret);
+    const user_id = decode.userId;
     const { id } = req.query;
     const { month } = req.query;
     responseGet = await specialExpendService.getSpecialExpend(user_id, month, id); //looking for the expense to which I refer

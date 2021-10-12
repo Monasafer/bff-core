@@ -2,10 +2,15 @@ const express = require('express');
 const expendService = require('../services/expendServices/expendService');
 const router = express.Router();
 const validate = require('../services/expendServices/validationsExpend');
+const jwt = require('jsonwebtoken');
+const expresiones = require('../services/expressions');
 var { error } = 1;
 
 router.get('/expend', async(req, res) => {
-    let user_id = req.headers['user-id'];
+    const userToken = req.headers.authorization;
+    const token = userToken.split(' ');
+    const decode = jwt.verify(token[1], expresiones.secret);
+    const user_id = decode.userId;
     let listFixed = [];
     let listDaily = []
     let listVariable = [];
@@ -13,7 +18,6 @@ router.get('/expend', async(req, res) => {
     const { month } = req.query;
     const { isDailyUse } = req.query;
     const response = await expendService.getExpend(user_id, month, null, fixed, isDailyUse);
-    console.log("expendService.getExpend Response : " + JSON.stringify(response));
     results = JSON.parse(JSON.stringify(response));
     results.forEach(element => {
         if (element.isDailyUse == 1) {
@@ -35,10 +39,11 @@ router.get('/expend', async(req, res) => {
 });
 
 
-
-
 router.post('/expend', validate.validate(validate.createExpendSchema), async(req, res) => {
-    const user_id = req.headers['user-id'];
+    const userToken = req.headers.authorization;
+    const token = userToken.split(' ');
+    const decode = jwt.verify(token[1], expresiones.secret);
+    const user_id = decode.userId;
     const { name, value, month, id_fe, isDailyUse } = req.body;
     const response = await expendService.setExpend(user_id, name, value, month, id_fe, isDailyUse)
     console.log("expendService.setExpend Response : " + JSON.stringify(response));
@@ -47,7 +52,10 @@ router.post('/expend', validate.validate(validate.createExpendSchema), async(req
 });
 
 router.put('/expend', validate.validate(validate.updateExpendSchema), async(req, res) => {
-    const user_id = req.headers['user-id'];
+    const userToken = req.headers.authorization;
+    const token = userToken.split(' ');
+    const decode = jwt.verify(token[1], expresiones.secret);
+    const user_id = decode.userId;
     const { id } = req.query;
     const { name, value } = req.body;
     const response = await expendService.updateExpend(id, user_id, name, value);
@@ -57,7 +65,10 @@ router.put('/expend', validate.validate(validate.updateExpendSchema), async(req,
 })
 
 router.delete('/expend', async(req, res) => {
-    const user_id = req.headers['user-id'];
+    const userToken = req.headers.authorization;
+    const token = userToken.split(' ');
+    const decode = jwt.verify(token[1], expresiones.secret);
+    const user_id = decode.userId;
     const { id } = req.query;
     const response = await expendService.deleteExpend(id, user_id, null);
     console.log("expendService.DeleteExpend Response: " + JSON.stringify(response));

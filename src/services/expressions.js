@@ -10,7 +10,7 @@ const expresiones = {
     invalidName: 'Name should not have symbols',
     invalidUser: 'User with no symbols between 7 and 20 characters',
     invalidMail: 'Invalid email',
-    secret: 'monasafer-private-key-token-'
+    secret: 'monasaferprivatekeytoken'
 }
 
 module.exports = expresiones;

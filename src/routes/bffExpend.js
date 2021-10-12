@@ -5,9 +5,14 @@ const monthService = require('../services/monthServices/monthService');
 const validations = require('../services/bffExpendServices/validationsBffExpend')
 const router = express.Router();
 var { error } = 1;
+const jwt = require('jsonwebtoken');
+const expresiones = require('../services/expressions');
 
 router.post('/bff/createExpend', validations.validate(validations.BffCreateExpend), async(req, res) => {
-    const user_id = req.headers['user-id'];
+    const userToken = req.headers.authorization;
+    const token = userToken.split(' ');
+    const decode = jwt.verify(token[1], expresiones.secret);
+    const user_id = decode.userId;
     const isSpecial = 0;
     const { name, value, month, fixed, isDailyUse } = req.body;
     //decide the path depending on whether it is fixed or variable
@@ -34,7 +39,10 @@ router.post('/bff/createExpend', validations.validate(validations.BffCreateExpen
 
 
 router.post('/bff/createMonth', validations.validate(validations.BffCreateMonth), async(req, res) => { //Unique query creating String in for
-    const user_id = req.headers['user-id'];
+    const userToken = req.headers.authorization;
+    const token = userToken.split(' ');
+    const decode = jwt.verify(token[1], expresiones.secret);
+    const user_id = decode.userId;
     month = req.body.month;
     monthSpecial = month;
     const state = 1;
@@ -75,7 +83,10 @@ router.post('/bff/createMonth', validations.validate(validations.BffCreateMonth)
 });
 
 router.put('/bff/updateExpend', validations.validate(validations.BffUpdateExpend), async(req, res) => {
-    const user_id = req.headers['user-id'];
+    const userToken = req.headers.authorization;
+    const token = userToken.split(' ');
+    const decode = jwt.verify(token[1], expresiones.secret);
+    const user_id = decode.userId;
     const { fixed } = req.query;
     const { month } = req.query;
     const { id } = req.query;
@@ -118,7 +129,10 @@ router.put('/bff/updateExpend', validations.validate(validations.BffUpdateExpend
 })
 
 router.delete('/bff/deleteExpend', async(req, res) => {
-    const user_id = req.headers['user-id'];
+    const userToken = req.headers.authorization;
+    const token = userToken.split(' ');
+    const decode = jwt.verify(token[1], expresiones.secret);
+    const user_id = decode.userId;
     const { id } = req.query;
     const { month } = req.query;
     const { fixed } = req.query;

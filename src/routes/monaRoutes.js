@@ -3,9 +3,14 @@ const monaService = require('../services/monaServices/monaService')
 const router = express.Router();
 const validations = require('../services/monaServices/validationsMona')
 var { error } = 1;
+const jwt = require('jsonwebtoken');
+const expresiones = require('../services/expressions');
 
 router.get('/mona', async(req, res) => {
-    let user_id = req.headers['user-id'];
+    const userToken = req.headers.authorization;
+    const token = userToken.split(' ');
+    const decode = jwt.verify(token[1], expresiones.secret);
+    const user_id = decode.userId;
     const { month } = req.query;
     const response = await monaService.getMona(user_id, month);
     console.log("monaService.getMona Response : " + JSON.stringify(response));
@@ -13,7 +18,10 @@ router.get('/mona', async(req, res) => {
 });
 
 router.post('/mona', validations.validate(validations.createMonaSchema), async(req, res) => {
-    let user_id = req.headers['user-id'];
+    const userToken = req.headers.authorization;
+    const token = userToken.split(' ');
+    const decode = jwt.verify(token[1], expresiones.secret);
+    const user_id = decode.userId;
     const { name, value, month } = req.body;
     const response = await monaService.setMona(user_id, name, value, month)
     console.log("monaService.setMona Response : " + JSON.stringify(response));
@@ -22,7 +30,10 @@ router.post('/mona', validations.validate(validations.createMonaSchema), async(r
 });
 
 router.put('/mona', validations.validate(validations.updateMonaSchema), async(req, res) => {
-    let user_id = req.headers['user-id'];
+    const userToken = req.headers.authorization;
+    const token = userToken.split(' ');
+    const decode = jwt.verify(token[1], expresiones.secret);
+    const user_id = decode.userId;
     const { id } = req.query;
     const { name, value } = req.body;
     const response = await monaService.updateMona(user_id, id, name, value)
@@ -32,7 +43,10 @@ router.put('/mona', validations.validate(validations.updateMonaSchema), async(re
 });
 
 router.delete('/mona', async(req, res) => {
-    let user_id = req.headers['user-id'];
+    const userToken = req.headers.authorization;
+    const token = userToken.split(' ');
+    const decode = jwt.verify(token[1], expresiones.secret);
+    const user_id = decode.userId;
     const { id } = req.query;
     const response = await monaService.deleteMona(user_id, id)
     console.log("monaService.deleteMona Response : " + JSON.stringify(response));
