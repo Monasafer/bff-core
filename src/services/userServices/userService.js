@@ -12,7 +12,7 @@ var userService = {
     },
 
     setUser: function(user, pass, mail) {
-        const query = `insert ignore into user(user, pass, mail, creation_date, state_code) values(?,?,?,?,1)`;
+        const query = `insert into user(user, pass, mail, creation_date, state_code) values(?,?,?,?,1)`;
         const timeElapsed = Date.now();
         const creation_date = new Date(timeElapsed).toISOString();
         rows = [user, pass, mail, creation_date]
