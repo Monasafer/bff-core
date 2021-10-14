@@ -47,17 +47,39 @@ router.post('/login', async(req, res) => {
 router.put('/user', validations.validateupdate(validations.updateUserSchema), async(req, res, next) => {
     let user = req.headers['user'];
     let pass = req.headers['pass'];
+    let response;
     let new_pass = req.headers['new_pass'];
-    const response = await userService.updateUser(user, pass, new_pass)
-    console.log("userService.updateUser Response : " + JSON.stringify(response));
+    const salt = await bcrypt.genSalt(10);
+    new_pass = bcrypt.hashSync(new_pass, salt);
+    const responseGet = await userService.loginUser(user);
+    hashPassword = responseGet[0].pass;
+    hashPassword.toString();
+    let VerifyIdentity = bcrypt.compareSync(pass, hashPassword);
+    console.log(VerifyIdentity);
+    if (VerifyIdentity) {
+        response = await userService.updateUser(user, hashPassword, new_pass)
+        console.log("userService.updateUser Response : " + JSON.stringify(response));
+    } else {
+        response = { error: 'wrong password' };
+    }
+
     res.json(response);
 });
 
 router.delete('/user', async(req, res) => {
     let user = req.headers['user'];
-    let pass = req.headers['pass']
-    const response = await userService.deleteUser(user, pass)
-    console.log("userService.deleteUser Response : " + JSON.stringify(response));
+    let pass = req.headers['pass'];
+    let response;
+    const responseGet = await userService.loginUser(user);
+    hashPassword = responseGet[0].pass;
+    hashPassword.toString();
+    let VerifyIdentity = bcrypt.compareSync(pass, hashPassword);
+    if (VerifyIdentity) {
+        response = await userService.deleteUser(user, hashPassword)
+        console.log("userService.deleteUser Response : " + JSON.stringify(response));
+    } else {
+        response = { error: 'wrong password' };
+    }
     res.json(response);
 });
 

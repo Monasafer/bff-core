@@ -4,7 +4,7 @@ var randomstring = require("randomstring");
 const random = require('random');
 
 let insertedExpendId;
-let userId = 5
+let userId = 305
 let name = randomstring.generate(7);
 let value = 10000
 let valueUpdated = 15000
@@ -12,7 +12,7 @@ let month = "2021-07-31";
 let id_fe = random.int((min = 0), (max = 55000));
 let verifymonth = "2021-07-31T03:00:00.000Z";
 let url = 'http://localhost:3000/'
-
+let token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMwNSwiaWF0IjoxNjM0MDQ5OTAyLCJleHAiOjE2MzQ2NTQ3MDJ9.AnqIliDpsYHUmnaN1vaEgPAAUpr5RDoc3D2G01wE19k'
 
 
 it('Insert Expend', function(done) {
@@ -21,7 +21,7 @@ it('Insert Expend', function(done) {
         'method': 'POST',
         'url': url + 'expend',
         'headers': {
-            'user-id': userId,
+            'Authorization': 'Bearer ' + token,
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
@@ -49,7 +49,7 @@ it('Get Expend', function(done) {
         'method': 'GET',
         'url': url + 'expend?month=' + month,
         'headers': {
-            'user-id': userId,
+            'Authorization': 'Bearer ' + token,
             'Content-Type': 'application/json'
         },
     };
@@ -76,7 +76,7 @@ it('Update Expend', function(done) {
         'method': 'PUT',
         'url': url + 'expend?id=' + insertedExpendId,
         'headers': {
-            'user-id': userId,
+            'Authorization': 'Bearer ' + token,
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
@@ -99,7 +99,7 @@ it('Get Expend Updated', function(done) {
         'method': 'GET',
         'url': url + 'expend?month=' + month,
         'headers': {
-            'user-id': userId,
+            'Authorization': 'Bearer ' + token,
             'Content-Type': 'application/json'
         },
     };
@@ -125,7 +125,7 @@ it('Delete Expend', function(done) {
         'method': 'DELETE',
         'url': url + 'expend?id=' + insertedExpendId,
         'headers': {
-            'user-id': userId,
+            'Authorization': 'Bearer ' + token,
             'Content-Type': 'application/json'
         }
     };

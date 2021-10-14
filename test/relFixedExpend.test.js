@@ -1,15 +1,15 @@
 var expect = require('chai').expect;
 var request = require('request');
-let userId = 5
+let userId = 305
 let url = 'http://localhost:3000/'
-
+let token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMwNSwiaWF0IjoxNjM0MDUxODQ4LCJleHAiOjE2MzQ2NTY2NDh9.SgH7dgM_D5YPNk1p_kjaoXCfqP7IU00WcAiwGKBLfUw'
 it('Insert FixedExpend', function(done) {
     console.log("TEST FIXED EXPEND");
     var options = {
         'method': 'POST',
         'url': url + 'relFixedExpend',
         'headers': {
-            'user-id': userId,
+            'Authorization': 'Bearer ' + token,
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({})
@@ -28,7 +28,7 @@ it('Get FixedExpend', function(done) {
         'method': 'GET',
         'url': url + 'relFixedExpend',
         'headers': {
-            'user-id': userId,
+            'Authorization': 'Bearer ' + token,
             'Content-Type': 'application/json'
         },
     };
@@ -51,7 +51,7 @@ it('Delete FixedExpend', function(done) {
         'method': 'DELETE',
         'url': url + 'relFixedExpend?id_fe=' + id_fe,
         'headers': {
-            'user-id': userId,
+            'Authorization': 'Bearer ' + token,
             'Content-Type': 'application/json'
         }
     };

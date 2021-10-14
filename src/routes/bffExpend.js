@@ -90,8 +90,13 @@ router.put('/bff/updateExpend', validations.validate(validations.BffUpdateExpend
     const { fixed } = req.query;
     const { month } = req.query;
     const { id } = req.query;
-    const { name, value } = req.body;
-    responseGet = await expendService.getExpend(user_id, month, id, fixed); //looking for the expense to which I refer
+    const { name, value, isDailyUse } = req.body;
+    console.log(user_id);
+    console.log(month);
+    console.log(id);
+    console.log(fixed);
+    responseGet = await expendService.getExpend(user_id, month, id, fixed, isDailyUse); //looking for the expense to which I refer
+    console.log(responseGet);
     if (fixed == 0) { // In case of being variable, I perform update as always -reuse service
         const responseUpdateExpend = await expendService.updateExpend(id, user_id, name, value);
         response = responseUpdateExpend;
