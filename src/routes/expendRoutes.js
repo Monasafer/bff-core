@@ -51,7 +51,6 @@ router.post('/expend', validate.validate(validate.createExpendSchema), async(req
         const decode = jwt.verify(token[1], expresiones.secret);
         const user_id = decode.userId;
         const { name, value, month, id_fe, isDailyUse } = req.body;
-        console.log(name, value, month, id_fe, isDailyUse);
         const response = await expendService.setExpend(user_id, name, value, month, id_fe, isDailyUse)
         console.log("expendService.setExpend Response : " + JSON.stringify(response));
         error = 0;

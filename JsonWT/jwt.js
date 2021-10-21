@@ -1,6 +1,8 @@
 const expressjwt = require('express-jwt');
 const expresiones = require('../src/services/expressions');
 
+
+
 function authJwt() {
     const secret = expresiones.secret;
     return expressjwt({
