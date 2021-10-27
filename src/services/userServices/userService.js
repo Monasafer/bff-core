@@ -1,4 +1,7 @@
 const pool = require('../../database');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const expresiones = require('../../services/expressions');
 var userService = {
     getUser: function(user, pass) {
         let rows = [user, pass];
@@ -6,9 +9,24 @@ var userService = {
         return pool.query(query, rows);
     },
 
-    loginUser: function(user) {
+    loginUser: async function(user, pass) {
         let query = 'Select user,pass,id FROM user WHERE (user)=?';
-        return pool.query(query, user);
+        responseGet = await pool.query(query, user);
+        hashPassword = responseGet[0].pass;
+        hashPassword.toString();
+        let loginStatus = bcrypt.compareSync(pass, hashPassword);
+        var loginData;
+        if (loginStatus) {
+            const token = jwt.sign({
+                    userId: responseGet[0].id
+                },
+                expresiones.secret, { expiresIn: '1w' }
+            )
+            loginData = { user: user, token: token };
+        } else {
+            loginData = null
+        }
+        return loginData;
     },
 
     setUser: function(user, pass, mail) {

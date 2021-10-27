@@ -8,7 +8,8 @@ const expresiones = {
     invalidDate: 'Invalid date entered',
     required: 'Data is missing',
     invalidName: 'Name should not have symbols',
-    invalidUser: 'User with no symbols between 7 and 20 characters',
+    invalidUser: 'User with no special characters',
+    invalidPass: 'Password with no special characters',
     invalidMail: 'Invalid email',
     secret: 'monasaferprivatekeytoken'
 }

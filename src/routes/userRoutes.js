@@ -36,19 +36,9 @@ router.post('/login', async(req, res, next) => {
     try {
         user = req.headers['user'];
         pass = req.headers['pass'];
-        const responseGet = await userService.loginUser(user);
-        hashPassword = responseGet[0].pass;
-        hashPassword.toString();
-        let loginStatus = bcrypt.compareSync(pass, hashPassword);
-        if (loginStatus) {
-            const token = jwt.sign({
-                    userId: responseGet[0].id
-                },
-                expresiones.secret, { expiresIn: '1w' }
-
-
-            )
-            res.status(200).send({ user: user, token: token });
+        const loginData = await userService.loginUser(user, pass);
+        if (loginData != null) {
+            res.status(200).send(loginData);
         } else {
             res.status(400).send('Incorrect Password');
         }
