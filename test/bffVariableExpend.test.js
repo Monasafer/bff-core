@@ -3,7 +3,7 @@ var request = require('request');
 var randomstring = require("randomstring");
 let DateGenerator = require('random-date-generator');
 
-let userId = 5
+let userId = 155
 let name = randomstring.generate(7);
 let value = 10000
 let fixed = "1";
@@ -13,6 +13,7 @@ let notisDailyUse = "0";
 let month = new Date(DateGenerator.getRandomDate().toDateString());
 let verifyMonth = month.toISOString().split('T')[0];
 let url = 'http://localhost:3000/'
+let token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjE1NSwiaWF0IjoxNjM0ODI0NDY0LCJleHAiOjE2MzU0MjkyNjR9.C528U3FcHSW7h9e0NNlKXRyLOyrQktQgdAXI8quq8WI'
 
 
 it('BFF Create  Variable Expend', function(done) {
@@ -21,7 +22,7 @@ it('BFF Create  Variable Expend', function(done) {
         'method': 'POST',
         'url': url + 'bff/createExpend',
         'headers': {
-            'user-id': userId,
+            'Authorization': 'Bearer ' + token,
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
@@ -49,7 +50,7 @@ it('BFF Get No-Fixed Expend', function(done) {
         'method': 'GET',
         'url': url + `expend?fixed=0&month=2021/10/01&id=null`,
         'headers': {
-            'user-id': userId,
+            'Authorization': 'Bearer ' + token,
             'Content-Type': 'application/json'
         },
     };
@@ -76,7 +77,7 @@ it('BBF Update No-Fixed Expend', function(done) {
         'method': 'PUT',
         'url': url + 'bff/updateExpend?fixed=0&month=2021/10/01&id=' + insertedId,
         'headers': {
-            'user-id': userId,
+            'Authorization': 'Bearer ' + token,
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
@@ -99,7 +100,7 @@ it('BFF Get No-Fixed Expend Updated', function(done) {
         'method': 'GET',
         'url': url + `expend?fixed=0&month=2021/10/01&id=null`,
         'headers': {
-            'user-id': userId,
+            'Authorization': 'Bearer ' + token,
             'Content-Type': 'application/json'
         },
     };

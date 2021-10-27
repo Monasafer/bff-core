@@ -2,14 +2,14 @@ var expect = require('chai').expect;
 var request = require('request');
 var randomstring = require("randomstring");
 let insertedMonaId;
-let userId = 5
+let userId = 155
 let name = randomstring.generate(7);
 let value = 1000
 let valueUpdated = 1500
 let month = "2021-07-31";
 let verifymonth = "2021-07-31T03:00:00.000Z";
 let url = 'http://localhost:3000/'
-
+let token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjE1NSwiaWF0IjoxNjM0ODI0NDY0LCJleHAiOjE2MzU0MjkyNjR9.C528U3FcHSW7h9e0NNlKXRyLOyrQktQgdAXI8quq8WI'
 
 it('Insert Mona', function(done) {
     console.log("TEST MONA");
@@ -17,14 +17,14 @@ it('Insert Mona', function(done) {
         'method': 'POST',
         'url': url + 'mona',
         'headers': {
-            'user-id': userId,
+            'Authorization': 'Bearer ' + token,
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
             "name": name,
             "value": value,
             "month": month
-        })
+        }),
     };
 
     request(options, function(error, response) {
@@ -43,7 +43,7 @@ it('Get Mona', function(done) {
         'method': 'GET',
         'url': url + 'mona?month=' + month,
         'headers': {
-            'user-id': userId,
+            'Authorization': 'Bearer ' + token,
             'Content-Type': 'application/json'
         },
     };
@@ -69,7 +69,7 @@ it('Update Mona', function(done) {
         'method': 'PUT',
         'url': url + 'mona?id=' + insertedMonaId,
         'headers': {
-            'user-id': userId,
+            'Authorization': 'Bearer ' + token,
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
@@ -92,7 +92,7 @@ it('Get Mona Updated', function(done) {
         'method': 'GET',
         'url': url + 'mona?month=' + month,
         'headers': {
-            'user-id': userId,
+            'Authorization': 'Bearer ' + token,
             'Content-Type': 'application/json'
         },
     };
@@ -117,7 +117,7 @@ it('Delete Mona', function(done) {
         'method': 'DELETE',
         'url': url + 'mona?id=' + insertedMonaId,
         'headers': {
-            'user-id': userId,
+            'Authorization': 'Bearer ' + token,
             'Content-Type': 'application/json'
         }
     };

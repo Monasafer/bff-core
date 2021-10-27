@@ -3,13 +3,14 @@ var request = require('request');
 var randomstring = require("randomstring");
 
 let insertedSaveId;
-let userId = 5
+let userId = 155
 let name = randomstring.generate(7);
 let value = 1000
 let valueUpdated = 1500;
 let month = "2021-07-31";
 let verifymonth = "2021-07-31T03:00:00.000Z";
 let url = 'http://localhost:3000/';
+let token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjE1NSwiaWF0IjoxNjM0ODI0NDY0LCJleHAiOjE2MzU0MjkyNjR9.C528U3FcHSW7h9e0NNlKXRyLOyrQktQgdAXI8quq8WI'
 
 it('Insert Save', function(done) {
     console.log("TEST SAVE");
@@ -17,7 +18,7 @@ it('Insert Save', function(done) {
         'method': 'POST',
         'url': url + 'save',
         'headers': {
-            'user-id': userId,
+            'Authorization': 'Bearer ' + token,
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
@@ -43,7 +44,7 @@ it('Get Save', function(done) {
         'method': 'GET',
         'url': url + 'save?month=' + month,
         'headers': {
-            'user-id': userId,
+            'Authorization': 'Bearer ' + token,
             'Content-Type': 'application/json'
         },
     };
@@ -71,7 +72,7 @@ it('Update Save', function(done) {
         'method': 'PUT',
         'url': url + 'save?id=' + insertedSaveId,
         'headers': {
-            'user-id': userId,
+            'Authorization': 'Bearer ' + token,
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
@@ -95,7 +96,7 @@ it('Get Save Updated', function(done) {
         'method': 'GET',
         'url': url + 'save?month=' + month,
         'headers': {
-            'user-id': userId,
+            'Authorization': 'Bearer ' + token,
             'Content-Type': 'application/json'
         },
     };
@@ -121,7 +122,7 @@ it('Delete Save', function(done) {
         'method': 'DELETE',
         'url': url + 'save?id=' + insertedSaveId,
         'headers': {
-            'user-id': userId,
+            'Authorization': 'Bearer ' + token,
             'Content-Type': 'application/json'
         }
     };

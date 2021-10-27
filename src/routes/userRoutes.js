@@ -2,37 +2,98 @@ const express = require('express');
 const userService = require('../services/userServices/userService')
 const router = express.Router();
 const validations = require('../services/userServices/validationsUser');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const expresiones = require('../services/expressions');
 
-router.get('/user', async (req, res) => {
-  let user = req.headers['user'];
-  let pass = req.headers['pass'];
-  const response = await userService.getUser(user, pass);
-  console.log("userService.getUser Response : " + JSON.stringify(response));
-  res.json(response);
+router.get('/user', async(req, res, next) => {
+    try {
+        let user = req.headers['user'];
+        let pass = req.headers['pass'];
+        const response = await userService.getUser(user, pass);
+        console.log("userService.getUser Response : " + JSON.stringify(response));
+        res.json(response);
+    } catch (error) {
+        next(error);
+    }
+
 });
 
-router.post('/user', validations.validate(validations.createUserSchema), async (req, res, next) => {
-  const { user, pass, mail } = req.body;
-  const response = await userService.setUser(user, pass, mail)
-  console.log("userService.setUser Response : " + JSON.stringify(response));
-  res.json(response);
+router.post('/user', validations.validate(validations.createUserSchema), async(req, res, next) => {
+    try {
+        let { user, pass, mail } = req.body;
+        const salt = await bcrypt.genSalt(10);
+        pass = bcrypt.hashSync(pass, salt);
+        const response = await userService.setUser(user, pass, mail)
+        console.log("userService.setUser Response : " + JSON.stringify(response));
+        res.json(response);
+    } catch (error) {
+        next(error);
+    }
 });
 
-router.put('/user', validations.validateupdate(validations.updateUserSchema), async (req, res, next) => {
-    let user = req.headers['user'];
-    let pass = req.headers['pass'];
-    let new_pass = req.headers['new_pass'];
-    const response = await userService.updateUser(user, pass, new_pass)
-    console.log("userService.updateUser Response : " + JSON.stringify(response));
-    res.json(response);
+router.post('/login', async(req, res, next) => {
+    try {
+        user = req.headers['user'];
+        pass = req.headers['pass'];
+        const loginData = await userService.loginUser(user, pass);
+        if (loginData != null) {
+            res.status(200).send(loginData);
+        } else {
+            res.status(400).send('Incorrect Password');
+        }
+    } catch (error) {
+        next(error);
+    }
+
 });
 
-router.delete('/user', async (req, res) => {
-  let user = req.headers['user'];
-  let pass = req.headers['pass']
-  const response = await userService.deleteUser(user, pass)
-  console.log("userService.deleteUser Response : " + JSON.stringify(response));
-  res.json(response);
+router.put('/user', validations.validateupdate(validations.updateUserSchema), async(req, res, next) => {
+    try {
+        let user = req.headers['user'];
+        let pass = req.headers['pass'];
+        let response;
+        let new_pass = req.headers['new_pass'];
+        const salt = await bcrypt.genSalt(10);
+        new_pass = bcrypt.hashSync(new_pass, salt);
+        const responseGet = await userService.loginUser(user);
+        hashPassword = responseGet[0].pass;
+        hashPassword.toString();
+        let VerifyIdentity = bcrypt.compareSync(pass, hashPassword);
+        console.log(VerifyIdentity);
+        if (VerifyIdentity) {
+            response = await userService.updateUser(user, hashPassword, new_pass)
+            console.log("userService.updateUser Response : " + JSON.stringify(response));
+        } else {
+            response = { error: 'wrong password' };
+        }
+
+        res.json(response);
+    } catch (error) {
+        next(error);
+    }
+});
+
+router.delete('/user', async(req, res, next) => {
+    try {
+        let user = req.headers['user'];
+        let pass = req.headers['pass'];
+        let response;
+        const responseGet = await userService.loginUser(user);
+        hashPassword = responseGet[0].pass;
+        hashPassword.toString();
+        let VerifyIdentity = bcrypt.compareSync(pass, hashPassword);
+        if (VerifyIdentity) {
+            response = await userService.deleteUser(user, hashPassword)
+            console.log("userService.deleteUser Response : " + JSON.stringify(response));
+        } else {
+            response = { error: 'wrong password' };
+        }
+        res.json(response);
+    } catch (error) {
+        next(error);
+    }
+
 });
 
 module.exports = router;

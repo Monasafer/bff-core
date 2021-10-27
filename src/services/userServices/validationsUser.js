@@ -2,9 +2,9 @@ const expresiones = require('../expressions')
 const yup = require('yup');
 
 const createUserSchema = yup.object().shape({
-    user: yup.string().min(6, 'Minimo deben ser 7 caracteres').matches(expresiones.userValidation, expresiones.invalidUser).required(expresiones.required),
-    pass: yup.string().min(10, 'Minimo contraseña de 7 caracteres').matches(expresiones.passValidation).required(expresiones.required),
-    mail: yup.string().matches(expresiones.mailValidation).typeError(expresiones.invalidMail).required()
+    user: yup.string().min(7, 'Minimo deben ser 7 caracteres').matches(expresiones.userValidation, expresiones.invalidUser).required(expresiones.required),
+    pass: yup.string().min(7, 'Minimo contraseña de 7 caracteres').matches(expresiones.passValidation, 'Contraseña de 7 a 20 caracteres, sin simbolos').required(expresiones.required),
+    mail: yup.string().matches(expresiones.mailValidation, 'Verficar Mail').typeError(expresiones.invalidMail).required()
 });
 
 const updateUserSchema = yup.object().shape({

@@ -4,11 +4,11 @@ var randomstring = require("randomstring");
 let DateGenerator = require('random-date-generator');
 
 let insertedMonthId;
-let userId = 5
+let userId = 155
 let month = new Date(DateGenerator.getRandomDate().toDateString());
 let verifyMonth = month.toISOString().split('T')[0];
 let url = 'http://localhost:3000/'
-
+let token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjE1NSwiaWF0IjoxNjM0ODI0NDY0LCJleHAiOjE2MzU0MjkyNjR9.C528U3FcHSW7h9e0NNlKXRyLOyrQktQgdAXI8quq8WI'
 
 it('BFF Create Month', function(done) {
     console.log("BFF MONTH TEST")
@@ -16,7 +16,7 @@ it('BFF Create Month', function(done) {
         'method': 'POST',
         'url': url + 'bff/createMonth',
         'headers': {
-            'user-id': userId,
+            'Authorization': 'Bearer ' + token,
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
@@ -40,7 +40,7 @@ it('BFF Get Month', function(done) {
         'method': 'GET',
         'url': url + `month?month=${verifyMonth}`,
         'headers': {
-            'user-id': userId,
+            'Authorization': 'Bearer ' + token,
             'Content-Type': 'application/json'
         },
     };
