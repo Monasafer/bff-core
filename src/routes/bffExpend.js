@@ -16,14 +16,24 @@ router.post('/bff/createExpend', validations.validate(validations.BffCreateExpen
         const decode = jwt.verify(token[1], expresiones.secret);
         const user_id = decode.userId;
         const isSpecial = 0;
+        const state = 1;
         const { name, value, month, fixed, isDailyUse } = req.body;
+        let additional = '';
+        let id_fe;
+        let futureMonth;
         //decide the path depending on whether it is fixed or variable
         if (fixed == 1) {
             const responseFixed = await fixedExpendService.setFixedExpend(user_id, isSpecial);
             id_fe = responseFixed.insertId; //capture the id inserted in FixedExpend
-            const responseExpend = await expendService.setExpend(user_id, name, value, month, id_fe, isDailyUse) //insert to Expend
-            console.log("expendService.setExpend Response : " + JSON.stringify(responseExpend));
-            response = responseFixed
+            const responseMonths = await monthService.getFutureMonths(user_id, month);
+            for (i in responseMonths) {
+                futureMonth = responseMonths[i].month.getFullYear() + '/' + (responseMonths[i].month.getMonth() + 1) + '/0' + responseMonths[i].month.getDate();
+                additional = `(${user_id},"${name}",${value},"${futureMonth}",${state},${id_fe},${isDailyUse}),` + additional;
+            }
+            additional = additional.substring(0, additional.length - 1);
+            const responseMultipleExpend = await expendService.setMultipleExpends(additional);
+            console.log("expendService.setExpend Response : " + JSON.stringify(responseMultipleExpend));
+            response = responseMultipleExpend;
             error = 0;
         } else if (fixed == 0) {
             id_fe = null; //If the expense is only variable - Create only in Expend 
