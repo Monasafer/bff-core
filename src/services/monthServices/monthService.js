@@ -10,7 +10,7 @@ var monthService = {
 
     getFutureMonths: function(user_id, month) {
         let rows = [user_id, month];
-        let query = 'SELECT * FROM month WHERE (user_id) = ? AND (month) > ? AND (state)=1 ';
+        let query = 'SELECT * FROM month WHERE (user_id) = ? AND (month) >= ? AND (state)=1 ';
         return pool.query(query, rows);
     },
 
