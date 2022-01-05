@@ -1,6 +1,8 @@
 var expect = require('chai').expect;
 var request = require('request');
 var randomstring = require("randomstring");
+const utils = require('./utils');
+
 let insertedMonaId;
 let userId = 155
 let name = randomstring.generate(7);
@@ -8,38 +10,11 @@ let value = 1000
 let valueUpdated = 1500
 let month = "2021-07-31";
 let verifymonth = "2021-07-31T03:00:00.000Z";
-let url = 'http://localhost:3000/'
-
-async function getToken(){
-  var token;
-  var options = {
-    'method': 'POST',
-    'url': url + 'login',
-    'headers': {
-        'user': 'federico',
-        'pass': 'sk84life'
-    },
-    body: JSON.stringify({
-        "name": name,
-        "value": value,
-        "month": month
-    }),
-  };
-
-  await request(options, function(error, response) {
-      if (error) throw new Error(error);
-      let res = JSON.parse(response.body);
-      token = res.response.token;
-      console.log('TOKEN IS : ' + token)
-  });
-  console.log('TOKEN IS : ' + token)
-  return token
-}
-
+let url = 'http://localhost:3000/';
 
 it('Insert Mona', async () => {
     console.log("TEST MONA");
-    var token = await getToken()
+    var token = await utils.getToken()
     var options = {
         'method': 'POST',
         'url': url + 'mona',
