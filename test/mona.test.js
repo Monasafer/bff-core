@@ -9,10 +9,37 @@ let valueUpdated = 1500
 let month = "2021-07-31";
 let verifymonth = "2021-07-31T03:00:00.000Z";
 let url = 'http://localhost:3000/'
-let token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjE1NSwiaWF0IjoxNjM0ODI0NDY0LCJleHAiOjE2MzU0MjkyNjR9.C528U3FcHSW7h9e0NNlKXRyLOyrQktQgdAXI8quq8WI'
 
-it('Insert Mona', function(done) {
+async function getToken(){
+  var token;
+  var options = {
+    'method': 'POST',
+    'url': url + 'login',
+    'headers': {
+        'user': 'federico',
+        'pass': 'sk84life'
+    },
+    body: JSON.stringify({
+        "name": name,
+        "value": value,
+        "month": month
+    }),
+  };
+
+  await request(options, function(error, response) {
+      if (error) throw new Error(error);
+      let res = JSON.parse(response.body);
+      token = res.response.token;
+      console.log('TOKEN IS : ' + token)
+  });
+  console.log('TOKEN IS : ' + token)
+  return token
+}
+
+
+it('Insert Mona', async () => {
     console.log("TEST MONA");
+    var token = await getToken()
     var options = {
         'method': 'POST',
         'url': url + 'mona',
