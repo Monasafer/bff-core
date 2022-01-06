@@ -1,7 +1,7 @@
 var expect = require('chai').expect;
 var request = require('request');
 var randomstring = require("randomstring");
-const utils = require('./utils');
+const {getToken} = require('./utils')
 
 let insertedMonaId;
 let userId = 155
@@ -12,35 +12,38 @@ let month = "2021-07-31";
 let verifymonth = "2021-07-31T03:00:00.000Z";
 let url = 'http://localhost:3000/';
 
-it('Insert Mona', async () => {
+it('Insert Mona', () => {  
     console.log("TEST MONA");
+    getToken(function(token) { 
+        var options = {
+            'method': 'POST',
+            'url': url + 'mona',
+            'headers': {
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                "name": name,
+                "value": value,
+                "month": month
+            }),
+        };
+    
+        request(options, function(error, response) {
+            if (error) throw new Error(error);
+            let res = JSON.parse(response.body);
+    
+            console.log("response body: " + JSON.stringify(res))
+            insertedMonaId = res.response.insertId;
+    
+            expect(res.response.affectedRows).to.equal(1);
+        });
+    })
+})
+
+
+it('Get Mona', async (done) => {
     var token = await utils.getToken()
-    var options = {
-        'method': 'POST',
-        'url': url + 'mona',
-        'headers': {
-            'Authorization': 'Bearer ' + token,
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            "name": name,
-            "value": value,
-            "month": month
-        }),
-    };
-
-    request(options, function(error, response) {
-        if (error) throw new Error(error);
-        let res = JSON.parse(response.body);
-
-        insertedMonaId = res.response.insertId;
-
-        expect(res.response.affectedRows).to.equal(1);
-        done();
-    });
-});
-
-it('Get Mona', function(done) {
     var options = {
         'method': 'GET',
         'url': url + 'mona?month=' + month,
@@ -53,6 +56,7 @@ it('Get Mona', function(done) {
     request(options, function(error, response) {
         if (error) throw new Error(error);
         let res = JSON.parse(response.body);
+        console.log("response body: " + JSON.stringify(res))
         expect(res[res.length - 1]).to.deep.include({
             "id": insertedMonaId,
             "name": name,

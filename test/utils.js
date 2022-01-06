@@ -1,7 +1,8 @@
 let url = 'http://localhost:3000/';
 var request = require('request');
 
-const getToken = async () => {
+module.exports = {
+  async getToken (callback) {
     var token;
     var options = {
       'method': 'POST',
@@ -15,11 +16,9 @@ const getToken = async () => {
     await request(options, function(error, response) {
         if (error) throw new Error(error);
         let res = JSON.parse(response.body);
-        token = res.response.token;
-        console.log('TOKEN IS : ' + token)
+        token = res.token;
+        console.log("token: " + token)
+        callback(token)
     });
-    console.log('TOKEN IS : ' + token)
-    return token
   }
-  
-exports.getToken = getToken;
+}
