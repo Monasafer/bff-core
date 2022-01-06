@@ -184,6 +184,21 @@
 		{
 			"name": "Mona",
 			"request": {
+				"auth": {
+					"type": "apikey",
+					"apikey": [
+						{
+							"key": "value",
+							"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjI1NSwiaWF0IjoxNjQxMzk0MDc4LCJleHAiOjE2NDE5OTg4Nzh9.c4mUxy_WbZB44J9QI2piOojPk1u6ij241E1uijsbQtg",
+							"type": "string"
+						},
+						{
+							"key": "key",
+							"value": "Authorization",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [
 					{
@@ -193,7 +208,7 @@
 					}
 				],
 				"url": {
-					"raw": "http://localhost:3000/mona?month=2021-09-01",
+					"raw": "http://localhost:3000/mona?month=2021-11-01",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -205,7 +220,7 @@
 					"query": [
 						{
 							"key": "month",
-							"value": "2021-09-01"
+							"value": "2021-11-01"
 						}
 					]
 				}
@@ -492,17 +507,17 @@
 					{
 						"key": "user",
 						"type": "text",
-						"value": "federico"
+						"value": "pruebas"
 					},
 					{
 						"key": "pass",
-						"value": "sk84life",
+						"value": "pruebas",
 						"type": "text"
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"user\": \"pruebas\",\r\n    \"pass\": \"pruebas\"\r\n}",
+					"raw": "",
 					"options": {
 						"raw": {
 							"language": "json"
