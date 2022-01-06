@@ -12,7 +12,7 @@ let month = "2021-07-31";
 let verifymonth = "2021-07-31T03:00:00.000Z";
 let url = 'http://localhost:3000/';
 
-it('Insert Mona', () => {  
+it('Insert Mona', (done) => {  
     console.log("TEST MONA");
     getToken(function(token) { 
         var options = {
@@ -37,6 +37,7 @@ it('Insert Mona', () => {
             insertedMonaId = res.response.insertId;
     
             expect(res.response.affectedRows).to.equal(1);
+            done();
         });
     })
 })
