@@ -52,7 +52,6 @@ it('Login User', function(done) {
     request(options, function(error, response) {
         if (error) throw new Error(error);
         let res = JSON.parse(response.body);
-        console.log(res);
         token = res.token;
         expect(res).to.deep.include({
             "user": user,
