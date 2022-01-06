@@ -8,8 +8,8 @@ module.exports = {
       'method': 'POST',
       'url': url + 'login',
       'headers': {
-          'user': 'federico',
-          'pass': 'sk84life'
+          'user': 'pruebas',
+          'pass': 'pruebas'
       },
     };
   
