@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "0ff2d53b-e6da-466b-9b91-66e90e9fba07",
+		"_postman_id": "5a677951-4acd-483b-9dd0-19b40b5ab134",
 		"name": "bff-core",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -463,7 +463,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"user\": \"Camila97\",\r\n    \"pass\": \"Camilita97\",\r\n    \"mail\":\"Camila97@gmai.com\"\r\n}",
+					"raw": "{\r\n    \"user\": \"pruebas\",\r\n    \"pass\": \"pruebas\",\r\n    \"mail\":\"federicomarilungo@gmai.com\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -490,15 +490,19 @@
 				"method": "POST",
 				"header": [
 					{
-						"key": "",
+						"key": "user",
 						"type": "text",
-						"value": "",
-						"disabled": true
+						"value": "federico"
+					},
+					{
+						"key": "pass",
+						"value": "sk84life",
+						"type": "text"
 					}
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"user\": \"Camila97\",\r\n    \"pass\": \"Camilita97\",\r\n    \"mail\":\"Camila97@gmai.com\"\r\n}",
+					"raw": "{\r\n    \"user\": \"pruebas\",\r\n    \"pass\": \"pruebas\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -506,14 +510,14 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3000/user",
+					"raw": "http://localhost:3000/login",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "3000",
 					"path": [
-						"user"
+						"login"
 					]
 				}
 			},
