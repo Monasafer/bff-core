@@ -38,6 +38,7 @@ var expendService = {
     setMultipleExpends: function(additional) {
         const query = `insert into expend(user_id,name,value,month,state,id_fe,isDailyUse) values ${additional}`;
         rows = [];
+        console.log(query)
         return pool.query(query, rows);
     },
 

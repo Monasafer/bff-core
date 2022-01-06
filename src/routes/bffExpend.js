@@ -33,7 +33,7 @@ router.post('/bff/createExpend', validations.validate(validations.BffCreateExpen
             additional = additional.substring(0, additional.length - 1);
             const responseMultipleExpend = await expendService.setMultipleExpends(additional);
             console.log("expendService.setExpend Response : " + JSON.stringify(responseMultipleExpend));
-            response = responseMultipleExpend;
+            response = responseFixed;
             error = 0;
         } else if (fixed == 0) {
             id_fe = null; //If the expense is only variable - Create only in Expend 

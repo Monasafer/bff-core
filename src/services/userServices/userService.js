@@ -9,6 +9,12 @@ var userService = {
         return pool.query(query, rows);
     },
 
+    getUserUpdate: function(user) {
+        let rows = [user];
+        let query = 'SELECT * FROM user WHERE (user) = ? AND state_code =1';
+        return pool.query(query, rows);
+    },
+
     loginUser: async function(user, pass) {
         let query = 'Select user,pass,id FROM user WHERE (user)=?';
         responseGet = await pool.query(query, user);

@@ -2,131 +2,146 @@ var expect = require('chai').expect;
 var request = require('request');
 var randomstring = require("randomstring");
 const random = require('random');
+const { getToken } = require('./utils')
 
-let userId = 155;
+let userId = 565
 let name = randomstring.generate(4);
 let value = 10000;
 let valueUpdated = 12000;
 let url = 'http://localhost:3000/'
-let token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjE1NSwiaWF0IjoxNjM0ODI0NDY0LCJleHAiOjE2MzU0MjkyNjR9.C528U3FcHSW7h9e0NNlKXRyLOyrQktQgdAXI8quq8WI'
 
 it('BFF Create Special Expend', function(done) {
     console.log("TEST SPECIAL EXPEND");
-    var options = {
-        'method': 'POST',
-        'url': url + 'specialExpend',
-        'headers': {
-            'Authorization': 'Bearer ' + token,
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            "name": name,
-            "capacity": value,
-            "month": '2021/10/01'
-        })
-    };
+    getToken(function(token) {
+        var options = {
+            'method': 'POST',
+            'url': url + 'specialExpend',
+            'headers': {
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                "name": name,
+                "capacity": value,
+                "month": '2021/10/01'
+            })
+        };
 
-    request(options, function(error, response) {
-        if (error) throw new Error(error);
-        let res = JSON.parse(response.body);
+        request(options, function(error, response) {
+            if (error) throw new Error(error);
+            let res = JSON.parse(response.body);
 
-        insertedId = res.response.insertId;
+            insertedId = res.response.insertId;
 
-        expect(res.response.affectedRows).to.equal(1);
-        done();
-    });
+            expect(res.response.affectedRows).to.equal(1);
+            done();
+        });
+    })
+
 }).timeout(15000);
 
 it('Bff GET SPECIAL EXPEND', function(done) {
-    var options = {
-        'method': 'GET',
-        'url': url + 'specialExpend?month=2021/10/01',
-        'headers': {
-            'Authorization': 'Bearer ' + token,
-            'Content-Type': 'application/json'
-        },
-    };
+    getToken(function(token) {
+        var options = {
+            'method': 'GET',
+            'url': url + 'specialExpend?month=2021/10/01',
+            'headers': {
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/json'
+            },
+        };
 
-    request(options, function(error, response) {
-        if (error) throw new Error(error);
-        let res = JSON.parse(response.body);
-        expect(res[res.length - 1]).to.deep.include({
-            "id": insertedId,
-            "name": name,
-            "capacity": value,
-            "stock": value,
-            "user_id": userId,
+        request(options, function(error, response) {
+            if (error) throw new Error(error);
+            let res = JSON.parse(response.body);
+            expect(res[res.length - 1]).to.deep.include({
+                "id": insertedId,
+                "name": name,
+                "capacity": value,
+                "stock": value,
+                "user_id": userId,
+            });
+            done();
         });
-        done();
-    });
+    })
+
 }).timeout(15000);
 
 
 it('BFF Create Special January', function(done) {
-    var options = {
-        'method': 'POST',
-        'url': url + 'specialExpend',
-        'headers': {
-            'Authorization': 'Bearer ' + token,
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            "name": name,
-            "capacity": value,
-            "month": '2021/01/01'
-        })
-    };
+    getToken(function(token) {
+        var options = {
+            'method': 'POST',
+            'url': url + 'specialExpend',
+            'headers': {
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                "name": name,
+                "capacity": value,
+                "month": '2021/01/01'
+            })
+        };
 
-    request(options, function(error, response) {
-        if (error) throw new Error(error);
-        let res = JSON.parse(response.body);
+        request(options, function(error, response) {
+            if (error) throw new Error(error);
+            let res = JSON.parse(response.body);
 
-        insertedId = res.response.insertId;
+            insertedId = res.response.insertId;
 
-        expect(res.response.affectedRows).to.equal(1);
-        done();
-    });
+            expect(res.response.affectedRows).to.equal(1);
+            done();
+        });
+    })
+
 }).timeout(15000);
 
 
 it('Create Special February', function(done) {
-    var options = {
-        'method': 'POST',
-        'url': url + 'bff/createMonth',
-        'headers': {
-            'Authorization': 'Bearer ' + token,
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            "month": '2021/02/01'
-        })
-    };
+    getToken(function(token) {
+        var options = {
+            'method': 'POST',
+            'url': url + 'bff/createMonth',
+            'headers': {
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                "month": '2021/02/01'
+            })
+        };
 
-    request(options, function(error, response) {
-        if (error) throw new Error(error);
-        let res = JSON.parse(response.body);
-        done();
-    });
+        request(options, function(error, response) {
+            if (error) throw new Error(error);
+            let res = JSON.parse(response.body);
+            done();
+        });
+    })
+
 }).timeout(15000);
 
 it('Create Special March', function(done) {
-    var options = {
-        'method': 'POST',
-        'url': url + 'bff/createMonth',
-        'headers': {
-            'Authorization': 'Bearer ' + token,
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            "month": '2021/03/01'
-        })
-    };
+    getToken(function(token) {
+        var options = {
+            'method': 'POST',
+            'url': url + 'bff/createMonth',
+            'headers': {
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                "month": '2021/03/01'
+            })
+        };
 
-    request(options, function(error, response) {
-        if (error) throw new Error(error);
-        let res = JSON.parse(response.body);
-        done();
-    });
+        request(options, function(error, response) {
+            if (error) throw new Error(error);
+            let res = JSON.parse(response.body);
+            done();
+        });
+    })
+
 }).timeout(15000);
 
 // it('BBF Update Special February', function(done) {

@@ -50,16 +50,17 @@ router.post('/login', async(req, res, next) => {
 
 router.put('/user', validations.validateupdate(validations.updateUserSchema), async(req, res, next) => {
     try {
-        let user = req.headers['user'];
-        let pass = req.headers['pass'];
+        let user = await req.headers['user'];
+        let pass = await req.headers['pass'];
         let response;
-        let new_pass = req.headers['new_pass'];
+        let new_pass = await req.headers['new_pass'];
         const salt = await bcrypt.genSalt(10);
-        new_pass = bcrypt.hashSync(new_pass, salt);
-        const responseGet = await userService.loginUser(user);
+        new_pass = await bcrypt.hashSync(new_pass, salt);
+        const responseGet = await userService.getUserUpdate(user);
+        console.log(responseGet);
         hashPassword = responseGet[0].pass;
         hashPassword.toString();
-        let VerifyIdentity = bcrypt.compareSync(pass, hashPassword);
+        let VerifyIdentity = await bcrypt.compareSync(pass, hashPassword);
         console.log(VerifyIdentity);
         if (VerifyIdentity) {
             response = await userService.updateUser(user, hashPassword, new_pass)
@@ -79,7 +80,7 @@ router.delete('/user', async(req, res, next) => {
         let user = req.headers['user'];
         let pass = req.headers['pass'];
         let response;
-        const responseGet = await userService.loginUser(user);
+        const responseGet = await userService.getUserUpdate(user);
         hashPassword = responseGet[0].pass;
         hashPassword.toString();
         let VerifyIdentity = bcrypt.compareSync(pass, hashPassword);

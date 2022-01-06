@@ -8,8 +8,8 @@ const createUserSchema = yup.object().shape({
 });
 
 const updateUserSchema = yup.object().shape({
-    pass: yup.string().min(10, 'Minimo contraseña de 7 caracteres').matches(expresiones.passValidation).required(expresiones.required),
-    new_pass: yup.string().min(10, 'Minimo contraseña de 10 caracteres').matches(expresiones.passValidation).required(expresiones.required),
+    pass: yup.string().min(7, 'Minimo contraseña de 7 caracteres').matches(expresiones.passValidation).required(expresiones.required),
+    new_pass: yup.string().min(7, 'Minimo contraseña de 10 caracteres').matches(expresiones.passValidation).required(expresiones.required),
 });
 
 const validate = (schema) => async(req, res, next) => {
