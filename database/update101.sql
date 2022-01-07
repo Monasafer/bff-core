@@ -11,3 +11,6 @@ USE `heroku_8a551bcfa4d3d31`;
 -- Actualizacion de tabla de Gastos
 --
 
+ALTER TABLE 'expend' ADD payed BIT DEFAULT 0 NOT NULL;
+ALTER TABLE 'expend' ADD tag varchar(100) NULL;
+
