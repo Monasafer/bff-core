@@ -28,7 +28,7 @@ var expendService = {
         return pool.query(query, rows);
     },
 
-    isPayedExpend: function(user_id, id) {
+    getPayedDataExpend: function(user_id, id) {
         let state = 1;
         let query;
         let rows = [user_id, id, state];

@@ -158,7 +158,8 @@ router.put('/bff/payedExpend', async(req, res, next) => {
         const decode = jwt.verify(token[1], expresiones.secret);
         const user_id = decode.userId;
         const { id } = req.query;
-        responseGet = await expendService.isPayedExpend(user_id, id); //looking for the expense to which I refer
+        responseGet = await expendService.getPayedDataExpend(user_id, id); //looking for the expense to which I refer
+        console.log(responseGet)
         let isPayed = responseGet[0].payed
         if (isPayed == 0) {
             isPayed = 1
