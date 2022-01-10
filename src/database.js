@@ -8,6 +8,7 @@ const {promisify} = require('util');
 //  database: process.env.DATABASE_NAME
 //};
 
+//If you want to run the DB in SQL server or dBeaber you must put: port:3306
 var db_config = {
   host: 'us-cdbr-east-04.cleardb.com',
   user: 'ba46bc2da80b73',
