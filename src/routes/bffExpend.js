@@ -151,6 +151,29 @@ router.put('/bff/updateExpend', validations.validate(validations.BffUpdateExpend
     }
 })
 
+router.put('/bff/payedExpend', async(req, res, next) => {
+    try {
+        const userToken = req.headers.authorization;
+        const token = userToken.split(' ');
+        const decode = jwt.verify(token[1], expresiones.secret);
+        const user_id = decode.userId;
+        const { id } = req.query;
+        responseGet = await expendService.getPayedDataExpend(user_id, id); //looking for the expense to which I refer
+        console.log(responseGet)
+        let isPayed = responseGet[0].payed
+        if (isPayed == 0) {
+            isPayed = 1
+        } else {
+            isPayed = 0
+        }
+        const responseUpdateExpend = await expendService.updatePayedExpend(id, user_id, isPayed);
+        console.log("ExpendService.UpdateExpend Response: " + JSON.stringify(responseUpdateExpend));
+        res.json({ error, responseUpdateExpend });
+    } catch (error) {
+        next(error);
+    }
+})
+
 router.delete('/bff/deleteExpend', async(req, res, next) => {
     try {
         const userToken = req.headers.authorization;

@@ -28,6 +28,14 @@ var expendService = {
         return pool.query(query, rows);
     },
 
+    getPayedDataExpend: function(user_id, id) {
+        let state = 1;
+        let query;
+        let rows = [user_id, id, state];
+        query = 'SELECT payed FROM expend WHERE (user_id) = ? AND (id) = ? AND (state)=? ';
+        return pool.query(query, rows);
+    },
+
     setExpend: function(user_id, name, value, month, id_fe, isDailyUse) {
         const query = `insert into expend(user_id,name,value,month,state,id_fe,isDailyUse) values(?,?,?,?,?,?,?)`;
         state = 1;
@@ -56,6 +64,16 @@ var expendService = {
                 WHERE id = ?
                 AND user_id = ?`;
         rows = [name, value, id, user_id];
+        return pool.query(query, rows);
+    },
+
+    updatePayedExpend: function(id, user_id, isPayed) {
+        let query = `UPDATE expend
+                SET 
+                payed = ?
+                WHERE id = ?
+                AND user_id = ?`;
+        rows = [isPayed, id, user_id];
         return pool.query(query, rows);
     },
 
