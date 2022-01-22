@@ -3,8 +3,8 @@ const pool = require('../../database');
 var saveService = {
 
     getSave: function (user_id, month) {
-        let rows = [user_id, month];
-        let query = 'SELECT * FROM save WHERE (user_id) = ? AND (month)=? AND (state_code)=1 ';
+        let rows = [user_id];
+        let query = 'SELECT * FROM save WHERE (user_id) = ? AND (state_code)=1 ';
         return pool.query(query, rows);
     },
 
