@@ -46,7 +46,6 @@ it('Get Save', function(done) {
     getToken(function(token) {
         var options = {
             'method': 'GET',
-            //'url': url + 'save?month=' + month,
             'url': url + 'save',
             'headers': {
                 'Authorization': 'Bearer ' + token,
@@ -64,7 +63,6 @@ it('Get Save', function(done) {
                 "name": name,
                 "value": value,
                 "user_id": userId,
-                //"month": verifymonth,
                 "state_code": 1
             });
             done();
