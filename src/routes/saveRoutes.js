@@ -12,8 +12,7 @@ router.get('/save', async(req, res, next) => {
         const token = userToken.split(' ');
         const decode = jwt.verify(token[1], expresiones.secret);
         const user_id = decode.userId;
-        const { month } = req.query;
-        const response = await saveService.getSave(user_id, month);
+        const response = await saveService.getSave(user_id); 
         console.log("saveService.getSave Response : " + JSON.stringify(response));
         res.json(response);
     } catch (error) {
