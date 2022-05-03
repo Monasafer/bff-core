@@ -24,6 +24,7 @@ router.post('/user', validations.validate(validations.createUserSchema), async(r
         let { user, pass, mail } = req.body;
         const salt = await bcrypt.genSalt(10);
         pass = bcrypt.hashSync(pass, salt);
+        console.log("creacion de usuario y contrasenia " + user + " " + pass)
         const response = await userService.setUser(user, pass, mail)
         console.log("userService.setUser Response : " + JSON.stringify(response));
         res.json(response);

@@ -16,12 +16,19 @@ var userService = {
     },
 
     loginUser: async function(user, pass) {
+        console.log("user y pass")
+        console.log("user" + user + " pass" + pass)
         let query = 'Select user,pass,id FROM user WHERE (user)=?';
         responseGet = await pool.query(query, user);
         hashPassword = responseGet[0].pass;
         hashPassword.toString();
+        console.log("comparacion pass y hashpassword")
+        console.log(pass)
+        console.log(hashPassword)
         let loginStatus = bcrypt.compareSync(pass, hashPassword);
         var loginData;
+        console.log("login status")
+        console.log(loginStatus)
         if (loginStatus) {
             const token = jwt.sign({
                     userId: responseGet[0].id

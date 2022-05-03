@@ -31,7 +31,7 @@ CREATE TABLE `mona` (
 CREATE TABLE `user` (
   `id` int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
   `user` varchar(20) CHARACTER SET latin1 COLLATE latin1_bin NOT NULL UNIQUE KEY,
-  `pass` varchar(20) CHARACTER SET latin1 COLLATE latin1_bin NOT NULL,
+  `pass` varchar(320) CHARACTER SET latin1 COLLATE latin1_bin NOT NULL,
   `mail` varchar(320) CHARACTER SET latin1 COLLATE latin1_bin NOT NULL UNIQUE,
   `creation_date` date NOT NULL,
   `state_code` int(1) NOT NULL
