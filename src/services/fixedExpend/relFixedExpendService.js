@@ -15,19 +15,19 @@ var fixedExpendService = {
         let active = 1;
         let state = 1;
         let rows = [month, state, active, user_id, month];
-        let query = `select rel_fixed_expend.id_fe,rel_fixed_expend.user_id,name,value,month,isDailyUse from rel_fixed_expend
+        let query = `select rel_fixed_expend.id_fixed_expend,rel_fixed_expend.user_id,name,value,month,isDailyUse from rel_fixed_expend
                      inner join expend 
-                        on rel_fixed_expend.id_fe = expend.id_fe
+                        on rel_fixed_expend.id_fixed_expend = expend.id_fixed_expend
                         where month <= ?
                         and expend.state = ?
                         and active = ? 
                         and isSpecial = 0
                         and rel_fixed_expend.user_id = ?
-                        and (expend.id_fe,month) IN 
-                            (SELECT expend.id_fe, MAX(month)
+                        and (expend.id_fixed_expend,month) IN 
+                            (SELECT expend.id_fixed_expend, MAX(month)
                             FROM expend 
                             where month < ?
-                            GROUP BY expend.id_fe
+                            GROUP BY expend.id_fixed_expend
                             );`;
         return pool.query(query, rows);
     },
@@ -36,42 +36,43 @@ var fixedExpendService = {
         let active = 1;
         let state = 1;
         let rows = [month, state, active, user_id, month];
-        let query = `select rel_fixed_expend.id_fe,rel_fixed_expend.user_id,name,capacity,month from rel_fixed_expend 
-        inner join special_expend  on rel_fixed_expend.id_fe = special_expend.id_fe where month <= ? and special_expend.state_code = ? and active = ? and isSpecial = 1 and rel_fixed_expend.user_id = ? and (special_expend.id_fe,month) 
-        IN  (SELECT special_expend.id_fe, MAX(month) FROM special_expend where month < ? GROUP BY special_expend.id_fe);`;
+        let query = `select rel_fixed_expend.id_fixed_expend,rel_fixed_expend.user_id,name,capacity,month from rel_fixed_expend 
+        inner join special_expend  on rel_fixed_expend.id_fixed_expend = special_expend.id_fixed_expend where month <= ? and special_expend.state_code = ? and active = ? and isSpecial = 1 and rel_fixed_expend.user_id = ? and (special_expend.id_fixed_expend,month) 
+        IN  (SELECT special_expend.id_fixed_expend, MAX(month) FROM special_expend where month < ? GROUP BY special_expend.id_fixed_expend);`;
         return pool.query(query, rows);
     },
 
-    setFixedExpend: function(user_id, isSpecial) {
-        const query = `insert into rel_fixed_expend(user_id,creation_date,state,active,isSpecial) values(?,?,?,?,?)`;
+    setFixedExpend: function(user_id) {
+        const query = `insert into rel_fixed_expend(user_id,creation_date,state,active) values(?,?,?,?)`;
         state = 1;
         active = 1;
         const timeElapsed = Date.now();
         const creation_date = new Date(timeElapsed).toISOString();
-        rows = [user_id, creation_date, state, active, isSpecial];
+        rows = [user_id, creation_date, state, active];
         return pool.query(query, rows);
     },
 
-    updateFixedExpend: function(id_fe, user_id, active) {
+    updateFixedExpend: function(id_fixed_expend, user_id, active) {
         let query = `UPDATE rel_fixed_expend
                 SET 
                 active = ? 
-                WHERE id_fe = ?
+                WHERE id_fixed_expend = ?
                 AND user_id = ?`;
-        rows = [active, id_fe, user_id];
+        rows = [active, id_fixed_expend, user_id];
         return pool.query(query, rows);
     },
 
-    deleteFixedExpend: function(user_id, id_fe) {
+    //no es delete, es desactivar. Cambia active a 0 no state a 0. 
+    deleteFixedExpend: function(user_id, id_fixed_expend) {
         let query = `UPDATE rel_fixed_expend
             SET 
             state = ?,
             active = ?
-            WHERE id_fe = ?
+            WHERE id_fixed_expend = ?
             AND user_id = ?`;
         state = 1;
         active = 0;
-        rows = [state, active, id_fe, user_id];
+        rows = [state, active, id_fixed_expend, user_id];
         return pool.query(query, rows);
     }
 }

@@ -306,7 +306,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"BFF1\",\r\n    \"value\": \"11200\",\r\n    \"month\":\"2021/9/01\",\r\n    \"id_fe\":\"55\",\r\n    \"dailyUse\": 0\r\n}",
+					"raw": "{\r\n    \"name\": \"BFF1\",\r\n    \"value\": \"11200\",\r\n    \"month\":\"2021/9/01\",\r\n    \"id_fixed_expend\":\"55\",\r\n    \"dailyUse\": 0\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -1077,7 +1077,7 @@
 					}
 				],
 				"url": {
-					"raw": "http://localhost:3000/relFixedExpend?id_fe=22",
+					"raw": "http://localhost:3000/relFixedExpend?id_fixed_expend=22",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -1088,7 +1088,7 @@
 					],
 					"query": [
 						{
-							"key": "id_fe",
+							"key": "id_fixed_expend",
 							"value": "22"
 						}
 					]

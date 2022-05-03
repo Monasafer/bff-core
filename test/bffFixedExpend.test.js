@@ -34,7 +34,7 @@ it('BFF Create Fixed Expend', function(done) {
         request(options, function(error, response) {
             if (error) throw new Error(error);
             let res = JSON.parse(response.body);
-            insertedId_Fe = res.response.insertId;
+            insertedid_fixed_expend = res.response.insertId;
             expect(res.response.affectedRows).to.above(0)
             done();
         });
@@ -57,7 +57,7 @@ it('Bff GET FIXED EXPEND RELATION', function(done) {
             if (error) throw new Error(error);
             let res = JSON.parse(response.body);
             expect(res[res.length - 1]).to.deep.include({
-                "id_fe": insertedId_Fe,
+                "id_fixed_expend": insertedid_fixed_expend,
                 "user_id": userId,
                 "state": 1,
                 "active": 1
@@ -90,7 +90,7 @@ it('BFF Create Fixed Expend January', function(done) {
         request(options, function(error, response) {
             if (error) throw new Error(error);
             let res = JSON.parse(response.body);
-            insertedId_Fe = res.response.insertId;
+            insertedid_fixed_expend = res.response.insertId;
             expect(res.response.affectedRows).to.equal(1);
             done();
         });

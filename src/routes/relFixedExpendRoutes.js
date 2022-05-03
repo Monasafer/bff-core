@@ -52,9 +52,9 @@ router.put('/relFixedExpend', async(req, res, next) => {
         const token = userToken.split(' ');
         const decode = jwt.verify(token[1], expresiones.secret);
         const user_id = decode.userId;
-        const { id_fe } = req.query;
+        const { id_fixed_expend } = req.query;
         const { active } = req.body;
-        const response = await fixedExpendService.updateFixedExpend(id_fe, user_id, active);
+        const response = await fixedExpendService.updateFixedExpend(id_fixed_expend, user_id, active);
         console.log("fixedExpendService.updateFixedExpend Response: " + JSON.stringify(response));
         res.json(response);
     } catch (error) {
@@ -68,8 +68,8 @@ router.delete('/relFixedExpend', async(req, res, next) => {
         const token = userToken.split(' ');
         const decode = jwt.verify(token[1], expresiones.secret);
         const user_id = decode.userId;
-        const { id_fe } = req.query;
-        const response = await fixedExpendService.deleteFixedExpend(user_id, id_fe)
+        const { id_fixed_expend } = req.query;
+        const response = await fixedExpendService.deleteFixedExpend(user_id, id_fixed_expend)
         console.log("fixedExpendService.deleteFixedExpend Response: " + JSON.stringify(response));
         res.json(response);
     } catch (error) {

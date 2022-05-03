@@ -65,7 +65,7 @@ it('BFF Get No-Fixed Expend', function(done) {
             //console.log(res.listVariable[0]);
             expect(res.listVariable[res.listVariable.length - 1]).to.deep.include({
                 "id": insertedId,
-                "id_fe": null,
+                "id_fixed_expend": null,
                 "name": name,
                 "value": value,
                 "user_id": userId,
@@ -121,7 +121,7 @@ it('BFF Get No-Fixed Expend Updated', function(done) {
             //console.log(res.listVariable[0]);
             expect(res.listVariable[res.listVariable.length - 1]).to.deep.include({
                 "id": insertedId,
-                "id_fe": null,
+                "id_fixed_expend": null,
                 "name": "BFF" + name + "changed",
                 "value": 7777,
                 "user_id": userId,

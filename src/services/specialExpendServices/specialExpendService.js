@@ -15,28 +15,28 @@ var specialExpendService = {
         return pool.query(query, rows);
     },
 
-    setSpecialExpend: function(user_id, name, capacity, stock, month, id_fe) {
-        const query = `insert into special_expend(user_id, name,capacity, stock,month,state_code,id_fe) values(?,?,?,?,?,?,?)`;
+    setSpecialExpend: function(user_id, name, capacity, stock, month, id_fixed_expend) {
+        const query = `insert into special_expend(user_id, name,capacity, stock,month,state_code,id_fixed_expend) values(?,?,?,?,?,?,?)`;
         state = 1;
-        rows = [user_id, name, capacity, stock, month, state, id_fe];
+        rows = [user_id, name, capacity, stock, month, state, id_fixed_expend];
         return pool.query(query, rows);
     },
 
-    updateMultipleSpecialExpend: function(id_fe, user_id, name, capacity, month, capacityChanges) {
+    updateMultipleSpecialExpend: function(id_fixed_expend, user_id, name, capacity, month, capacityChanges) {
         if (capacityChanges == 0) {
-            rows = [name, id_fe, user_id];
+            rows = [name, id_fixed_expend, user_id];
             let query = `UPDATE special_expend
                     SET 
                     name = ?
-                    WHERE id_fe = ?
+                    WHERE id_fixed_expend = ?
                     AND user_id = ?`;
             return pool.query(query, rows);
         } else if (capacityChanges == 1) {
-            rows = [capacity, id_fe, user_id, month];
+            rows = [capacity, id_fixed_expend, user_id, month];
             let query = `UPDATE special_expend
                 SET 
                 capacity = ?
-                WHERE id_fe = ?
+                WHERE id_fixed_expend = ?
                 AND user_id = ?
                 AND month >= ?`;
             return pool.query(query, rows);
@@ -56,15 +56,15 @@ var specialExpendService = {
 
 
 
-    deleteMultipleSpecialExpend: function(id_fe, user_id, month) {
+    deleteMultipleSpecialExpend: function(id_fixed_expend, user_id, month) {
         let query = `UPDATE special_expend
                 SET 
                 state_code = ?
-                WHERE id_fe = ?
+                WHERE id_fixed_expend = ?
                 AND user_id = ?
                 AND month >= ?`;
         state = 0;
-        rows = [state, id_fe, user_id, month];
+        rows = [state, id_fixed_expend, user_id, month];
         return pool.query(query, rows);
     }
 }

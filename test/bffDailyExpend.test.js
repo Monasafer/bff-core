@@ -57,7 +57,7 @@ it('Bff GET DAILY-FIXED EXPEND', function(done) {
             if (error) throw new Error(error);
             let res = JSON.parse(response.body);
             expect(res[res.length - 1]).to.deep.include({
-                "id_fe": insertedId,
+                "id_fixed_expend": insertedId,
                 "user_id": userId,
                 "state": 1,
                 "active": 1
