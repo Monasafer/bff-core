@@ -4,8 +4,7 @@ const yup = require('yup');
 const createExpendSchema = yup.object().shape({
     name: yup.string().matches(expresiones.nameValidation, expresiones.invalidName).required(),
     value: yup.number().typeError(expresiones.invalidNumber).positive().required(expresiones.required),
-    month: yup.date().typeError(expresiones.date).required(),
-    isDailyUse: yup.number().required(expresiones.required),
+    month: yup.date().typeError(expresiones.date).required()
 });
 
 const updateExpendSchema = yup.object().shape({

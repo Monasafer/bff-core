@@ -2,11 +2,10 @@ var expect = require('chai').expect;
 var request = require('request');
 const { getToken } = require('./utils')
 
-let userId = 565
+let userId = 35
 let url = 'http://localhost:3000/'
 
 it('Insert FixedExpend', function(done) {
-    console.log("TEST FIXED EXPEND");
     getToken(function(token) {
         var options = {
             'method': 'POST',

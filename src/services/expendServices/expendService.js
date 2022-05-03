@@ -4,8 +4,8 @@ var expendService = {
 
     getExpend: function(user_id) {
         let query;
-        let rows = [user_id, month];
-        query = 'SELECT * FROM expend WHERE (user_id) = ? AND (state)=1 ';
+        let rows = [user_id];
+        query = 'SELECT * FROM expend WHERE (user_id) = ? AND (state)=1';
         return pool.query(query, rows);
     },
 
@@ -34,7 +34,6 @@ var expendService = {
     setMultipleExpends: function(additional) {
         const query = `insert into expend(user_id,name,value,month,state,id_fixed_expend) values ${additional}`;
         rows = [];
-        console.log(query)
         return pool.query(query, rows);
     },
 

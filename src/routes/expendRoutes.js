@@ -15,6 +15,7 @@ router.get('/expend', async(req, res, next) => {
         let listFixed = [];
         let listVariable = [];
         const response = await expendService.getExpend(user_id);
+        
         results = JSON.parse(JSON.stringify(response));
         results.forEach(element => {
             if (element.id_fixed_expend == null) {
@@ -24,7 +25,6 @@ router.get('/expend', async(req, res, next) => {
                 listFixed.push(element);
             }
         });
-        console.log(listFixed, listVariable);
         res.json({
             listFixed,
             listVariable

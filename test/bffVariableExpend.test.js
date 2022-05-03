@@ -4,7 +4,7 @@ var randomstring = require("randomstring");
 let DateGenerator = require('random-date-generator');
 const { getToken } = require('./utils')
 
-let userId = 565;
+let userId = 35;
 let name = randomstring.generate(7);
 let value = 10000
 let fixed = "1";
@@ -17,7 +17,6 @@ let url = 'http://localhost:3000/'
 
 
 it('BFF Create  Variable Expend', function(done) {
-    console.log("TEST BFF VARIABLE EXPEND");
     getToken(function(token) {
         var options = {
             'method': 'POST',
@@ -62,7 +61,6 @@ it('BFF Get No-Fixed Expend', function(done) {
         request(options, function(error, response) {
             if (error) throw new Error(error);
             let res = JSON.parse(response.body);
-            //console.log(res.listVariable[0]);
             expect(res.listVariable[res.listVariable.length - 1]).to.deep.include({
                 "id": insertedId,
                 "id_fixed_expend": null,
@@ -118,7 +116,6 @@ it('BFF Get No-Fixed Expend Updated', function(done) {
         request(options, function(error, response) {
             if (error) throw new Error(error);
             let res = JSON.parse(response.body);
-            //console.log(res.listVariable[0]);
             expect(res.listVariable[res.listVariable.length - 1]).to.deep.include({
                 "id": insertedId,
                 "id_fixed_expend": null,

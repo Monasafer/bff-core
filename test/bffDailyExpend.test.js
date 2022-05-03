@@ -3,7 +3,7 @@ var request = require('request');
 var randomstring = require("randomstring");
 const { getToken } = require('./utils')
 
-let userId = 565
+let userId = 35
 let name = randomstring.generate(7);
 let value = 10000
 let fixed = "1";
@@ -11,7 +11,6 @@ let isDailyUse = "1";
 let month = '2021/01/01';
 let url = 'http://localhost:3000/'
 it('BFF Create  Daily Expend', function(done) {
-    console.log("TEST BFF DAILY EXPEND");
     getToken(function(token) {
         var options = {
             'method': 'POST',
@@ -32,7 +31,6 @@ it('BFF Create  Daily Expend', function(done) {
         request(options, function(error, response) {
             if (error) throw new Error(error);
             let res = JSON.parse(response.body);
-            console.log(res)
             insertedId = res.response.insertId;
 
             expect(res.response.affectedRows).to.above(0)

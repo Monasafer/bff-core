@@ -2,13 +2,12 @@ var expect = require('chai').expect;
 var request = require('request');
 const { getToken } = require('./utils')
 let insertedMonthId;
-let userId = 565
+let userId = 35
 let month = "2021-07-31";
 let verifymonth = "2021-07-31T03:00:00.000Z";
 let url = 'http://localhost:3000/'
 
 it('Insert Month', function(done) {
-    console.log("TEST MONTH");
     getToken(function(token) {
         var options = {
             'method': 'POST',

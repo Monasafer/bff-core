@@ -11,7 +11,6 @@ let url = 'http://localhost:3000/';
 
 
 it('Insert User', function(done) {
-    console.log("TEST USER");
     var options = {
         'method': 'POST',
         'url': url + 'user',

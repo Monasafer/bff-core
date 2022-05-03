@@ -3,7 +3,7 @@ var request = require('request');
 var randomstring = require("randomstring");
 const { getToken } = require('./utils')
 
-let userId = 565;
+let userId = 35;
 let name = randomstring.generate(7);
 let value = 10000
 let fixed = "1";
@@ -13,7 +13,6 @@ let url = 'http://localhost:3000/'
 
 
 it('BFF Create Fixed Expend', function(done) {
-    console.log("TEST BFF FIXED EXPEND");
     getToken(function(token) {
         var options = {
             'method': 'POST',

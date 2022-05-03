@@ -58,11 +58,9 @@ router.put('/user', validations.validateupdate(validations.updateUserSchema), as
         const salt = await bcrypt.genSalt(10);
         new_pass = await bcrypt.hashSync(new_pass, salt);
         const responseGet = await userService.getUserUpdate(user);
-        console.log(responseGet);
         hashPassword = responseGet[0].pass;
         hashPassword.toString();
         let VerifyIdentity = await bcrypt.compareSync(pass, hashPassword);
-        console.log(VerifyIdentity);
         if (VerifyIdentity) {
             response = await userService.updateUser(user, hashPassword, new_pass)
             console.log("userService.updateUser Response : " + JSON.stringify(response));

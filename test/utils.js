@@ -17,7 +17,6 @@ module.exports = {
             if (error) throw new Error(error);
             let res = JSON.parse(response.body);
             token = res.token;
-            //console.log("token: " + token)
             callback(token)
         });
     }

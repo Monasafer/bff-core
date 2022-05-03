@@ -5,7 +5,7 @@ const random = require('random');
 const { getToken } = require('./utils')
 
 let insertedExpendId;
-let userId = 565
+let userId = 35 //User ID del usuario que se usa para generar token : prueba prueba
 let name = randomstring.generate(7);
 let value = 10000
 let valueUpdated = 15000
@@ -33,9 +33,7 @@ it('Insert Variable Expend', function(done) {
         request(options, function(error, response) {
             if (error) throw new Error(error);
             let res = JSON.parse(response.body);
-
             insertedExpendId = res.response.insertId;
-
             expect(res.response.affectedRows).to.equal(1);
             done();
         });
