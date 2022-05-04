@@ -26,9 +26,7 @@ it('BFF Create Month', function(done) {
         request(options, function(error, response) {
             if (error) throw new Error(error);
             let res = JSON.parse(response.body);
-
             insertedMonthId = res.insertId;
-
             expect(res.affectedRows).to.equal(1);
             done();
         });

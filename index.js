@@ -22,7 +22,8 @@ app.use(require('./src/routes/relFixedExpendRoutes'));
 app.use(require('./src/routes/saveRoutes'));
 app.use(require('./src/routes/monaRoutes'));
 app.use(require('./src/routes/userRoutes'));
-app.use(require('./src/routes/bffExpend'));
+app.use(require('./src/routes/bffCreateExpend'));
+app.use(require('./src/routes/bffCreateMonth'));
 app.use(require('./src/routes/monthRoutes'));
 
 //Error handing

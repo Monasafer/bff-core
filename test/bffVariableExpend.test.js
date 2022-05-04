@@ -9,8 +9,6 @@ let name = randomstring.generate(7);
 let value = 10000
 let fixed = "1";
 let NoFixed = "0";
-let isDailyUse = "1";
-let notisDailyUse = "0";
 let month = new Date(DateGenerator.getRandomDate().toDateString());
 let verifyMonth = month.toISOString().split('T')[0];
 let url = 'http://localhost:3000/'
@@ -29,8 +27,7 @@ it('BFF Create  Variable Expend', function(done) {
                 "name": name,
                 "value": value,
                 "month": "2021/10/01",
-                "fixed": NoFixed,
-                "isDailyUse": notisDailyUse
+                "fixed": NoFixed
             })
         };
 

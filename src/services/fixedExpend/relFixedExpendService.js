@@ -15,13 +15,12 @@ var fixedExpendService = {
         let active = 1;
         let state = 1;
         let rows = [month, state, active, user_id, month];
-        let query = `select rel_fixed_expend.id_fixed_expend,rel_fixed_expend.user_id,name,value,month,isDailyUse from rel_fixed_expend
+        let query = `select rel_fixed_expend.id,rel_fixed_expend.user_id,name,value,month from rel_fixed_expend
                      inner join expend 
-                        on rel_fixed_expend.id_fixed_expend = expend.id_fixed_expend
+                        on rel_fixed_expend.id = expend.id_fixed_expend
                         where month <= ?
                         and expend.state = ?
                         and active = ? 
-                        and isSpecial = 0
                         and rel_fixed_expend.user_id = ?
                         and (expend.id_fixed_expend,month) IN 
                             (SELECT expend.id_fixed_expend, MAX(month)
@@ -29,16 +28,6 @@ var fixedExpendService = {
                             where month < ?
                             GROUP BY expend.id_fixed_expend
                             );`;
-        return pool.query(query, rows);
-    },
-
-    getFixedExpendsAndValuesSpecial: function(user_id, month) {
-        let active = 1;
-        let state = 1;
-        let rows = [month, state, active, user_id, month];
-        let query = `select rel_fixed_expend.id_fixed_expend,rel_fixed_expend.user_id,name,capacity,month from rel_fixed_expend 
-        inner join special_expend  on rel_fixed_expend.id_fixed_expend = special_expend.id_fixed_expend where month <= ? and special_expend.state_code = ? and active = ? and isSpecial = 1 and rel_fixed_expend.user_id = ? and (special_expend.id_fixed_expend,month) 
-        IN  (SELECT special_expend.id_fixed_expend, MAX(month) FROM special_expend where month < ? GROUP BY special_expend.id_fixed_expend);`;
         return pool.query(query, rows);
     },
 

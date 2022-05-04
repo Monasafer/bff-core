@@ -36,13 +36,7 @@ var expendService = {
         rows = [];
         return pool.query(query, rows);
     },
-
-    setMultipleSpecialExpends: function(additional) {
-        const query = `insert into special_expend(user_id,name,capacity,stock,month,state_code,id_fixed_expend) values ${additional}`;
-        rows = [];
-        return pool.query(query, rows);
-    },
-
+    
     updateExpend: function(id, user_id, name, value) {
         let query = `UPDATE expend
                 SET 
