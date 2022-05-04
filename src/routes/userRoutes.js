@@ -24,6 +24,7 @@ router.post('/user', validations.validate(validations.createUserSchema), async(r
         let { user, pass, mail } = req.body;
         const salt = await bcrypt.genSalt(10);
         pass = bcrypt.hashSync(pass, salt);
+        console.log("creacion de usuario y contrasenia " + user + " " + pass)
         const response = await userService.setUser(user, pass, mail)
         console.log("userService.setUser Response : " + JSON.stringify(response));
         res.json(response);
@@ -57,11 +58,9 @@ router.put('/user', validations.validateupdate(validations.updateUserSchema), as
         const salt = await bcrypt.genSalt(10);
         new_pass = await bcrypt.hashSync(new_pass, salt);
         const responseGet = await userService.getUserUpdate(user);
-        console.log(responseGet);
         hashPassword = responseGet[0].pass;
         hashPassword.toString();
         let VerifyIdentity = await bcrypt.compareSync(pass, hashPassword);
-        console.log(VerifyIdentity);
         if (VerifyIdentity) {
             response = await userService.updateUser(user, hashPassword, new_pass)
             console.log("userService.updateUser Response : " + JSON.stringify(response));

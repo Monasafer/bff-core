@@ -8,13 +8,25 @@ const {promisify} = require('util');
 //  database: process.env.DATABASE_NAME
 //};
 
-//If you want to run the DB in SQL server or dBeaber you must put: port:3306
+//DEV 
+var db_config = {
+  host: 'us-cdbr-east-04.cleardb.com',
+  user: 'b6371f736dccb4',
+  password: '6dba59ad',
+  database: 'heroku_ed9ac3a741ce980'
+  //PORT 3306
+};
+
+//PROD
 var db_config = {
   host: 'us-cdbr-east-04.cleardb.com',
   user: 'ba46bc2da80b73',
   password: 'd43a9c88f2f5daf',
   database: 'heroku_8a551bcfa4d3d31'
+  //PORT 3306
 };
+
+
 
 const pool = mysql.createPool(db_config);
 

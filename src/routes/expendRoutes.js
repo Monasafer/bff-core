@@ -13,28 +13,20 @@ router.get('/expend', async(req, res, next) => {
         const decode = jwt.verify(token[1], expresiones.secret);
         const user_id = decode.userId;
         let listFixed = [];
-        let listDaily = []
         let listVariable = [];
-        const { fixed } = req.query;
-        const { month } = req.query;
-        const { isDailyUse } = req.query;
-        const response = await expendService.getExpend(user_id, month, null, fixed, isDailyUse);
+        const response = await expendService.getExpend(user_id);
+        
         results = JSON.parse(JSON.stringify(response));
         results.forEach(element => {
-            if (element.isDailyUse == 1) {
-                listDaily.push(element);
-            }
-            if (element.id_fe == null) {
+            if (element.id_fixed_expend == null) {
                 listVariable.push(element);
             }
-            if (element.id_fe != null && element.isDailyUse == 0) {
+            if (element.id_fixed_expend != 1) {
                 listFixed.push(element);
             }
         });
-        console.log(listFixed, listDaily, listVariable);
         res.json({
             listFixed,
-            listDaily,
             listVariable
         });
     } catch (error) {
@@ -50,8 +42,8 @@ router.post('/expend', validate.validate(validate.createExpendSchema), async(req
         const token = userToken.split(' ');
         const decode = jwt.verify(token[1], expresiones.secret);
         const user_id = decode.userId;
-        const { name, value, month, id_fe, isDailyUse } = req.body;
-        const response = await expendService.setExpend(user_id, name, value, month, id_fe, isDailyUse)
+        const { name, value, month, id_fixed_expend } = req.body;
+        const response = await expendService.setExpend(user_id, name, value, month, id_fixed_expend)
         console.log("expendService.setExpend Response : " + JSON.stringify(response));
         error = 0;
         res.json({ error, response });

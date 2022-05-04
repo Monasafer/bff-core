@@ -5,17 +5,15 @@ const random = require('random');
 const { getToken } = require('./utils')
 
 let insertedExpendId;
-let userId = 565
+let userId = 35 //User ID del usuario que se usa para generar token : prueba prueba
 let name = randomstring.generate(7);
 let value = 10000
 let valueUpdated = 15000
 let month = "2021-07-31";
-let id_fe = random.int((min = 0), (max = 55000));
 let verifymonth = "2021-07-31T03:00:00.000Z";
 let url = 'http://localhost:3000/'
 
-it('Insert Expend', function(done) {
-    console.log("TEST EXPEND");
+it('Insert Variable Expend', function(done) {
     getToken(function(token) {
         var options = {
             'method': 'POST',
@@ -28,17 +26,14 @@ it('Insert Expend', function(done) {
                 "name": name,
                 "value": value,
                 "month": month,
-                "id_fe": id_fe,
-                "isDailyUse": "0"
+                "id_fixed_expend": null
             })
         };
 
         request(options, function(error, response) {
             if (error) throw new Error(error);
             let res = JSON.parse(response.body);
-
             insertedExpendId = res.response.insertId;
-
             expect(res.response.affectedRows).to.equal(1);
             done();
         });
@@ -66,8 +61,7 @@ it('Get Expend', function(done) {
                 "value": value,
                 "user_id": userId,
                 "month": verifymonth,
-                "state": 1,
-                "id_fe": id_fe
+                "state": 1
             });
             done();
         })

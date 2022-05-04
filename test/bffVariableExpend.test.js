@@ -4,20 +4,17 @@ var randomstring = require("randomstring");
 let DateGenerator = require('random-date-generator');
 const { getToken } = require('./utils')
 
-let userId = 565;
+let userId = 35;
 let name = randomstring.generate(7);
 let value = 10000
 let fixed = "1";
 let NoFixed = "0";
-let isDailyUse = "1";
-let notisDailyUse = "0";
 let month = new Date(DateGenerator.getRandomDate().toDateString());
 let verifyMonth = month.toISOString().split('T')[0];
 let url = 'http://localhost:3000/'
 
 
 it('BFF Create  Variable Expend', function(done) {
-    console.log("TEST BFF VARIABLE EXPEND");
     getToken(function(token) {
         var options = {
             'method': 'POST',
@@ -30,8 +27,7 @@ it('BFF Create  Variable Expend', function(done) {
                 "name": name,
                 "value": value,
                 "month": "2021/10/01",
-                "fixed": NoFixed,
-                "isDailyUse": notisDailyUse
+                "fixed": NoFixed
             })
         };
 
@@ -62,10 +58,9 @@ it('BFF Get No-Fixed Expend', function(done) {
         request(options, function(error, response) {
             if (error) throw new Error(error);
             let res = JSON.parse(response.body);
-            //console.log(res.listVariable[0]);
             expect(res.listVariable[res.listVariable.length - 1]).to.deep.include({
                 "id": insertedId,
-                "id_fe": null,
+                "id_fixed_expend": null,
                 "name": name,
                 "value": value,
                 "user_id": userId,
@@ -118,10 +113,9 @@ it('BFF Get No-Fixed Expend Updated', function(done) {
         request(options, function(error, response) {
             if (error) throw new Error(error);
             let res = JSON.parse(response.body);
-            //console.log(res.listVariable[0]);
             expect(res.listVariable[res.listVariable.length - 1]).to.deep.include({
                 "id": insertedId,
-                "id_fe": null,
+                "id_fixed_expend": null,
                 "name": "BFF" + name + "changed",
                 "value": 7777,
                 "user_id": userId,
