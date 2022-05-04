@@ -186,7 +186,7 @@ router.delete('/bff/deleteExpend', async(req, res, next) => {
             response = await expendService.deleteExpend(id, user_id);
         } else if (fixed == 1) { //Borra los proximos fixed expends y desactiva el rel fixed expend asociado.
             responseExpend = await expendService.deleteMultipleExpend(id_fixed_expend, user_id, month);
-            responseFixed = await fixedExpendService.deleteFixedExpend(user_id, id_fixed_expend)
+            responseFixed = await fixedExpendService.deactivateFixedExpend(user_id, id_fixed_expend)
             response = Object.assign(responseExpend, responseFixed);
         }
         console.log("ExpendService.DeleteExpend Response: " + JSON.stringify(response));

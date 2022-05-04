@@ -37,8 +37,7 @@ router.post('/relFixedExpend', async(req, res, next) => {
         const token = userToken.split(' ');
         const decode = jwt.verify(token[1], expresiones.secret);
         const user_id = decode.userId;
-        const special = 0;
-        const response = await fixedExpendService.setFixedExpend(user_id, special);
+        const response = await fixedExpendService.setFixedExpend(user_id);
         console.log("FixedExpendService.setFixedExpend Response : " + JSON.stringify(response));
         res.json(response);
     } catch (error) {

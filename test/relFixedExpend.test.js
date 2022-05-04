@@ -45,7 +45,7 @@ it('Get FixedExpend', function(done) {
                 "user_id": userId,
                 "state": 1,
                 "active": 1,
-                "id_fixed_expend": id_fixed_expend
+                "id": id_fixed_expend
             });
             done();
         });

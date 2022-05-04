@@ -62,13 +62,25 @@ var fixedExpendService = {
         return pool.query(query, rows);
     },
 
-    //no es delete, es desactivar. Cambia active a 0 no state a 0. 
     deleteFixedExpend: function(user_id, id_fixed_expend) {
         let query = `UPDATE rel_fixed_expend
             SET 
             state = ?,
             active = ?
-            WHERE id_fixed_expend = ?
+            WHERE id = ?
+            AND user_id = ?`;
+        state = 0;
+        active = 0;
+        rows = [state, active, id_fixed_expend, user_id];
+        return pool.query(query, rows);
+    },
+
+    deactivateFixedExpend: function(user_id, id_fixed_expend) {
+        let query = `UPDATE rel_fixed_expend
+            SET 
+            state = ?,
+            active = ?
+            WHERE id = ?
             AND user_id = ?`;
         state = 1;
         active = 0;
