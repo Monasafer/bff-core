@@ -49,10 +49,10 @@ CREATE TABLE `reserves` (
   `user_id` int(11) NOT NULL,
   `name` text CHARACTER SET latin1 COLLATE latin1_bin NOT NULL,
   `value` int(100) NOT NULL,
-  `available` int(100) NOT NULL,
   `month` date NOT NULL,
   `state` int(1) NOT NULL,
-  `id_fixed_reserve` int(11)
+  `id_fixed_reserve` int(11),
+  `tag`  text CHARACTER SET latin1 COLLATE latin1_bin
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 CREATE TABLE `rel_fixed_reserves` (
