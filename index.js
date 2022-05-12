@@ -16,16 +16,18 @@ app.use(cors({
     allawedHeaders: ['Content-Type']
 })); //este era del live session , cambiarlo por el de localhost:3001 de React 
 
-//Routes
+//CRUD Routes
 app.use(require('./src/routes/expendRoutes'));
 app.use(require('./src/routes/saveRoutes'));
 app.use(require('./src/routes/monaRoutes'));
 app.use(require('./src/routes/userRoutes'));
-app.use(require('./src/routes/bffExpend'));
-app.use(require('./src/routes/bffCreateMonth'));
 app.use(require('./src/routes/monthRoutes'));
 app.use(require('./src/routes/reserveExpend'));
-app.use(require('./src/routes/bffCreateReserve'));
+
+//BFF Routes // Bussiness Logic
+app.use(require('./src/routes/bffExpend'));
+app.use(require('./src/routes/bffMonth'));
+app.use(require('./src/routes/bffReserve'));
 
 //Error handing
 app.use((req, res, next) => {

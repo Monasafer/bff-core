@@ -3,7 +3,7 @@ const pool = require('../../database');
 
 var fixedReserveService = {
 
-    getFixedReserve: function(user_id) {
+    getRelFixedReserve: function(user_id) {
         let active = 1;
         let state = 1;
         let rows = [user_id, active, state];
@@ -12,27 +12,27 @@ var fixedReserveService = {
     },
 
     //TODO : Modificar el nombre de esta funcion y analoga 
-    getFixedReservesAndValues: function(user_id, month) {
+    getRelFixedReservesWithTheLastReserveNameAndValue: function(user_id, month) {
         let active = 1;
         let state = 1;
         let rows = [month, state, active, user_id, month];
         let query = `select rel_fixed_reserves.id,rel_fixed_reserves.user_id,name,value,month from rel_fixed_reserves
-                     inner join reserve 
-                        on rel_fixed_reserves.id = reserve.id_fixed_reserve
+                     inner join reserves 
+                        on rel_fixed_reserves.id = reserves.id_fixed_reserve
                         where month <= ?
-                        and reserve.state = ?
+                        and reserves.state = ?
                         and active = ? 
                         and rel_fixed_reserves.user_id = ?
-                        and (reserve.id_fixed_reserve,month) IN 
-                            (SELECT reserve.id_fixed_reserve, MAX(month)
-                            FROM reserve 
+                        and (reserves.id_fixed_reserve,month) IN 
+                            (SELECT reserves.id_fixed_reserve, MAX(month)
+                            FROM reserves 
                             where month < ?
-                            GROUP BY reserve.id_fixed_reserve
+                            GROUP BY reserves.id_fixed_reserve
                             );`;
         return pool.query(query, rows);
     },
 
-    setFixedReserve: function(user_id) {
+    setRelFixedReserve: function(user_id) {
         const query = `insert into rel_fixed_reserves(user_id,creation_date,state,active) values(?,?,?,?)`;
         state = 1;
         active = 1;
@@ -42,7 +42,7 @@ var fixedReserveService = {
         return pool.query(query, rows);
     },
 
-    updateFixedReserve: function(id_fixed_reserve, user_id, active) {
+    updateRelFixedReserve: function(id_fixed_reserve, user_id, active) {
         let query = `UPDATE rel_fixed_reserves
                 SET 
                 active = ? 
@@ -52,7 +52,7 @@ var fixedReserveService = {
         return pool.query(query, rows);
     },
 
-    deleteFixedReserve: function(user_id, id_fixed_reserve) {
+    deleteRelFixedReserve: function(user_id, id_fixed_reserve) {
         let query = `UPDATE rel_fixed_reserves
             SET 
             state = ?,
@@ -65,7 +65,7 @@ var fixedReserveService = {
         return pool.query(query, rows);
     },
 
-    deactivateFixedReserve: function(user_id, id_fixed_reserve) {
+    deactivateRelFixedReserve: function(user_id, id_fixed_reserve) {
         let query = `UPDATE rel_fixed_reserves
             SET 
             state = ?,

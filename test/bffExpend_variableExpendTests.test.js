@@ -7,13 +7,10 @@ const { getToken } = require('./utils')
 let userId = 35;
 let name = randomstring.generate(7);
 let value = 10000
-let NoFixed = "0";
-let month = new Date(DateGenerator.getRandomDate().toDateString());
-let verifyMonth = month.toISOString().split('T')[0];
 let url = 'http://localhost:3000/'
 
 
-it('BFF Create  Variable Expend', function(done) {
+it('BFF Create Variable Expend', function(done) {
     getToken(function(token) {
         var options = {
             'method': 'POST',
@@ -26,7 +23,7 @@ it('BFF Create  Variable Expend', function(done) {
                 "name": name,
                 "value": value,
                 "month": "2021/10/01",
-                "fixed": NoFixed
+                "fixed": 0
             })
         };
 
@@ -43,7 +40,7 @@ it('BFF Create  Variable Expend', function(done) {
 
 }).timeout(15000);
 
-it('BFF Get No-Fixed Expend', function(done) {
+it('BFF Get Variable Expend', function(done) {
     getToken(function(token) {
         var options = {
             'method': 'GET',
@@ -72,10 +69,10 @@ it('BFF Get No-Fixed Expend', function(done) {
 }).timeout(15000);
 
 
-it('BBF Update No-Fixed Expend', function(done) {
+it('BBF Update Variable Expend', function(done) {
     getToken(function(token) {
         var options = {
-            'method': 'PUT',
+            'method': 'POST',
             'url': url + 'bff/updateExpend?fixed=0&month=2021/10/01&id=' + insertedId,
             'headers': {
                 'Authorization': 'Bearer ' + token,
@@ -83,7 +80,8 @@ it('BBF Update No-Fixed Expend', function(done) {
             },
             body: JSON.stringify({
                 "name": "BFF" + name + "changed",
-                "value": 7777
+                "value": 7777,
+                "fixed": 0
             })
         };
 
@@ -98,11 +96,11 @@ it('BBF Update No-Fixed Expend', function(done) {
 
 }).timeout(15000);
 
-it('BFF Get No-Fixed Expend Updated', function(done) {
+it('BFF Get Variable Expend Updated', function(done) {
     getToken(function(token) {
         var options = {
             'method': 'GET',
-            'url': url + `expend?fixed=0&month=2021/10/01&id=null`,
+            'url': url + `expend?fixed=0&month=2021/10/01`,
             'headers': {
                 'Authorization': 'Bearer ' + token,
                 'Content-Type': 'application/json'

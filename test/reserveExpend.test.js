@@ -1,7 +1,6 @@
 var expect = require('chai').expect;
 var request = require('request');
 var randomstring = require("randomstring");
-const random = require('random');
 const { getToken } = require('./utils')
 
 let insertedReserveId;
@@ -9,8 +8,6 @@ let userId = 35 //User ID del usuario que se usa para generar token : prueba pru
 let name = randomstring.generate(7);
 let value = 10000
 let valueUpdated = 15000
-let month = "2021-07-31";
-let verifymonth = "2021-07-31T03:00:00.000Z";
 let url = 'http://localhost:3000/'
 
 it('BFF Create Fixed Reserve', function(done) {

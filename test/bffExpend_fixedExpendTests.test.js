@@ -10,7 +10,6 @@ let url = 'http://localhost:3000/';
 let userId = 35;
 
 it('BFF Create Fixed Expend', function(done) {
-    console.log("Creando gasto con valores : " + name, value, current_month, fixed)
     getToken(function(token) {
         var options = {
             'method': 'POST',
@@ -31,7 +30,6 @@ it('BFF Create Fixed Expend', function(done) {
             if (error) throw new Error(error);
             let res = JSON.parse(response.body);
             inserted_rel_fixed_expend_id = res.response.insertId;
-            console.log("rel fixed expend insertado:"+inserted_rel_fixed_expend_id)
             expect(res.response.affectedRows).to.above(0)
             done();
         });
@@ -69,7 +67,6 @@ it('BFF Get Fixed Expend for current month', function(done) {
 }).timeout(15000);
 
 it('BFF Update Fixed Expend without modifications', function(done) {
-    console.log("update expend data ", name, value, current_month, fixed, new_fixed_expend_id)
     getToken(function(token) {
         var options = {
             'method': 'POST',
@@ -97,7 +94,6 @@ it('BFF Update Fixed Expend without modifications', function(done) {
 }).timeout(15000);
 
 it('BFF Update Name of Fixed Expend', function(done) {
-    console.log("update expend data ", name, value, current_month, fixed, new_fixed_expend_id)
     getToken(function(token) {
         var options = {
             'method': 'POST',
@@ -117,7 +113,6 @@ it('BFF Update Name of Fixed Expend', function(done) {
         request(options, function(error, response) {
             if (error) throw new Error(error);
             let res = JSON.parse(response.body);
-            console.log("respuesta : " + JSON.stringify(res))
             expect(res.response.affectedRows).to.above(0)
             done();
         });
@@ -126,7 +121,6 @@ it('BFF Update Name of Fixed Expend', function(done) {
 }).timeout(15000);
 
 it('BFF Update Value of Fixed Expend', function(done) {
-    console.log("update expend data ", name, value, current_month, fixed, new_fixed_expend_id)
     getToken(function(token) {
         var options = {
             'method': 'POST',
@@ -146,7 +140,6 @@ it('BFF Update Value of Fixed Expend', function(done) {
         request(options, function(error, response) {
             if (error) throw new Error(error);
             let res = JSON.parse(response.body);
-            console.log("respuesta : " + JSON.stringify(res))
             expect(res.response.affectedRows).to.above(0)
             done();
         });
@@ -155,7 +148,6 @@ it('BFF Update Value of Fixed Expend', function(done) {
 }).timeout(15000);
 
 it('BFF Update Both Value and Name of Fixed Expend', function(done) {
-    console.log("update expend data ", name, value, current_month, fixed, new_fixed_expend_id)
     getToken(function(token) {
         var options = {
             'method': 'POST',
@@ -175,7 +167,6 @@ it('BFF Update Both Value and Name of Fixed Expend', function(done) {
         request(options, function(error, response) {
             if (error) throw new Error(error);
             let res = JSON.parse(response.body);
-            console.log("respuesta : " + JSON.stringify(res))
             expect(res.response.affectedRows).to.above(0)
             done();
         });
