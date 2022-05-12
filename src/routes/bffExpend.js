@@ -50,49 +50,45 @@ router.post('/bff/createExpend', validations.validate(validations.BffCreateExpen
     }
 });
 
-router.put('/bff/updateExpend', validations.validate(validations.BffUpdateExpend), async(req, res, next) => {
+router.post('/bff/updateExpend', validations.validate(validations.BffUpdateExpend), async(req, res, next) => {
     try {
         const userToken = req.headers.authorization;
         const token = userToken.split(' ');
         const decode = jwt.verify(token[1], expresiones.secret);
         const user_id = decode.userId;
-        const { fixed } = req.query;
-        const { month } = req.query;
         const { id } = req.query;
-        const { name, value } = req.body;
-        responseGet = await expendService.getExpend(user_id, month, id, fixed); //looking for the expense to which I refer
+        const { name, value, month, fixed } = req.body;
         if (fixed == 0) { // In case of being variable, I perform update as always -reuse service
             const responseUpdateExpend = await expendService.updateExpend(id, user_id, name, value);
             response = responseUpdateExpend;
             state = 1;
         } else if (fixed == 1) { //In case of being fixed
-            id_fixed_expend = responseGet[0].id_fixed_expend; //capture its id_fixed_expend to make a query
-            fieldName = responseGet[0].name; //capture the name, to see if it is what is modified
-            fieldValue = responseGet[0].value; //capture the value, to see if it is what is modified
-            responseValue = {};
-            responseName = {};
+            console.log("llendo a buscar el gasto " + id)
+            currentExpend = await expendService.getExpendById(user_id, id); //looking for the expense to which I refer
+            id_fixed_expend = currentExpend[0].id_fixed_expend; //capture its id_fixed_expend to make a query
+            fieldName = currentExpend[0].name; //capture the name, to see if it is what is modified
+            fieldValue = currentExpend[0].value; //capture the value, to see if it is what is modified
+            
+            console.log("name " + name)
+            console.log("fieldName " + fieldName)
+            console.log("value " + value)
+            console.log("fieldValue " + fieldValue)
+
             if (name != fieldName) {
-                console.log("Name is changed");
-                additional = 0;
-                responseUpdateMultipleExpend = await expendService.updateMultipleExpend(id_fixed_expend, user_id, name, value, month, 0);
-                console.log("ExpendService.UpdateExpend Response: " + JSON.stringify(responseUpdateMultipleExpend));
-                responseName = responseUpdateMultipleExpend;
+                response = await expendService.updateMultipleExpend(id_fixed_expend, user_id, name, value, month, 0);
             }
             if (value != fieldValue) {
-                console.log("Value is modified");
-                responseUpdateMultipleExpend = await expendService.updateMultipleExpend(id_fixed_expend, user_id, name, value, month, 1);
-                console.log("ExpendService.UpdateExpend Response: " + JSON.stringify(responseUpdateMultipleExpend));
-                responseValue = responseUpdateMultipleExpend;
+                response = await expendService.updateMultipleExpend(id_fixed_expend, user_id, name, value, month, 1);
             }
-            response = Object.assign(responseValue, responseName);
             if (value == fieldValue && name == fieldName) {
+                console.log("No modifications have been made'")
                 response = { message: 'No modifications have been made' };
             }
-            error = 0;
+            response = Object.assign(response);
         } else {
             response = { message: 'It must be defined if the value is fixed or variable correctly' }
-            error = 0;
         }
+        error = 0;            
         console.log("ExpendService.UpdateExpend Response: " + JSON.stringify(response));
         res.json({ error, response });
     } catch (error) {
@@ -100,7 +96,7 @@ router.put('/bff/updateExpend', validations.validate(validations.BffUpdateExpend
     }
 })
 
-router.put('/bff/payExpend', async(req, res, next) => {
+router.post('/bff/payExpend', async(req, res, next) => {
     try {
         const userToken = req.headers.authorization;
         const token = userToken.split(' ');

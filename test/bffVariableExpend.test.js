@@ -7,7 +7,6 @@ const { getToken } = require('./utils')
 let userId = 35;
 let name = randomstring.generate(7);
 let value = 10000
-let fixed = "1";
 let NoFixed = "0";
 let month = new Date(DateGenerator.getRandomDate().toDateString());
 let verifyMonth = month.toISOString().split('T')[0];

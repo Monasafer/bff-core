@@ -100,29 +100,6 @@ router.put('/bff/updateReserve', validations.validate(validations.BffUpdateReser
     }
 })
 
-router.put('/bff/payReserve', async(req, res, next) => {
-    try {
-        const userToken = req.headers.authorization;
-        const token = userToken.split(' ');
-        const decode = jwt.verify(token[1], expresiones.secret);
-        const user_id = decode.userId;
-        const { id } = req.query;
-        responseGet = await reserveService.getPayedDataReserve(user_id, id); //looking for the expense to which I refer
-        console.log(responseGet)
-        let isPayed = responseGet[0].payed
-        if (isPayed == 0) {
-            isPayed = 1
-        } else {
-            isPayed = 0
-        }
-        const responseUpdateReserve = await reserveService.updatePayedReserve(id, user_id, isPayed);
-        console.log("ReserveService.UpdateReserve Response: " + JSON.stringify(responseUpdateReserve));
-        res.json({ error, responseUpdateReserve });
-    } catch (error) {
-        next(error);
-    }
-})
-
 router.delete('/bff/deleteReserve', async(req, res, next) => {
     try {
         const userToken = req.headers.authorization;

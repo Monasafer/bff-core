@@ -9,6 +9,14 @@ var expendService = {
         return pool.query(query, rows);
     },
 
+    getExpendById: function(user_id, id) {
+        console.log("query to user id , id", user_id, id)
+        let query;
+        let rows = [user_id, id];
+        query = 'SELECT * FROM expend WHERE (user_id) = ? AND (state)=1  AND (id)=?';
+        return pool.query(query, rows);
+    },
+
     getExpendByMonth: function(user_id, month) {
         let query;
         let rows = [user_id, month];
@@ -58,8 +66,8 @@ var expendService = {
         return pool.query(query, rows);
     },
 
-    updateMultipleExpend: function(id_fixed_expend, user_id, name, value, month, valueChanges) {
-        if (valueChanges == 0) {
+    updateMultipleExpend: function(id_fixed_expend, user_id, name, value, month, modifyOnlySubsequentMonths) {
+        if (modifyOnlySubsequentMonths == 0) {
             rows = [name, id_fixed_expend, user_id];
             let query = `UPDATE expend
                     SET 
@@ -67,7 +75,7 @@ var expendService = {
                     WHERE id_fixed_expend = ?
                     AND user_id = ?`;
             return pool.query(query, rows);
-        } else if (valueChanges == 1) {
+        } else if (modifyOnlySubsequentMonths == 1) {
             rows = [value, id_fixed_expend, user_id, month];
             let query = `UPDATE expend
                 SET 
