@@ -2,12 +2,12 @@ const express = require('express');
 const expendService = require('../services/expendServices/expendService');
 const fixedExpendService = require('../services/fixedExpend/relFixedExpendService');
 const monthService = require('../services/monthServices/monthService');
-const validations = require('../services/bffExpendServices/validationsBffExpend')
+const validations = require('../services/monthServices/validationsMonth')
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 const expresiones = require('../services/expressions');
 
-router.post('/bff/createMonth', validations.validate(validations.BffCreateMonth), async(req, res, next) => { 
+router.post('/bff/createMonth', validations.validate(validations.createMonthSchema), async(req, res, next) => { 
     try {
         const userToken = req.headers.authorization;
         const token = userToken.split(' ');

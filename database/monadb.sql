@@ -66,6 +66,7 @@ CREATE TABLE `rel_fixed_reserves` (
 CREATE TABLE `reserves_expends` (
   `id` int(11) NOT null AUTO_INCREMENT PRIMARY KEY,
   `user_id` int(11) NOT NULL,
+  `name` text CHARACTER SET latin1 COLLATE latin1_bin NOT NULL,
   `creation_date` date NOT NULL,
   `state` int(1) NOT NULL,
   `value` int(11) NOT NULL,

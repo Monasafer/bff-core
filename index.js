@@ -24,6 +24,8 @@ app.use(require('./src/routes/userRoutes'));
 app.use(require('./src/routes/bffCreateExpend'));
 app.use(require('./src/routes/bffCreateMonth'));
 app.use(require('./src/routes/monthRoutes'));
+app.use(require('./src/routes/reserveExpend'));
+app.use(require('./src/routes/bffCreateReserve'));
 
 //Error handing
 app.use((req, res, next) => {
