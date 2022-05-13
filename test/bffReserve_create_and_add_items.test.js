@@ -1,125 +1,113 @@
 var expect = require('chai').expect;
 var request = require('request');
 var randomstring = require("randomstring");
-let DateGenerator = require('random-date-generator');
 const { getToken } = require('./utils')
 
-let userId = 35;
-let name = randomstring.generate(7);
-let value = 10000
+let month = '2022/01/01';
 let url = 'http://localhost:3000/'
 
-
-it('BFF Create Variable Expend', function(done) {
+it('BFF Create Variable Reserve', function(done) {
+    let name = randomstring.generate(7);
     getToken(function(token) {
         var options = {
             'method': 'POST',
-            'url': url + 'bff/createExpend',
+            'url': url + 'bff/createReserve',
             'headers': {
                 'Authorization': 'Bearer ' + token,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
                 "name": name,
-                "value": value,
-                "month": "2021/10/01",
-                "fixed": 0
+                "value": 400,
+                "month": month,
+                "fixed": "0"
             })
         };
 
         request(options, function(error, response) {
             if (error) throw new Error(error);
             let res = JSON.parse(response.body);
-
-            insertedId = res.response.insertId;
-
-            expect(res.response.affectedRows).to.equal(1);
+            insertedReserveId = res.response.insertId;
+            expect(res.response.affectedRows).to.above(0)
             done();
         });
     })
 
 }).timeout(15000);
 
-it('BFF Get Variable Expend', function(done) {
-    getToken(function(token) {
-        var options = {
-            'method': 'GET',
-            'url': url + `expend?fixed=0&month=2021/10/01&id=null`,
-            'headers': {
-                'Authorization': 'Bearer ' + token,
-                'Content-Type': 'application/json'
-            },
-        };
-
-        request(options, function(error, response) {
-            if (error) throw new Error(error);
-            let res = JSON.parse(response.body);
-            expect(res.listVariable[res.listVariable.length - 1]).to.deep.include({
-                "id": insertedId,
-                "id_fixed_expend": null,
-                "name": name,
-                "value": value,
-                "user_id": userId,
-                "state": 1
-            });
-            done();
-        });
-    })
-
-}).timeout(15000);
-
-
-it('BBF Update Variable Expend', function(done) {
+it('Insert ReserveExpend', function(done) {
+    let name = randomstring.generate(7);
     getToken(function(token) {
         var options = {
             'method': 'POST',
-            'url': url + 'bff/updateExpend?fixed=0&month=2021/10/01&id=' + insertedId,
+            'url': url + 'reserveExpend',
             'headers': {
                 'Authorization': 'Bearer ' + token,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                "name": "BFF" + name + "changed",
-                "value": 7777,
-                "fixed": 0
+                "name": name,
+                "value": 103,
+                "reserve_id": insertedReserveId
             })
         };
 
         request(options, function(error, response) {
             if (error) throw new Error(error);
             let res = JSON.parse(response.body);
+            insertedReserveExpendId = res.response.insertId;
             expect(res.response.affectedRows).to.equal(1);
-            expect(res.response.changedRows).to.equal(1);
             done();
         });
     })
-
 }).timeout(15000);
 
-it('BFF Get Variable Expend Updated', function(done) {
+it('Insert Second ReserveExpend', function(done) {
+    let name = randomstring.generate(7);
     getToken(function(token) {
         var options = {
-            'method': 'GET',
-            'url': url + `expend?fixed=0&month=2021/10/01`,
+            'method': 'POST',
+            'url': url + 'reserveExpend',
             'headers': {
                 'Authorization': 'Bearer ' + token,
                 'Content-Type': 'application/json'
             },
+            body: JSON.stringify({
+                "name": name,
+                "value": 104,
+                "reserve_id": insertedReserveId
+            })
         };
 
         request(options, function(error, response) {
             if (error) throw new Error(error);
             let res = JSON.parse(response.body);
-            expect(res.listVariable[res.listVariable.length - 1]).to.deep.include({
-                "id": insertedId,
-                "id_fixed_expend": null,
-                "name": "BFF" + name + "changed",
-                "value": 7777,
-                "user_id": userId,
-                "state": 1
-            });
+            insertedReserveExpendId = res.response.insertId;
+            expect(res.response.affectedRows).to.equal(1);
+            done();
+        });
+    })
+}).timeout(15000);
+
+it('BFF Get Reserves With Reserve_Expends', function(done) {
+    getToken(function(token) {
+        var options = {
+            'method': 'GET',
+            'url': url + 'bff/getReservesWithReserveExpends?month='+month,
+            'headers': {
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/json'
+            }
+        };
+
+        request(options, function(error, response) {
+            if (error) throw new Error(error);
+            let res = JSON.parse(response.body);
+            console.log(JSON.stringify(res))
+            expect(res.reserves.length).to.above(0)
             done();
         });
     })
 
 }).timeout(15000);
+

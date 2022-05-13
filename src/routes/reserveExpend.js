@@ -13,7 +13,7 @@ router.get('/reserveExpend', async(req, res, next) => {
         const decode = jwt.verify(token[1], expresiones.secret);
         const user_id = decode.userId;
         const { reserve_id } = req.query;
-        const response = await reserveExpendService.getReserveExpendByReserve(user_id, reserve_id);
+        const response = await reserveExpendService.getReserveExpendByFatherReserveId(user_id, reserve_id);
         console.log("reserveExpendService.getReserveExpend Response : " + JSON.stringify(response));
         res.json({ error, response });
 

@@ -9,17 +9,17 @@ var reservesService = {
         return pool.query(query, rows);
     },
 
-    getReserveByMonth: function(user_id, month) {
+    getReservesByMonth: function(user_id, month) {
         let query;
         let rows = [user_id, month];
         query = 'SELECT * FROM reserves WHERE (user_id) = ? AND (month) = ? AND (state)=1 ';
         return pool.query(query, rows);
     },
 
-    setReserve: function(user_id, name, value, available, month, id_fixed_reserve) {
-        const query = `insert into reserves(user_id,name,value,month,state,id_fixed_reserve) values(?,?,?,?,?,?,?)`;
+    setReserve: function(user_id, name, value, month, id_fixed_reserve) {
+        const query = `insert into reserves(user_id,name,value,month,state,id_fixed_reserve) values(?,?,?,?,?,?)`;
         state = 1;
-        rows = [user_id, name, value, available, month, state, id_fixed_reserve]
+        rows = [user_id, name, value, month, state, id_fixed_reserve]
         return pool.query(query, rows);
     },
 

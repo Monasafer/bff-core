@@ -32,7 +32,7 @@ router.post('/bff/createExpend', validations.validate(validations.BffCreateExpen
             additional = additional.substring(0, additional.length - 1);
             const responseMultipleExpend = await expendService.setMultipleExpends(additional);
             console.log("expendService.setExpend Response : " + JSON.stringify(responseMultipleExpend));
-            response = responseFixed;
+            response = responseMultipleExpend;
             error = 0;
         } else if (fixed == 0) {
             id_rel_fixed_expend = null;

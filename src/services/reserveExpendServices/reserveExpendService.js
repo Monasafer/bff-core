@@ -1,8 +1,8 @@
 const pool = require('../../database');
 
-var expendService = {
+var reserveExpendService = {
 
-    getReserveExpendByReserve: function(user_id, reserve_id) {
+    getReserveExpendByFatherReserveId: function(user_id, reserve_id) {
         let query;
         let rows = [user_id, reserve_id];
         query = 'SELECT * FROM reserves_expends WHERE (user_id) = ? AND (reserve_id) = ? AND (state)=1';
@@ -45,4 +45,4 @@ var expendService = {
     }
 }
 
-module.exports = expendService;
+module.exports = reserveExpendService;

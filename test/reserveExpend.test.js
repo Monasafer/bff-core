@@ -21,8 +21,8 @@ it('BFF Create Fixed Reserve', function(done) {
             },
             body: JSON.stringify({
                 "name": randomstring.generate(7),
-                "value": 10000,
-                "month": '2021/10/01',
+                "value": 400,
+                "month": '2002/01/01',
                 "fixed": "1"
             })
         };

@@ -1,5 +1,6 @@
 const express = require('express');
 const reserveService = require('../services/reserveServices/reserveService');
+const reserveExpendService = require('../services/reserveExpendServices/reserveExpendService');
 const relFixedReserveService = require('../services/relFixedReserve/relFixedReserveService');
 const monthService = require('../services/monthServices/monthService');
 const validations = require('../services/bffReserveServices/validationsBffReserve')
@@ -9,6 +10,7 @@ const jwt = require('jsonwebtoken');
 const expresiones = require('../services/expressions');
 
 
+//If reserve is fixed this endpoint will create the reserve for all the existed months
 router.post('/bff/createReserve', validations.validate(validations.BffCreateReserve), async(req, res, next) => {
     try {
         const userToken = req.headers.authorization;
@@ -32,7 +34,7 @@ router.post('/bff/createReserve', validations.validate(validations.BffCreateRese
             additional = additional.substring(0, additional.length - 1);
             const responseMultipleReserve = await reserveService.setMultipleReserves(additional);
             console.log("reserveService.setReserve Response : " + JSON.stringify(responseMultipleReserve));
-            response = responseFixed;
+            response = responseMultipleReserve;
             error = 0;
         } else if (fixed == 0) {
             id_rel_fixed_reserve = null;
@@ -48,6 +50,34 @@ router.post('/bff/createReserve', validations.validate(validations.BffCreateRese
     } catch (error) {
         next(error)
     }
+});
+
+router.get('/bff/getReservesWithReserveExpends', async(req, res, next) => {
+    try {
+        const userToken = req.headers.authorization;
+        const token = userToken.split(' ');
+        const decode = jwt.verify(token[1], expresiones.secret);
+        const user_id = decode.userId;
+        const { month } = req.query;
+        let items = [];
+        let listReserves = await reserveService.getReservesByMonth(user_id, month);
+        let reserves = []
+        
+        reservesAux = JSON.parse(JSON.stringify(listReserves));
+
+        for (const reserve of reservesAux) {
+            items = await reserveExpendService.getReserveExpendByFatherReserveId(user_id, reserve.id)
+            if (items != null) {
+                reserves.push({reserve, items});
+            }
+        }
+        res.json({
+            reserves
+        });
+    } catch (error) {
+        next(error)
+    }
+
 });
 
 router.post('/bff/updateReserve', validations.validate(validations.BffUpdateReserve), async(req, res, next) => {

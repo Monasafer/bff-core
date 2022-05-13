@@ -29,7 +29,7 @@ it('BFF Create Fixed Expend', function(done) {
         request(options, function(error, response) {
             if (error) throw new Error(error);
             let res = JSON.parse(response.body);
-            inserted_rel_fixed_expend_id = res.response.insertId;
+            inserted_expend_id = res.response.insertId;
             expect(res.response.affectedRows).to.above(0)
             done();
         });
@@ -53,7 +53,6 @@ it('BFF Get Fixed Expend for current month', function(done) {
             let res = JSON.parse(response.body);
             new_fixed_expend_id = res.listFixed[res.listFixed.length - 1]
             expect(new_fixed_expend_id).to.deep.include({
-                "id_fixed_expend": inserted_rel_fixed_expend_id, //valido que corresponda al rel_fixed_expend que cree, no conozco el id del gasto que se creó
                 "name": name,
                 "value": value,
                 "user_id": userId,
