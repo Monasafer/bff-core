@@ -51,7 +51,7 @@ it('BFF Get Fixed Expend for current month', function(done) {
         request(options, function(error, response) {
             if (error) throw new Error(error);
             let res = JSON.parse(response.body);
-            new_fixed_expend_id = res.listFixed[res.listFixed.length - 1]
+            new_fixed_expend_id = res.listFixed[res.listFixed.length - 1] //tomo el id del ultimo expend
             expect(new_fixed_expend_id).to.deep.include({
                 "name": name,
                 "value": value,

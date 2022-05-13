@@ -9,6 +9,14 @@ var reservesService = {
         return pool.query(query, rows);
     },
 
+    getReserveById: function(user_id, id) {
+        console.log("query to user id , id", user_id, id)
+        let query;
+        let rows = [user_id, id];
+        query = 'SELECT * FROM reserves WHERE (user_id) = ? AND (state)=1  AND (id)=?';
+        return pool.query(query, rows);
+    },
+
     getReservesByMonth: function(user_id, month) {
         let query;
         let rows = [user_id, month];
@@ -40,8 +48,8 @@ var reservesService = {
         return pool.query(query, rows);
     },
 
-    updateMultipleReserve: function(id_fixed_reserve, user_id, name, value, month, valueChanges) {
-        if (valueChanges == 0) {
+    updateMultipleReserve: function(id_fixed_reserve, user_id, name, value, month, modifyOnlySubsequentMonths) {
+        if (modifyOnlySubsequentMonths == 0) {
             rows = [name, id_fixed_reserve, user_id];
             let query = `UPDATE reserves
                     SET 
@@ -49,7 +57,7 @@ var reservesService = {
                     WHERE id_fixed_reserve = ?
                     AND user_id = ?`;
             return pool.query(query, rows);
-        } else if (valueChanges == 1) {
+        } else if (modifyOnlySubsequentMonths == 1) {
             rows = [value, id_fixed_reserve, user_id, month];
             let query = `UPDATE reserves
                 SET 

@@ -1,7 +1,6 @@
 var expect = require('chai').expect;
 var request = require('request');
 var randomstring = require("randomstring");
-let DateGenerator = require('random-date-generator');
 const { getToken } = require('./utils')
 
 let userId = 35;

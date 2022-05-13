@@ -6,7 +6,7 @@ const { getToken } = require('./utils')
 let month = '1996/01/01';
 let url = 'http://localhost:3000/'
 
-it('BFF Create Variable Reserve', function(done) { //no funciona el test con Fixed expend porq fixed expend responde un id random de todas las reservas fijas que se crearon
+it('BFF Create Variable Reserve for item creation', function(done) { //no funciona el test con Fixed reserve porq responde un id random de todas las reservas fijas que se crearon
     let name = randomstring.generate(7);
     getToken(function(token) {
         var options = {

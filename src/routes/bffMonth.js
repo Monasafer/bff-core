@@ -19,9 +19,7 @@ router.post('/bff/createMonth', validations.validate(validations.createMonthSche
         const state = 1;
         expensesToAdd = "";
         reservesToAdd = "";
-        console.log("crear month con datos: " + user_id, req.body.month)
         let response = await monthService.getMonth(user_id, month)
-        console.log("crear month response: " + JSON.stringify(response))
 
         if (response[0] == undefined) { //If the month does not exist
             month_id_created = await monthService.setMonth(user_id, month) //create the month

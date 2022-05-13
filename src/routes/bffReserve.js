@@ -21,17 +21,18 @@ router.post('/bff/createReserve', validations.validate(validations.BffCreateRese
         const { name, value, month, fixed } = req.body;
         let additional = '';
         let id_rel_fixed_reserve;
-        let futureMonth;
 
         if (fixed == 1) {
             const responseFixed = await relFixedReserveService.setRelFixedReserve(user_id);
             id_rel_fixed_reserve = responseFixed.insertId; //capture the id inserted in FixedReserve
+            additional = `(${user_id},"${name}",${value},"${month}",${state},${id_rel_fixed_reserve})` //El primero es el que se esta creando. termina sin coma al final, por que va a ser el ultimo.
+            
             const responseMonths = await monthService.getFutureMonths(user_id, month);
             for (i in responseMonths) {
-                futureMonth = responseMonths[i].month.getFullYear() + '/' + (responseMonths[i].month.getMonth() + 1) + '/0' + responseMonths[i].month.getDate();
-                additional = `(${user_id},"${name}",${value},"${futureMonth}",${state},${id_rel_fixed_reserve}),` + additional;
+                auxMoth = responseMonths[i].month.toISOString().split("T")[0]
+                additional = `(${user_id},"${name}",${value},"${auxMoth}",${state},${id_rel_fixed_reserve}),` + additional;
             }
-            additional = additional.substring(0, additional.length - 1);
+            
             const responseMultipleReserve = await reserveService.setMultipleReserves(additional);
             console.log("reserveService.setReserve Response : " + JSON.stringify(responseMultipleReserve));
             response = responseMultipleReserve;
