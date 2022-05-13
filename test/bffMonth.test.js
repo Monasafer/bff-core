@@ -4,8 +4,7 @@ let DateGenerator = require('random-date-generator');
 const { getToken } = require('./utils')
 let insertedMonthId;
 let userId = 35
-let month = new Date(DateGenerator.getRandomDate().toDateString());
-let verifyMonth = month.toISOString().split('T')[0];
+let month = new Date(DateGenerator.getRandomDate().toDateString()); //TODO : Ver que este month se genere siempre con horario en cero. Que pasa si no mando el horario ?
 let url = 'http://localhost:3000/'
 
 it('BFF Create Month', function(done) {
@@ -18,7 +17,7 @@ it('BFF Create Month', function(done) {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                "month": month
+                "month": month 
             })
         };
 
@@ -37,7 +36,7 @@ it('BFF Get Month', function(done) {
     getToken(function(token) {
         var options = {
             'method': 'GET',
-            'url': url + `month?month=${verifyMonth}`,
+            'url': url + `month?month=${formatDate(month.toISOString())}`,
             'headers': {
                 'Authorization': 'Bearer ' + token,
                 'Content-Type': 'application/json'
@@ -47,10 +46,11 @@ it('BFF Get Month', function(done) {
         request(options, function(error, response) {
             if (error) throw new Error(error);
             let res = JSON.parse(response.body);
-            expect(res[res.length - 1]).to.deep.include({
+            lastMonth = res[res.length - 1]
+            expect(formatDate(lastMonth.month)).equals(formatDate(month.toISOString()))
+            expect(lastMonth).to.deep.include({
                 "id": insertedMonthId,
                 "user_id": userId,
-                "month": verifyMonth + "T03:00:00.000Z",
                 "state": 1
             });
             done();
@@ -58,3 +58,7 @@ it('BFF Get Month', function(done) {
     })
 
 }).timeout(15000);
+
+function formatDate(date){
+    return date.split('T')[0]; 
+}

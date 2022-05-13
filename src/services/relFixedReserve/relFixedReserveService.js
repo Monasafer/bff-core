@@ -12,7 +12,7 @@ var fixedReserveService = {
     },
 
     //TODO : Modificar el nombre de esta funcion y analoga 
-    getRelFixedReservesWithTheLastReserveNameAndValue: function(user_id, month) {
+    getActiveFixedReservesBeforeMonth: function(user_id, month) {
         let active = 1;
         let state = 1;
         let rows = [month, state, active, user_id, month];

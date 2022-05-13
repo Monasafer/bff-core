@@ -27,13 +27,13 @@ router.post('/bff/createMonth', validations.validate(validations.createMonthSche
             month_id_created = await monthService.setMonth(user_id, month) //create the month
 
             //Creation of new fixed expends
-            relFixedExpendsWithTheLastExpendNameAndValue = await relFixedExpendService.getRelFixedExpendsWithTheLastExpendNameAndValue(user_id, month);
-            if (relFixedExpendsWithTheLastExpendNameAndValue[0] != undefined) {
+            activesFixedExpendsBeforeMonth = await relFixedExpendService.getActiveFixedExpendsBeforeMonth(user_id, month);
+            if (activesFixedExpendsBeforeMonth[0] != undefined) {
                 month = JSON.stringify(month);
-                for (i in relFixedExpendsWithTheLastExpendNameAndValue) { //loop through the get with its values
-                    id_rel_fixed_expend = relFixedExpendsWithTheLastExpendNameAndValue[i].id_rel_fixed_expend;
-                    value = relFixedExpendsWithTheLastExpendNameAndValue[i].value;
-                    name = JSON.stringify(relFixedExpendsWithTheLastExpendNameAndValue[i].name);
+                for (i in activesFixedExpendsBeforeMonth) { //loop through the get with its values
+                    id_rel_fixed_expend = activesFixedExpendsBeforeMonth[i].id;
+                    value = activesFixedExpendsBeforeMonth[i].value;
+                    name = JSON.stringify(activesFixedExpendsBeforeMonth[i].name);
                     expensesToAdd = `(${user_id},${name},${value},${month},${state},${id_rel_fixed_expend}),` + expensesToAdd; 
                 }
                 expensesToAdd = expensesToAdd.substring(0, expensesToAdd.length - 1);
@@ -41,13 +41,13 @@ router.post('/bff/createMonth', validations.validate(validations.createMonthSche
             }
 
             //Creation of new fixed reserves
-            relFixedReservesWithTheLastReserveNameAndValue = await relFixedReserveService.getRelFixedReservesWithTheLastReserveNameAndValue(user_id, month);
-            if (relFixedReservesWithTheLastReserveNameAndValue[0] != undefined) {
+            activeFixedReservesBeforeMonth = await relFixedReserveService.getActiveFixedReservesBeforeMonth(user_id, month);
+            if (activeFixedReservesBeforeMonth[0] != undefined) {
                 month = JSON.stringify(month);
-                for (i in relFixedReservesWithTheLastReserveNameAndValue) { //loop through the get with its values
-                    id_rel_fixed_reserve = relFixedReservesWithTheLastReserveNameAndValue[i].id_rel_fixed_reserve;
-                    value = relFixedReservesWithTheLastReserveNameAndValue[i].value;
-                    name = JSON.stringify(relFixedReservesWithTheLastReserveNameAndValue[i].name);
+                for (i in activeFixedReservesBeforeMonth) { //loop through the get with its values
+                    id_rel_fixed_reserve = activeFixedReservesBeforeMonth[i].id;
+                    value = activeFixedReservesBeforeMonth[i].value;
+                    name = JSON.stringify(activeFixedReservesBeforeMonth[i].name);
                     reservesToAdd = `(${user_id},${name},${value},${month},${state},${id_rel_fixed_reserve}),` + reservesToAdd; 
                 }
                 reservesToAdd = reservesToAdd.substring(0, reservesToAdd.length - 1);

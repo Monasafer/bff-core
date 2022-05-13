@@ -11,8 +11,8 @@ var relFixedExpendService = {
         return pool.query(query, rows);
     },
 
-    getRelFixedExpendsWithTheLastExpendNameAndValue: function(user_id, month) {
-        let rows = [month, , user_id, month];
+    getActiveFixedExpendsBeforeMonth: function(user_id, month) {
+        let rows = [month, user_id, month];
         let query = `select rel_fixed_expend.id, rel_fixed_expend.user_id, name, value, month from rel_fixed_expend
                      inner join expend 
                         on rel_fixed_expend.id = expend.id_fixed_expend
