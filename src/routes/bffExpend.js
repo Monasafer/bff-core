@@ -19,17 +19,18 @@ router.post('/bff/createExpend', validations.validate(validations.BffCreateExpen
         const { name, value, month, fixed } = req.body;
         let additional = '';
         let id_rel_fixed_expend;
-        let futureMonth;
 
         if (fixed == 1) {
             const responseFixed = await relFixedExpendService.setRelFixedExpend(user_id);
             id_rel_fixed_expend = responseFixed.insertId; //capture the id inserted in FixedExpend
+            additional = `(${user_id},"${name}",${value},"${month}",${state},${id_rel_fixed_expend})` + additional;
+
             const responseMonths = await monthService.getFutureMonths(user_id, month);
             for (i in responseMonths) {
-                futureMonth = responseMonths[i].month.getFullYear() + '/' + (responseMonths[i].month.getMonth() + 1) + '/0' + responseMonths[i].month.getDate();
-                additional = `(${user_id},"${name}",${value},"${futureMonth}",${state},${id_rel_fixed_expend}),` + additional;
+                auxMoth = responseMonths[i].month.toISOString().split("T")[0]
+                additional = `(${user_id},"${name}",${value},"${auxMoth}",${state},${id_rel_fixed_expend}),` + additional;
             }
-            additional = additional.substring(0, additional.length - 1);
+            
             const responseMultipleExpend = await expendService.setMultipleExpends(additional);
             console.log("expendService.setExpend Response : " + JSON.stringify(responseMultipleExpend));
             response = responseMultipleExpend;
@@ -48,6 +49,37 @@ router.post('/bff/createExpend', validations.validate(validations.BffCreateExpen
     } catch (error) {
         next(error)
     }
+});
+
+router.get('/bff/getExpenses', async(req, res, next) => {
+    try {
+        const userToken = req.headers.authorization;
+        const token = userToken.split(' ');
+        const decode = jwt.verify(token[1], expresiones.secret);
+        const user_id = decode.userId;
+        const { month } = req.query;
+        let fixedExpends = [];
+        let variableExpends = [];
+        const response = await expendService.getExpendByMonth(user_id, month);
+        
+        results = JSON.parse(JSON.stringify(response));
+        results.forEach(element => {
+            if (element.id_fixed_expend == null) {
+                variableExpends.push(element);
+            }
+            if (element.id_fixed_expend != null) {
+                fixedExpends.push(element);
+            }
+        });
+        res.json({
+            fixedExpends,
+            variableExpends
+        });
+
+    } catch (error) {
+        next(error)
+    }
+
 });
 
 router.post('/bff/updateExpend', validations.validate(validations.BffUpdateExpend), async(req, res, next) => {

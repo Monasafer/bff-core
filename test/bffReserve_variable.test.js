@@ -40,7 +40,7 @@ it('BFF Get Reserves With Reserve_Expends for current month', function(done) {
     getToken(function(token) {
         var options = {
             'method': 'GET',
-            'url': url + 'bff/getReservesWithReserveExpends?month='+month,
+            'url': url + 'bff/getReserves?month='+month,
             'headers': {
                 'Authorization': 'Bearer ' + token,
                 'Content-Type': 'application/json'
@@ -50,8 +50,8 @@ it('BFF Get Reserves With Reserve_Expends for current month', function(done) {
         request(options, function(error, response) {
             if (error) throw new Error(error);
             let res = JSON.parse(response.body);
-            new_fixed_reserve_id = res.reserves[res.reserves.length - 1].reserve.id //tomo el id del ultimo expend
-            expect(res.reserves.length).to.above(0)
+            new_fixed_reserve_id = res.variableReserves[res.variableReserves.length - 1].reserve_id //tomo el id del ultimo expend
+            expect(res.variableReserves.length).to.above(0)
             done();
         });
     })
@@ -145,7 +145,7 @@ it('BFF Get Reserves With Reserve_Expends for current month Updateds', function(
     getToken(function(token) {
         var options = {
             'method': 'GET',
-            'url': url + 'bff/getReservesWithReserveExpends?month='+month,
+            'url': url + 'bff/getReserves?month='+month,
             'headers': {
                 'Authorization': 'Bearer ' + token,
                 'Content-Type': 'application/json'
@@ -155,7 +155,7 @@ it('BFF Get Reserves With Reserve_Expends for current month Updateds', function(
         request(options, function(error, response) {
             if (error) throw new Error(error);
             let res = JSON.parse(response.body);
-            expect(res.reserves.length).to.above(0)
+            expect(res.variableReserves.length).to.above(0)
             done();
         });
     })

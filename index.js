@@ -17,7 +17,6 @@ app.use(cors({
 })); //este era del live session , cambiarlo por el de localhost:3001 de React 
 
 //CRUD Routes
-app.use(require('./src/routes/expendRoutes'));
 app.use(require('./src/routes/saveRoutes'));
 app.use(require('./src/routes/monaRoutes'));
 app.use(require('./src/routes/userRoutes'));

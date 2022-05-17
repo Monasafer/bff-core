@@ -53,28 +53,56 @@ router.post('/bff/createReserve', validations.validate(validations.BffCreateRese
     }
 });
 
-router.get('/bff/getReservesWithReserveExpends', async(req, res, next) => {
+router.get('/bff/getReserves', async(req, res, next) => {
     try {
         const userToken = req.headers.authorization;
         const token = userToken.split(' ');
         const decode = jwt.verify(token[1], expresiones.secret);
         const user_id = decode.userId;
         const { month } = req.query;
+        let reservesAndItems = await reserveService.getReservesAndItemsByMonth(user_id, month);
         let items = [];
-        let listReserves = await reserveService.getReservesByMonth(user_id, month);
-        let reserves = []
-        
-        reservesAux = JSON.parse(JSON.stringify(listReserves));
+        let reserves = [];
 
-        for (const reserve of reservesAux) {
-            items = await reserveExpendService.getReserveExpendByFatherReserveId(user_id, reserve.id)
-            if (items != null) {
-                reserves.push({reserve, items});
+        auxReserveId = reservesAndItems[0].reserve_id
+        reservesAndItems.forEach(element => {
+            if (auxReserveId != element.reserve_id) { //si cambio el valor de reserva, osea, no es la primera iteracion
+                auxReserveId = element.reserve_id
+                reserves.push({reserve_id, reserve_name, reserve_value, reserve_tag, id_fixed_reserve, items}) // guardo la reserva, con los valores que tenia,con esos items
+                items = [] //limpio el valor de items
             }
-        }
-        res.json({
-            reserves
+            //agarro los valores de la reserva
+            reserve_id = element.reserve_id
+            reserve_name = element.reserve_name 
+            reserve_value = element.reserve_value
+            reserve_tag = element.tag
+            id_fixed_reserve = element.id_fixed_reserve
+
+            //agarro los valores del item y los voy almacenando
+            item_id = element.item_id
+            item_name = element.item_name
+            item_value = element.item_value
+            if(item_id != null){
+                items.push({item_id, item_name, item_value})
+            }
         });
+
+        let variableReserves = [];
+        let fixedReserves = [];
+
+        reserves.forEach(element => {
+            if (element.id_fixed_reserve == null) {
+                variableReserves.push(element);
+            }
+            if (element.id_fixed_reserve != null) {
+                fixedReserves.push(element);
+            }
+        });
+        res.json({
+            fixedReserves,
+            variableReserves
+        });
+
     } catch (error) {
         next(error)
     }

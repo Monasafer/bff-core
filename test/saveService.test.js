@@ -1,29 +1,27 @@
 const { assert } = require('chai');
-const saveService = require('../../src/services/saveServices/saveService');
+const saveService = require('../src/services/saveServices/saveService');
 var randomstring = require("randomstring");
 const random = require('random');
 
-let insertedServiceId = 0;
+let insertedSaveId = 0;
 let name = randomstring.generate(50);
 let value = random.int(min = 0, max = 100000000)
-console.log("name", name)
-console.log("value", value)
 
-it('createService', async function() {
+it('createSave', async function() {
     response = await saveService.createSave(name,35,"inv")
     assert.isTrue(response.affectedRows > 0)
     assert.isTrue(response.insertId > 0)
-    insertedServiceId = response.insertId
+    insertedSaveId = response.insertId
 }).timeout(15000);
 
 it('createSaveHistory', async function() {
-    response = await saveService.createSaveHistory(value,insertedServiceId)
+    response = await saveService.createSaveHistory(value,insertedSaveId)
     assert.isTrue(response.affectedRows > 0)
     assert.isTrue(response.insertId > 0)
 }).timeout(15000);
 
 it('getSaveWithLastValueById', async function() {
-    response = await saveService.getSaveWithLastValueById(insertedServiceId, 35)
+    response = await saveService.getSaveWithLastValueById(insertedSaveId, 35)
     assert.isTrue(response[0].name == name)
     assert.isTrue(response[0].value == value)
 }).timeout(15000);

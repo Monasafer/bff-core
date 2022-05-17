@@ -24,6 +24,20 @@ var reservesService = {
         return pool.query(query, rows);
     },
 
+    getReservesAndItemsByMonth: function(user_id, month) {
+        let query;
+        let rows = [month, user_id];
+        query = `select reserves.id as reserve_id, reserves.name as reserve_name, reserves.value as reserve_value, id_fixed_reserve, tag, re.id as item_id, re.name as item_name, re.value as item_value 
+                FROM reserves 
+                    left join reserves_expends re
+                    on reserves.id = re.reserve_id and re.state = 1
+                WHERE reserves.month = ?
+                and reserves.user_id = ?
+                and reserves.state = 1
+                order by reserve_id`;
+        return pool.query(query, rows);
+    },
+
     setReserve: function(user_id, name, value, month, id_fixed_reserve) {
         const query = `insert into reserves(user_id,name,value,month,state,id_fixed_reserve) values(?,?,?,?,?,?)`;
         state = 1;

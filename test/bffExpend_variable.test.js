@@ -29,9 +29,7 @@ it('BFF Create Variable Expend', function(done) {
         request(options, function(error, response) {
             if (error) throw new Error(error);
             let res = JSON.parse(response.body);
-
             insertedId = res.response.insertId;
-
             expect(res.response.affectedRows).to.equal(1);
             done();
         });
@@ -43,7 +41,7 @@ it('BFF Get Variable Expend', function(done) {
     getToken(function(token) {
         var options = {
             'method': 'GET',
-            'url': url + `expend?fixed=0&month=2021/10/01&id=null`,
+            'url': url + `bff/getExpenses?&month=2021/10/01`,
             'headers': {
                 'Authorization': 'Bearer ' + token,
                 'Content-Type': 'application/json'
@@ -53,7 +51,7 @@ it('BFF Get Variable Expend', function(done) {
         request(options, function(error, response) {
             if (error) throw new Error(error);
             let res = JSON.parse(response.body);
-            expect(res.listVariable[res.listVariable.length - 1]).to.deep.include({
+            expect(res.variableExpends[res.variableExpends.length - 1]).to.deep.include({
                 "id": insertedId,
                 "id_fixed_expend": null,
                 "name": name,
@@ -72,7 +70,7 @@ it('BFF Update Variable Expend', function(done) {
     getToken(function(token) {
         var options = {
             'method': 'POST',
-            'url': url + 'bff/updateExpend?fixed=0&month=2021/10/01&id=' + insertedId,
+            'url': url + 'bff/updateExpend?month=2021/10/01&id=' + insertedId,
             'headers': {
                 'Authorization': 'Bearer ' + token,
                 'Content-Type': 'application/json'
@@ -99,7 +97,7 @@ it('BFF Get Variable Expend Updated', function(done) {
     getToken(function(token) {
         var options = {
             'method': 'GET',
-            'url': url + `expend?fixed=0&month=2021/10/01`,
+            'url': url + `bff/getExpenses?&month=2021/10/01`,
             'headers': {
                 'Authorization': 'Bearer ' + token,
                 'Content-Type': 'application/json'
@@ -109,7 +107,7 @@ it('BFF Get Variable Expend Updated', function(done) {
         request(options, function(error, response) {
             if (error) throw new Error(error);
             let res = JSON.parse(response.body);
-            expect(res.listVariable[res.listVariable.length - 1]).to.deep.include({
+            expect(res.variableExpends[res.variableExpends.length - 1]).to.deep.include({
                 "id": insertedId,
                 "id_fixed_expend": null,
                 "name": "BFF" + name + "changed",

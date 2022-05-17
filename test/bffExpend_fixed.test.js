@@ -41,7 +41,7 @@ it('BFF Get Fixed Expend for current month', function(done) {
     getToken(function(token) {
         var options = {
             'method': 'GET',
-            'url': url + `expend?fixed=1&month=2000/01/01`,
+            'url': url + 'bff/getExpenses?month='+current_month,
             'headers': {
                 'Authorization': 'Bearer ' + token,
                 'Content-Type': 'application/json'
@@ -51,7 +51,7 @@ it('BFF Get Fixed Expend for current month', function(done) {
         request(options, function(error, response) {
             if (error) throw new Error(error);
             let res = JSON.parse(response.body);
-            new_fixed_expend_id = res.listFixed[res.listFixed.length - 1] //tomo el id del ultimo expend
+            new_fixed_expend_id = res.fixedExpends[res.fixedExpends.length - 1] //tomo el id del ultimo expend
             expect(new_fixed_expend_id).to.deep.include({
                 "name": name,
                 "value": value,
