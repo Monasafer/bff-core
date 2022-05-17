@@ -2,18 +2,58 @@ const pool = require('../../database');
 
 var saveService = {
 
-    getSave: function (user_id, month) {
-        let rows = [user_id];
-        let query = 'SELECT * FROM save WHERE (user_id) = ? AND (state_code)=1 ';
+    createSave: function (name, user_id, tag) {
+        const query = `insert into save(name, user_id, creation_date, tag, state) values(?,?,?,?,1)`
+        const creation_date = new Date(Date.now()).toISOString();
+        rows = [name, user_id, creation_date, tag]
         return pool.query(query, rows);
     },
 
-    setSave: function (user_id, name, value, month) {
-        const query = `insert into save(name, value, user_id, month,creation_date, state_code) values(?,?,?,?,?,1)`;
+    createSaveHistory: function (value, save_id) {
+        const query = `INSERT INTO save_history (value, state, save_id, creation_date) VALUES(?, 1, ?, ?)`
         const creation_date = new Date(Date.now()).toISOString();
-        rows = [name, value, user_id, month, creation_date]
+        rows = [value, save_id, creation_date]
         return pool.query(query, rows);
     },
+    
+    getSaveWithLastValueById: function (save_id, user_id) { //used internally to update a save
+        let rows = [user_id, save_id];
+        let query = `select save.id, save.name, sh.value, save.tag, sh.creation_date 
+        from save 
+        inner join save_history sh 
+            on save.id = sh.save_id 
+        where user_id = ? 
+        and save.id = ? 
+        order by sh.creation_date desc limit 1`
+        ;
+        return pool.query(query, rows);
+    },
+
+    getSavesWithLastValueByUserId: function (user_id) { //used Save main screen 
+        let rows = [user_id];
+        let query = `select * from (select save.id, save.name, sh.value, save.tag, sh.creation_date 
+            from save 
+            inner join save_history sh 
+                on save.id = sh.save_id 
+            where user_id = ? 
+            order by sh.creation_date desc) all_saves_with_values_ordered
+            group by all_saves_with_values_ordered.id`
+        ;
+        return pool.query(query, rows);
+    },
+
+    getSavesHistoryByUserId: function (user_id) { //used in Save history screen
+        let rows = [user_id];
+        let query = `select save.id, save.name, sh.value, save.tag, sh.creation_date 
+        from save 
+        inner join save_history sh 
+            on save.id = sh.save_id 
+        where user_id = ? 
+        order by save.id`
+        ;
+        return pool.query(query, rows);
+    },
+
 
     updateSave: function (id, user_id, name, value) {
         let query = `UPDATE save
