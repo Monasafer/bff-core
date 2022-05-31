@@ -9,6 +9,7 @@ CREATE TABLE `save` (
 
 CREATE TABLE `save_history` (
   `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `user_id` int(11) NOT NULL,
   `value` int(100) NOT NULL,
   `state` int(1) NOT NULL,
   `save_id` int(11),
