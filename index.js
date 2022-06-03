@@ -17,7 +17,6 @@ app.use(cors({
 })); //este era del live session , cambiarlo por el de localhost:3001 de React 
 
 //CRUD Routes
-app.use(require('./src/routes/saveRoutes'));
 app.use(require('./src/routes/monaRoutes'));
 app.use(require('./src/routes/userRoutes'));
 app.use(require('./src/routes/monthRoutes'));
@@ -27,6 +26,7 @@ app.use(require('./src/routes/reserveExpend'));
 app.use(require('./src/routes/bffExpend'));
 app.use(require('./src/routes/bffMonth'));
 app.use(require('./src/routes/bffReserve'));
+app.use(require('./src/routes/bffSaveRoutes'));
 
 //Error handing
 app.use((req, res, next) => {
