@@ -100,4 +100,42 @@ router.post('/bff/updateSave', async(req, res, next) => {
 
 });
 
+//debe devolver todos los saves con todos sus save history
+router.post('/bff/deleteSaveHistory', async(req, res, next) => {
+    try {
+        const userToken = req.headers.authorization;
+        const token = userToken.split(' ');
+        const decode = jwt.verify(token[1], expresiones.secret);
+        const user_id = decode.userId;
+        const { id } = req.query;
+
+        const deleteSaveHistoryResponse = await saveService.deleteSaveHistoryById(user_id, id); 
+        console.log("bffSaveRoutes.deleteSaveHistory Response : " + JSON.stringify(deleteSaveHistoryResponse));
+
+        res.json(deleteSaveHistoryResponse);
+    } catch (error) {
+        next(error)
+    }
+
+});
+
+//debe devolver todos los saves con todos sus save history
+router.post('/bff/deleteSave', async(req, res, next) => {
+    try {
+        const userToken = req.headers.authorization;
+        const token = userToken.split(' ');
+        const decode = jwt.verify(token[1], expresiones.secret);
+        const user_id = decode.userId;
+        const { id } = req.query;
+
+        const deleteSaveResponse = await saveService.deleteSaveById(user_id, id); 
+        console.log("bffSaveRoutes.deleteSave Response : " + JSON.stringify(deleteSaveResponse));
+
+        res.json(deleteSaveResponse);
+    } catch (error) {
+        next(error)
+    }
+
+});
+
 module.exports = router;
