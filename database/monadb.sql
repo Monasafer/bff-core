@@ -6,7 +6,7 @@ CREATE TABLE `expend` (
   `month` date NOT NULL,
   `state` int(1) NOT NULL,
   `id_fixed_expend` int(11),
-  `payed` BIT DEFAULT 0 NOT null,
+  `payed` int(1) NOT NULL,
   `tag`  text CHARACTER SET latin1 COLLATE latin1_bin
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
