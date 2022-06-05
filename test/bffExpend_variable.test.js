@@ -3,7 +3,6 @@ var request = require('request');
 var randomstring = require("randomstring");
 const { getToken } = require('./utils')
 
-let userId = 35;
 let name = randomstring.generate(7);
 let value = 10000
 let url = 'http://localhost:3000/'
@@ -56,7 +55,6 @@ it('BFF Get Variable Expend', function(done) {
                 "id_fixed_expend": null,
                 "name": name,
                 "value": value,
-                "user_id": userId,
                 "state": 1
             });
             done();
@@ -112,7 +110,6 @@ it('BFF Get Variable Expend Updated', function(done) {
                 "id_fixed_expend": null,
                 "name": "BFF" + name + "changed",
                 "value": value + 1,
-                "user_id": userId,
                 "state": 1
             });
             done();

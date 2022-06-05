@@ -4,7 +4,6 @@ var randomstring = require("randomstring");
 const { getToken } = require('./utils')
 
 let insertedReserveId;
-let userId = 35 //User ID del usuario que se usa para generar token : prueba prueba
 let name = randomstring.generate(7);
 let value = 10000
 let valueUpdated = 15000
@@ -84,7 +83,6 @@ it('Get ReserveExpend', function(done) {
                 "id": insertedReserveExpendId,
                 "name": name,
                 "value": value,
-                "user_id": userId,
                 "reserve_id": insertedReserveId,
                 "state": 1
             });
@@ -140,7 +138,6 @@ it('Get ReserveExpend Updated', function(done) {
                 "id": insertedReserveExpendId,
                 "name": name + "changed",
                 "value": valueUpdated,
-                "user_id": userId,
                 "reserve_id": insertedReserveId,
                 "state": 1
             });

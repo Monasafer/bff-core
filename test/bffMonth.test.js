@@ -3,7 +3,6 @@ var request = require('request');
 let DateGenerator = require('random-date-generator');
 const { getToken } = require('./utils')
 let insertedMonthId;
-let userId = 35
 let month = new Date(DateGenerator.getRandomDate().toDateString()); //TODO : Ver que este month se genere siempre con horario en cero. Que pasa si no mando el horario ?
 let url = 'http://localhost:3000/'
 
@@ -50,7 +49,6 @@ it('BFF Get Month', function(done) {
             expect(formatDate(lastMonth.month)).equals(formatDate(month.toISOString()))
             expect(lastMonth).to.deep.include({
                 "id": insertedMonthId,
-                "user_id": userId,
                 "state": 1
             });
             done();

@@ -7,7 +7,6 @@ let value = 10000;
 let fixed = "1";
 let current_month = '2000/01/01';
 let url = 'http://localhost:3000/';
-let userId = 35;
 
 it('BFF Create Fixed Expend', function(done) {
     getToken(function(token) {
@@ -55,7 +54,6 @@ it('BFF Get Fixed Expend for current month', function(done) {
             expect(new_fixed_expend_id).to.deep.include({
                 "name": name,
                 "value": value,
-                "user_id": userId,
                 "state": 1
             });
             new_fixed_expend_id = new_fixed_expend_id.id

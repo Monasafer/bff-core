@@ -3,7 +3,6 @@ var request = require('request');
 const { getToken } = require('./utils')
 
 let insertedMonthId;
-let userId = 35
 let month = "2021-07-31";
 let verifymonth = "2021-07-31T03:00:00.000Z";
 let url = 'http://localhost:3000/'
@@ -51,7 +50,6 @@ it('Get Month', function(done) {
             let res = JSON.parse(response.body);
             expect(res[res.length - 1]).to.deep.include({
                 "id": insertedMonthId,
-                "user_id": userId,
                 "month": verifymonth,
                 "state": 1
             });

@@ -4,7 +4,6 @@ var randomstring = require("randomstring");
 const { getToken } = require('./utils')
 
 let insertedMonaId;
-let userId = 35
 let name = randomstring.generate(7);
 let value = 1000
 let valueUpdated = 1500
@@ -57,7 +56,6 @@ it('Get Mona', (done) => {
                 "id": insertedMonaId,
                 "name": name,
                 "value": value,
-                "user_id": userId,
                 "month": verifymonth,
                 "state_code": 1
             });
@@ -110,7 +108,6 @@ it('Get Mona Updated', (done) => {
                 "id": insertedMonaId,
                 "name": name + "changed",
                 "value": valueUpdated,
-                "user_id": userId,
                 "month": verifymonth,
                 "state_code": 1
             });
